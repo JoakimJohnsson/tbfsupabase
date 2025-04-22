@@ -1,0 +1,55 @@
+on:
+  push:
+    branches:
+      - main
+name: 🚀 Deploy SMS website on push to main branch
+jobs:
+  diagnostics:
+      name: 🏥 Primary diagnostics
+      runs-on: ubuntu-latest
+      steps:
+        - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+        - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+        - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+  deployment:
+      name: 🎉 Deploy
+      runs-on: ubuntu-latest
+      steps:
+        - name: 🚚 Get latest code
+          uses: actions/checkout@v4
+        - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
+        - run: echo "🖥️ The workflow is now ready to test your code on the runner."
+        - name: Setup Node
+          uses: actions/setup-node@v4
+          with:
+            node-version: '20'
+            registry-url: 'https://npm.fontawesome.com/'
+            scope: '@fortawesome'
+        - name: 🔨 Build Project
+          env:
+            VITE_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+            VITE_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+            VITE_GOOGLE_CLOUD_API_KEY: ${{ secrets.GOOGLE_CLOUD_API_KEY }}
+            VITE_GOOGLE_CLOUD_SMS_LOCATION_ACCESS_MAP_ID: ${{ secrets.GOOGLE_CLOUD_SMS_LOCATION_ACCESS_MAP_ID }}
+            VITE_GITHUB_ACCESS_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
+            NODE_AUTH_TOKEN: ${{ secrets.FORTAWESOME_AUTH_TOKEN }}
+          run: |
+            npm install
+            npm run build
+        - name: 📂 Sync files
+          uses: SamKirkland/FTP-Deploy-Action@4.3.3
+          with:
+            server: ${{ secrets.FTP_HOST_UNOEURO }}
+            server-dir: svenskamarvelsamlare.se/
+            local-dir: dist/
+            username: ${{ secrets.FTP_HOST_UNOEURO_USERNAME }}
+            password: ${{ secrets.FTP_HOST_UNOEURO_PASSWORD }}
+            port: 21
+            dangerous-clean-slate: true
+            dry-run: false
+        - name: 🔄 Update Release Date
+          run: |
+            curl -X POST "${{ secrets.SUPABASE_URL }}/rest/v1/rpc/update_release_date" \
+            -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}" \
+            -H "Content-Type: application/json"

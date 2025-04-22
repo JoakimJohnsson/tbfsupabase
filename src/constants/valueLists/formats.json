@@ -1,0 +1,44 @@
+[
+  {
+    "id": 32545,
+    "name": "Serietidning",
+    "nameEn": "Comic",
+    "shade": 0
+  },
+  {
+    "id": 33541,
+    "name": "Storformat",
+    "nameEn": "Comic large size",
+    "shade": 100
+  },
+  {
+    "id": 23445,
+    "name": "Album",
+    "nameEn": "Album",
+    "shade": 200
+  },
+  {
+    "id": 24543,
+    "name": "Pocket",
+    "nameEn": "Pocket",
+    "shade": 800
+  },
+  {
+    "id": 23577,
+    "name": "Inbunden",
+    "nameEn": "Hard cover",
+    "shade": 400
+  },
+  {
+    "id": 26224,
+    "name": "Specialtidning",
+    "nameEn": "Special",
+    "shade": 600
+  },
+  {
+    "id": 674899,
+    "name": "Samlarföremål",
+    "nameEn": "Collectible",
+    "shade": 300
+  }
+]
