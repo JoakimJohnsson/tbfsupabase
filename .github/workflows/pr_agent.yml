@@ -1,7 +1,7 @@
 on:
   pull_request:
     branches:
-      - develop
+      - todo
   issue_comment:
 name: 🤓 Review PR's to develop branch
 jobs:
