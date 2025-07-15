@@ -8,7 +8,6 @@
 
 - Rensa ut all kod
 - Rensa ut dependencies - vilka behövs??
-- Gå igenom filer - index.html o.s.v.
 - Types fil
 - Uppdatera
 - boilerplate - hello world
