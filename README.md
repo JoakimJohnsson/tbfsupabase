@@ -6,9 +6,5 @@
 
 ## TODO
 
-- Rensa ut all kod
-- Rensa ut dependencies - vilka behövs??
-- Types fil
-- Uppdatera
-- boilerplate - hello world
+- TODO
 
