@@ -7,7 +7,7 @@ export const App = () => {
         <>
             <main id="main-content" className={""}>
                 <div className={""}>
-                    <h1>Hello SMS 2.0</h1>
+                    <h1>Hello TBF supabase</h1>
                 </div>
             </main>
         </>
