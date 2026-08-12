@@ -6,7 +6,9 @@
 
 ## TODO
 
-- A clean Supabase db - start adding stuff
+- Prepare app for i18n
+- I will have only en for now but be prepared for other languages
+- Continue with app skeleton
 
 ## Local files - Git ignored
 
