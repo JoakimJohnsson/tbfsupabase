@@ -6,7 +6,7 @@
 
 ## TODO
 
-- A clean Supabase db
+- A clean Supabase db - start adding stuff
 
 ## Local files - Git ignored
 
