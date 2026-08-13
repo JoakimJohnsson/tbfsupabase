@@ -9,6 +9,8 @@ export default [
             "dist/**",
             "node_modules/**",
             "coverage/**",
+            "supabase/.temp/**",
+            "src/lib/supabase/database.types.ts",
         ],
     },
     js.configs.recommended,
