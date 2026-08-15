@@ -1,15 +1,19 @@
 import {Link, Outlet} from "react-router";
+import {useTranslation} from "react-i18next";
 
 export const AdminLayout = () => {
+
+    const {t} = useTranslation();
+
     return (
         <>
             <header>
                 <nav>
-                    <Link to="/">TBF</Link>
+                    <Link to="/">{t("navigation.home")}</Link>
                     {" | "}
-                    <Link to="/admin">Admin</Link>
+                    <Link to="/admin">{t("navigation.admin")}</Link>
                     {" | "}
-                    <Link to="/admin/artists">Artists</Link>
+                    <Link to="/admin/artists">{t("navigation.adminArtists")}</Link>
                 </nav>
             </header>
 
