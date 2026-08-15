@@ -49,6 +49,12 @@ alter table public.artist_members enable row level security;
 alter table public.records enable row level security;
 alter table public.songs enable row level security;
 
+grant select on table public.artists to anon, authenticated;
+grant select on table public.persons to anon, authenticated;
+grant select on table public.artist_members to anon, authenticated;
+grant select on table public.records to anon, authenticated;
+grant select on table public.songs to anon, authenticated;
+
 create policy "Artists are publicly readable"
 on public.artists
 for select
