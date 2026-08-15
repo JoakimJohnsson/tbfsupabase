@@ -1,10 +1,18 @@
-import {Outlet} from "react-router";
+import {Link, Outlet} from "react-router";
 
 export const SiteLayout = () => {
     return (
         <>
             <header>
-                TBF site header - if we want
+                <nav>
+                    <Link to="/">Home</Link>
+                    {" | "}
+                    <Link to="/artists">Artists</Link>
+                    {" | "}
+                    <Link to="/login">Login</Link>
+                    {" | "}
+                    <Link to="/admin">Admin</Link>
+                </nav>
             </header>
 
             <main id="main-content">
