@@ -21,7 +21,7 @@ export const LoginPage = () => {
 
         try {
             await signIn(email, password);
-            navigate("/admin");
+            navigate("/");
         } catch (err) {
             console.error(err);
             setError(t("features.auth.login.error.loginError"));

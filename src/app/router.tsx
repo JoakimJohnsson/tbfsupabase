@@ -1,6 +1,6 @@
 import {createBrowserRouter} from "react-router";
-
 import {AdminLayout} from "../components/layout/AdminLayout";
+import {AuthenticatedLayout} from "../components/layout/AuthenticatedLayout";
 import {SiteLayout} from "../components/layout/SiteLayout";
 import {AdminArtistsPage} from "../features/admin/pages/AdminArtistsPage";
 import {AdminPage} from "../features/admin/pages/AdminPage";
@@ -19,16 +19,21 @@ export const router = createBrowserRouter([
                 element: <HomePage/>,
             },
             {
-                path: "artists",
-                element: <ArtistsPage/>,
-            },
-            {
-                path: "artists/:artistSlug",
-                element: <ArtistPage/>,
-            },
-            {
                 path: "login",
                 element: <LoginPage/>,
+            },
+            {
+                element: <AuthenticatedLayout/>,
+                children: [
+                    {
+                        path: "artists",
+                        element: <ArtistsPage/>,
+                    },
+                    {
+                        path: "artists/:artistSlug",
+                        element: <ArtistPage/>,
+                    },
+                ],
             },
             {
                 path: "*",
