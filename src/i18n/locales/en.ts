@@ -1,10 +1,29 @@
 export const en = {
     common: {
         loading: "Loading...",
+        logout: "Log out",
     },
     features: {
         admin: {
-
+            artist: {
+                create: {
+                    error: {
+                        createError: "Could not create artist.",
+                        invalidNameError: "The artist name is invalid.",
+                    },
+                    success: {
+                        createSuccess: "Artist created.",
+                    },
+                    submit: "Create artist",
+                    submitting: "Creating artist...",
+                    title: "Create artist",
+                },
+                title: "Artist",
+            },
+            artists: {
+                lead: "Here, you can administer the artists.",
+                title: "Artists",
+            },
         },
         artist: {
             error: {
@@ -16,6 +35,7 @@ export const en = {
             }
         },
         artists: {
+
             error: {
                 loadError: "Could not load artists.",
             },
@@ -26,7 +46,6 @@ export const en = {
             title: "Artists",
         },
         auth: {
-
             login: {
                 error: {
                     loginError: "Could not log in. Check your email and password.",
@@ -38,7 +57,9 @@ export const en = {
         },
     },
     forms: {
+        description: "Description",
         email: "E-mail",
+        name: "Name",
         password: "Password",
     },
     navigation: {

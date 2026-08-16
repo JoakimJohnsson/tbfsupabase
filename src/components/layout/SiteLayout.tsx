@@ -9,12 +9,9 @@ export const SiteLayout = () => {
         <>
             <header>
                 <nav>
-                    <Link to="/">{t("navigation.home")}</Link>
-                    {" | "}
-                    <Link to="/artists">{t("navigation.artists")}</Link>
-                    {" | "}
-                    <Link to="/login">{t("navigation.login")}</Link>
-                    {" | "}
+                    <Link className="me-2" to="/">{t("navigation.home")}</Link>
+                    <Link className="me-2" to="/artists">{t("navigation.artists")}</Link>
+                    <Link className="me-2" to="/login">{t("navigation.login")}</Link>
                     <Link to="/admin">{t("navigation.admin")}</Link>
                 </nav>
             </header>
