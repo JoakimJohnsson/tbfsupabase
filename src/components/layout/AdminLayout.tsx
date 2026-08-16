@@ -5,107 +5,112 @@ import {supabase} from "../../lib/supabase/client";
 import {getProfile} from "../../features/auth/api/getProfile";
 import {ADMIN_STATE, AdminState, Profile} from "../../types";
 import {signOut} from "../../features/auth/api/signOut";
+import {useMountedRef} from "../../lib/hooks/useMountedRef";
+import {useLatestRequestGuard} from "../../lib/hooks/useLatestRequestGuard";
 
 export const AdminLayout = () => {
 
     const {t} = useTranslation();
+    const isMountedRef = useMountedRef();
+    const {beginRequest, isLatestRequest} = useLatestRequestGuard();
 
     const [adminState, setAdminState] = useState<AdminState>(ADMIN_STATE.LOADING);
+    const [userId, setUserId] = useState<string | null>(null);
 
     useEffect(() => {
-        // Prevent state updates after unmount.
-        let isMounted = true;
-        // Store timeout id so it can be cleared in cleanup.
-        let adminCheckTimeout: ReturnType<typeof setTimeout> | null = null;
+        // Track session on startup and on auth changes.
+        let applySessionTimeout: ReturnType<typeof setTimeout> | null = null;
 
-        const checkAdmin = async (userId: string) => {
-            try {
-                const profile: Profile = await getProfile(userId);
-
-                if (isMounted) {
-                    setAdminState(
-                        profile.is_admin
-                            ? ADMIN_STATE.AUTHORIZED
-                            : ADMIN_STATE.UNAUTHORIZED,
-                    );
-                }
-            } catch (err) {
-                console.error(err);
-
-                if (isMounted) {
-                    setAdminState(ADMIN_STATE.UNAUTHORIZED);
-                }
-            }
-        };
-
-        // Resolve admin access for a known authenticated user.
-        // Keeps auth callback synchronous and delegates profile lookup.
-        const resolveSession = (userId: string) => {
-            // Show loading while we resolve admin rights from the profile.
-            setAdminState(ADMIN_STATE.LOADING);
-
-            // Run profile admin check after the auth callback to keep callback work minimal.
-            // This ensures the supabase query - getProfile() - is run outside of auth callback.
-            // Clear timeout before setting a new one.
-            if (adminCheckTimeout) {
-                clearTimeout(adminCheckTimeout);
-            }
-            adminCheckTimeout = setTimeout(() => {
-                if (!isMounted) {
-                    return;
-                }
-
-                void checkAdmin(userId);
-            }, 0);
-        };
-
-        // Perform one explicit startup check so loading state is always resolved,
-        // even if auth listener does not emit an initial session event.
-        const initializeSession = async () => {
-            const {data, error} = await supabase.auth.getSession();
-
-            if (!isMounted) {
+        const applySession = (sessionUserId: string | null) => {
+            if (!isMountedRef.current) {
                 return;
             }
 
-            if (error || !data.session) {
+            if (!sessionUserId) {
+                setUserId(null);
                 setAdminState(ADMIN_STATE.UNAUTHORIZED);
                 return;
             }
 
-            resolveSession(data.session.user.id);
+            setUserId(sessionUserId);
+            setAdminState(ADMIN_STATE.LOADING);
         };
 
-        // Listen to auth (login/logoff) changes.
+        const initializeSession = async () => {
+            const {data, error} = await supabase.auth.getSession();
+
+            if (!isMountedRef.current) {
+                return;
+            }
+
+            if (error || !data.session) {
+                applySession(null);
+                return;
+            }
+
+            applySession(data.session.user.id);
+        };
+
+        // Listen to auth changes.
         const {data: {subscription}} = supabase.auth.onAuthStateChange(
             (_event, session) => {
-
-                // Early exit if not mounted.
-                if (!isMounted) {
-                    return;
+                // Defer writes so callback stays lightweight.
+                if (applySessionTimeout !== null) {
+                    clearTimeout(applySessionTimeout);
                 }
 
-                // Early exit if no session - treat as unauthorized.
-                if (!session) {
-                    setAdminState(ADMIN_STATE.UNAUTHORIZED);
-                    return;
-                }
-
-                resolveSession(session.user.id);
+                applySessionTimeout = setTimeout(() => {
+                    applySession(session?.user.id ?? null);
+                }, 0);
             },
         );
 
         void initializeSession();
 
         return () => {
-            // Mark as unmounted and remove auth listener.
-            isMounted = false;
-            if (adminCheckTimeout !== null) {
-                clearTimeout(adminCheckTimeout);
+            if (applySessionTimeout !== null) {
+                clearTimeout(applySessionTimeout);
             }
+
             subscription.unsubscribe();
         };
     }, []);
+
+    useEffect(() => {
+        // Resolve admin role whenever an authenticated user id is available.
+        if (!userId) {
+            return;
+        }
+
+        // Use request ids so only the latest profile lookup can update state.
+        const requestId = beginRequest();
+
+        const resolveAdminState = async () => {
+            try {
+                const profile: Profile = await getProfile(userId);
+
+                if (!isMountedRef.current || !isLatestRequest(requestId)) {
+                    return;
+                }
+
+                setAdminState(
+                    profile.is_admin
+                        ? ADMIN_STATE.AUTHORIZED
+                        : ADMIN_STATE.UNAUTHORIZED,
+                );
+            } catch (err) {
+                console.error(err);
+
+                if (!isMountedRef.current || !isLatestRequest(requestId)) {
+                    return;
+                }
+
+                setAdminState(ADMIN_STATE.UNAUTHORIZED);
+            }
+        };
+
+        void resolveAdminState();
+    }, [beginRequest, isLatestRequest, isMountedRef, userId]);
 
     if (adminState === ADMIN_STATE.LOADING) {
         return <p>{t("common.loading")}</p>;
