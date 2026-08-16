@@ -1,11 +1,9 @@
 import {useEffect, useState} from "react";
 import {useParams} from "react-router";
-import type {Database} from "../../../lib/supabase/database.types";
 import {getArtist} from "../api/getArtist";
 import {isAbortError} from "../../../lib/asyncHelpers/withAbortSignal";
 import {useTranslation} from "react-i18next";
-
-type Artist = Database["public"]["Tables"]["artists"]["Row"];
+import {Artist} from "../../../types.ts";
 
 export const ArtistPage = () => {
 

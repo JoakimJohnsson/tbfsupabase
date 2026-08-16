@@ -1,5 +1,6 @@
 export const en = {
     common: {
+        loading: "Loading...",
     },
     features: {
         admin: {
@@ -24,8 +25,21 @@ export const en = {
             },
             title: "Artists",
         },
+        auth: {
+
+            login: {
+                error: {
+                    loginError: "Could not log in. Check your email and password.",
+                },
+                submit: "Log in",
+                submitting: "Logging in...",
+                title: "Login",
+            },
+        },
     },
     forms: {
+        email: "E-mail",
+        password: "Password",
     },
     navigation: {
         admin: "Admin",
