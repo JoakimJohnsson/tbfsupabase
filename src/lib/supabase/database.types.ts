@@ -92,6 +92,33 @@ export type Database = {
         }
         Relationships: []
       }
+      profiles: {
+        Row: {
+          created_at: string
+          display_name: string | null
+          first_name: string | null
+          id: string
+          is_admin: boolean
+          last_name: string | null
+        }
+        Insert: {
+          created_at?: string
+          display_name?: string | null
+          first_name?: string | null
+          id: string
+          is_admin?: boolean
+          last_name?: string | null
+        }
+        Update: {
+          created_at?: string
+          display_name?: string | null
+          first_name?: string | null
+          id?: string
+          is_admin?: boolean
+          last_name?: string | null
+        }
+        Relationships: []
+      }
       records: {
         Row: {
           artist_id: string
