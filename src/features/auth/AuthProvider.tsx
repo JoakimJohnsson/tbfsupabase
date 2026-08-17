@@ -17,14 +17,37 @@ export const AuthProvider = ({children}: AuthProviderProps) => {
     const [isProfileLoading, setIsProfileLoading] = useState(false);
 
     useEffect(() => {
-        const {data: {subscription}} = supabase.auth.onAuthStateChange(
-            (_event, currentSession) => {
+        let ignore = false;
+
+        const loadSession = async () => {
+            const {
+                data: {session: currentSession},
+                error,
+            } = await supabase.auth.getSession();
+
+            if (error) {
+                console.error(error);
+            }
+
+            if (!ignore) {
                 setSession(currentSession);
                 setIsSessionLoading(false);
-            },
-        );
+            }
+        };
+
+        void loadSession();
+
+        const {
+            data: {subscription},
+        } = supabase.auth.onAuthStateChange((_event, currentSession) => {
+            if (!ignore) {
+                setSession(currentSession);
+                setIsSessionLoading(false);
+            }
+        });
 
         return () => {
+            ignore = true;
             subscription.unsubscribe();
         };
     }, []);
