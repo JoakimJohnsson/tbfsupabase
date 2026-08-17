@@ -15,13 +15,7 @@ export const AdminLayout = () => {
         return <Navigate replace to="/login"/>;
     }
 
-    const handleSignOut = async () => {
-        try {
-            await signOut();
-        } catch (err) {
-            console.error(err);
-        }
-    };
+
 
     return (
         <>
@@ -38,16 +32,6 @@ export const AdminLayout = () => {
                     <Link className="me-2" to="/admin/artists">
                         {t("navigation.adminArtists")}
                     </Link>
-
-                    <button
-                        className="btn btn-link p-0"
-                        onClick={() => {
-                            void handleSignOut();
-                        }}
-                        type="button"
-                    >
-                        {t("common.logout")}
-                    </button>
                 </nav>
             </header>
 

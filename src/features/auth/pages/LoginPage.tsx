@@ -1,12 +1,18 @@
 import type {SubmitEvent} from "react";
 import {useState} from "react";
 import {useTranslation} from "react-i18next";
-import {useNavigate} from "react-router";
+import {useLocation, useNavigate} from "react-router";
 import {signIn} from "../api/signIn";
 
 export const LoginPage = () => {
     const {t} = useTranslation();
     const navigate = useNavigate();
+    const location = useLocation();
+
+    const from = location.state?.from;
+    const redirectTo = from
+        ? `${from.pathname}${from.search}${from.hash}`
+        : "/";
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -21,7 +27,7 @@ export const LoginPage = () => {
 
         try {
             await signIn(email, password);
-            navigate("/");
+            navigate(redirectTo, {replace: true});
         } catch (err) {
             console.error(err);
             setError(t("features.auth.login.error.loginError"));
