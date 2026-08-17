@@ -1,6 +1,5 @@
 import {useTranslation} from "react-i18next";
 import {Link, Navigate, Outlet} from "react-router";
-import {signOut} from "../../features/auth/api/signOut";
 import {useAuth} from "../../features/auth/hooks/useAuth.ts";
 
 export const AdminLayout = () => {
@@ -11,11 +10,15 @@ export const AdminLayout = () => {
         return <p>{t("common.loading")}</p>;
     }
 
-    if (!user || !profile?.is_admin) {
+    // Not logged in...
+    if (!user) {
         return <Navigate replace to="/login"/>;
     }
 
-
+    // Logged in, but not admin...
+    if (!profile?.is_admin) {
+        return <Navigate replace to="/"/>;
+    }
 
     return (
         <>
