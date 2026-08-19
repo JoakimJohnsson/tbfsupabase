@@ -1,13 +1,14 @@
 import {useTranslation} from "react-i18next";
 import {Link, Navigate, Outlet} from "react-router";
-import {useAuth} from "../../features/auth/hooks/useAuth.ts";
+import {useAuth} from "../../features/auth/hooks/useAuth";
+import SimpleSpinner from "../spinners/SimpleSpinner";
 
 export const AdminLayout = () => {
     const {t} = useTranslation();
     const {user, profile, isLoading} = useAuth();
 
     if (isLoading) {
-        return <p>{t("common.loading")}</p>;
+        return <SimpleSpinner/>;
     }
 
     // Not logged in...

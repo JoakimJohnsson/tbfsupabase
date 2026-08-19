@@ -3,7 +3,9 @@ import {useParams} from "react-router";
 import {getArtist} from "../api/getArtist";
 import {isAbortError} from "../../../lib/asyncHelpers/withAbortSignal";
 import {useTranslation} from "react-i18next";
-import {Artist} from "../../../types.ts";
+import Feedback from "../../../components/feedback/Feedback";
+import SimpleSpinner from "../../../components/spinners/SimpleSpinner";
+import type {Artist, SimpleMessage} from "../../../types";
 
 export const ArtistPage = () => {
 
@@ -11,7 +13,7 @@ export const ArtistPage = () => {
 
     const {artistSlug} = useParams();
     const [artist, setArtist] = useState<Artist | null>(null);
-    const [error, setError] = useState<string | null>(null);
+    const [error, setError] = useState<SimpleMessage>(null);
     const [loading, setLoading] = useState<boolean>(true);
 
     // Messages
@@ -60,15 +62,15 @@ export const ArtistPage = () => {
 
     // Error and state handling
     if (error) {
-        return <p>{error}</p>;
+        return <Feedback errors={[error]}/>;
     }
 
     if (loading) {
-        return <p>{t("features.artist.message.loading")}</p>;
+        return <SimpleSpinner message={t("features.artist.message.loading")}/>;
     }
 
     if (!artist) {
-        return <p>{t("features.artist.message.empty")}</p>;
+        return <Feedback warnings={[t("features.artist.message.empty")]} />;
     }
 
     return (

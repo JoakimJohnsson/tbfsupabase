@@ -5,6 +5,9 @@ import type {Session, User} from "@supabase/supabase-js";
 export type Artist = Database["public"]["Tables"]["artists"]["Row"];
 export type Profile = Database["public"]["Tables"]["profiles"]["Row"];
 
+export type SimpleMessage = string | null;
+export type SimpleMessageList = SimpleMessage[];
+
 // Inputs
 export type CreateArtistInput = {
     name: string;
