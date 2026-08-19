@@ -1,28 +1,32 @@
 import {useEffect, useState} from "react";
-import type {Database} from "../../../lib/supabase/database.types";
 import {getArtists} from "../api/getArtists";
 import {isAbortError} from "../../../lib/asyncHelpers/withAbortSignal";
 import {Link} from "react-router";
 import {useTranslation} from "react-i18next";
-
-type Artist = Database["public"]["Tables"]["artists"]["Row"];
+import Feedback from "../../../components/feedback/Feedback";
+import SimpleSpinner from "../../../components/spinners/SimpleSpinner";
+import type {Artist, SimpleMessage} from "../../../types";
 
 export const ArtistsPage = () => {
 
     const {t} = useTranslation();
 
     const [artists, setArtists] = useState<Artist[]>([]);
-    const [error, setError] = useState<string | null>(null);
+    const [error, setError] = useState<SimpleMessage>(null);
+    const [warning, setWarning] = useState<SimpleMessage>(null);
     const [loading, setLoading] = useState<boolean>(true);
 
     // Messages
     const loadError = t("features.artists.error.loadError");
+    const loadWarning = t("features.artists.message.empty");
 
     useEffect(() => {
 
         // Reset view state.
         setLoading(true);
         setError(null);
+        setWarning(null);
+        setArtists([]);
 
         // Cancel in-flight request when component unmounts.
         const controller = new AbortController();
@@ -31,11 +35,15 @@ export const ArtistsPage = () => {
             try {
                 const data = await getArtists(controller.signal);
                 setArtists(data);
+                if (!data?.length) {
+                    setWarning(loadWarning);
+                }
             } catch (error) {
                 // Ignore expected cancellation errors from AbortController.
                 if (!isAbortError(error)) {
                     console.error(error);
                     setError(loadError);
+                    setArtists([]);
                 }
             } finally {
                 // Avoid state updates after cleanup has already aborted the request.
@@ -51,34 +59,28 @@ export const ArtistsPage = () => {
             controller.abort();
         };
 
-    }, [loadError]);
-
-    // Error and state handling
-    if (error) {
-        return <p>{error}</p>;
-    }
-
-    if (loading) {
-        return <p>{t("features.artists.message.loading")}</p>;
-    }
-
-    if (!artists.length) {
-        return <p>{t("features.artists.message.empty")}</p>;
-    }
+    }, [loadError, loadWarning]);
 
     return (
         <>
             <h1>{t("features.artists.title")}</h1>
-
-            <ul>
-                {artists.map((artist) => (
-                    <li key={artist.id}>
-                        <Link to={`/artists/${artist.slug}`}>
-                            {artist.name}
-                        </Link>
-                    </li>
-                ))}
-            </ul>
+            <Feedback errors={[error]} warnings={[warning]}/>
+            {
+                loading &&
+                <SimpleSpinner message={t("features.artists.message.loading")}/>
+            }
+            {
+                !!artists.length &&
+                <ul>
+                    {artists.map((artist) => (
+                        <li key={artist.id}>
+                            <Link to={`/artists/${artist.slug}`}>
+                                {artist.name}
+                            </Link>
+                        </li>
+                    ))}
+                </ul>
+            }
         </>
     );
 };

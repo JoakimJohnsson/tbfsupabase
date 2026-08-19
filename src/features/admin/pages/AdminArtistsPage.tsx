@@ -1,43 +1,96 @@
-import type {SubmitEvent} from "react";
-import {useState} from "react";
+import {type SubmitEvent, useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {createArtist} from "../../artists/api/createArtist";
+import {getArtists} from "../../artists/api/getArtists";
+import {isAbortError} from "../../../lib/asyncHelpers/withAbortSignal";
+import Feedback from "../../../components/feedback/Feedback";
+import SimpleSpinner from "../../../components/spinners/SimpleSpinner";
+import type {Artist, SimpleMessage} from "../../../types";
 
 export const AdminArtistsPage = () => {
+
     const {t} = useTranslation();
 
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
-    const [error, setError] = useState<string | null>(null);
-    const [success, setSuccess] = useState<string | null>(null);
+    const [loadError, setLoadError] = useState<SimpleMessage>(null);
+    const [submitError, setSubmitError] = useState<SimpleMessage>(null);
+    const [submitSuccess, setSubmitSuccess] = useState<SimpleMessage>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [artists, setArtists] = useState<Artist[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    // Messages
+    const loadErrorMessage = t("features.artists.error.loadError");
+
+    useEffect(() => {
+
+        // Reset view state.
+        setLoading(true);
+        setLoadError(null);
+
+        // Cancel in-flight request when component unmounts.
+        const controller = new AbortController();
+
+        const loadArtists = async () => {
+            try {
+                const data = await getArtists(controller.signal);
+                setArtists(data);
+            } catch (error) {
+                // Ignore expected cancellation errors from AbortController.
+                if (!isAbortError(error)) {
+                    console.error(error);
+                    setLoadError(loadErrorMessage);
+                    setArtists([]);
+                }
+            } finally {
+                // Avoid state updates after cleanup has already aborted the request.
+                if (!controller.signal.aborted) {
+                    setLoading(false);
+                }
+            }
+        };
+
+        void loadArtists();
+
+        return () => {
+            controller.abort();
+        };
+
+    }, [loadErrorMessage]);
 
     const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        setError(null);
-        setSuccess(null);
+        setSubmitError(null);
+        setSubmitSuccess(null);
         setIsSubmitting(true);
 
         try {
             const trimmedName = name.trim();
 
             if (!trimmedName) {
-                setError(t("features.admin.artist.create.error.invalidNameError"));
+                setSubmitError(t("features.admin.artist.create.error.invalidNameError"));
                 return;
             }
 
-            await createArtist({
+            const createdArtist = await createArtist({
                 name: trimmedName,
                 description,
             });
 
+            // Add created artist to list
+            setArtists((currentArtists) => [
+                ...currentArtists,
+                createdArtist,
+            ].sort((a, b) => a.name.localeCompare(b.name)));
+
             setName("");
             setDescription("");
-            setSuccess(t("features.admin.artist.create.success.createSuccess"));
+            setSubmitSuccess(t("features.admin.artist.create.success.createSuccess"));
         } catch (err) {
             console.error(err);
-            setError(t("features.admin.artist.create.error.createError"));
+            setSubmitError(t("features.admin.artist.create.error.createError"));
         } finally {
             setIsSubmitting(false);
         }
@@ -47,21 +100,24 @@ export const AdminArtistsPage = () => {
         <>
             <h1>{t("features.admin.artists.title")}</h1>
 
+            <Feedback errors={[loadError, submitError]} successes={[submitSuccess]}/>
+
             <p className="lead">{t("features.admin.artists.lead")}</p>
 
+            {
+                !loading ?
+                    <ul>
+                        {artists.map((artist) => (
+                            <li key={artist.id}>
+                                {artist.name}
+                            </li>
+                        ))}
+                    </ul>
+                    :
+                    <SimpleSpinner/>
+            }
+
             <h2>{t("features.admin.artist.create.title")}</h2>
-
-            {error && (
-                <div className="alert alert-danger" role="alert">
-                    {error}
-                </div>
-            )}
-
-            {success && (
-                <div className="alert alert-success" role="status">
-                    {success}
-                </div>
-            )}
 
             <form onSubmit={handleSubmit}>
                 <div className="mb-3">
@@ -105,7 +161,7 @@ export const AdminArtistsPage = () => {
 
                 <button
                     className="btn btn-primary"
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || loading}
                     type="submit"
                 >
                     {isSubmitting
