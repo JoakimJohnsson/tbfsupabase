@@ -1,4 +1,5 @@
 import {useEffect, useState} from "react";
+import type {Dispatch, SetStateAction} from "react";
 import {getArtist} from "../api/getArtist";
 import {isAbortError} from "../../../lib/asyncHelpers/withAbortSignal";
 import type {Artist, SimpleMessage} from "../../../types";
@@ -12,6 +13,7 @@ type UseArtistResult = {
     artist: Artist | null;
     loadError: SimpleMessage | null;
     loading: boolean;
+    setArtist: Dispatch<SetStateAction<Artist | null>>;
 };
 
 export const useArtist = ({artistSlug, loadErrorMessage}: UseArtistOptions): UseArtistResult => {
@@ -67,5 +69,6 @@ export const useArtist = ({artistSlug, loadErrorMessage}: UseArtistOptions): Use
         artist,
         loadError: hasLoadError ? loadErrorMessage : null,
         loading,
+        setArtist,
     };
 };

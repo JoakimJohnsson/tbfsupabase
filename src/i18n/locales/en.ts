@@ -18,6 +18,16 @@ export const en = {
                     submitting: "Creating artist...",
                     title: "Create artist",
                 },
+                edit: {
+                    error: {
+                        editError: "Could not edit artist.",
+                    },
+                    success: {
+                        editSuccess: "Edited artist successfully.",
+                    },
+                    submit: "Edit artist",
+                    submitting: "Editing artist...",
+                },
                 title: "Artist",
                 error: {
                     loadError: "Could not load artist.",
@@ -42,7 +52,6 @@ export const en = {
             }
         },
         artists: {
-
             error: {
                 loadError: "Could not load artists.",
             },
