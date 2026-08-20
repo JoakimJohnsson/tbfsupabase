@@ -1,15 +1,15 @@
 import {useParams} from "react-router";
 import {useTranslation} from "react-i18next";
-import Feedback from "../../../components/feedback/Feedback";
 import SimpleSpinner from "../../../components/spinners/SimpleSpinner";
-import {useArtist} from "../hooks/useArtist";
+import Feedback from "../../../components/feedback/Feedback";
+import {useArtist} from "../../artists/hooks/useArtist";
 
-export const ArtistPage = () => {
+export const AdminArtistPage = () => {
 
     const {t} = useTranslation();
 
     const {artistSlug} = useParams();
-    const loadErrorMessage = t("features.artist.error.loadError");
+    const loadErrorMessage = t("features.admin.artist.error.loadError");
     const {artist, loadError, loading} = useArtist({
         artistSlug,
         loadErrorMessage,
@@ -21,11 +21,11 @@ export const ArtistPage = () => {
     }
 
     if (loading) {
-        return <SimpleSpinner message={t("features.artist.message.loading")}/>;
+        return <SimpleSpinner message={t("features.admin.artist.message.loading")}/>;
     }
 
     if (!artist) {
-        return <Feedback warnings={[t("features.artist.message.empty")]} />;
+        return <Feedback warnings={[t("features.admin.artist.message.empty")]} />;
     }
 
     return (
