@@ -19,6 +19,13 @@ export const en = {
                     title: "Create artist",
                 },
                 title: "Artist",
+                error: {
+                    loadError: "Could not load artist.",
+                },
+                message: {
+                    empty: "No artist found...",
+                    loading: "Loading artist...",
+                },
             },
             artists: {
                 lead: "Here, you can administer the artists.",

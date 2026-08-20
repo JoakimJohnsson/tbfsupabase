@@ -61,14 +61,18 @@ export const ArtistsPage = () => {
 
     }, [loadError, loadWarning]);
 
+    if (loading) {
+        return <SimpleSpinner message={t("features.artists.message.loading")}/>;
+    }
+
+    if (error) {
+        return <Feedback errors={[error]}/>
+    }
+
     return (
         <>
             <h1>{t("features.artists.title")}</h1>
-            <Feedback errors={[error]} warnings={[warning]}/>
-            {
-                loading &&
-                <SimpleSpinner message={t("features.artists.message.loading")}/>
-            }
+            <Feedback warnings={[warning]}/>
             {
                 !!artists.length &&
                 <ul>

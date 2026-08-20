@@ -9,6 +9,7 @@ import {ArtistsPage} from "../features/artists/pages/ArtistsPage";
 import {LoginPage} from "../features/auth/pages/LoginPage";
 import {HomePage} from "../features/home/pages/HomePage";
 import {NotFoundPage} from "../features/notfound/pages/NotFoundPage";
+import {AdminArtistPage} from "../features/admin/pages/AdminArtistPage";
 
 export const router = createBrowserRouter([
     {
@@ -52,6 +53,10 @@ export const router = createBrowserRouter([
             {
                 path: "artists",
                 element: <AdminArtistsPage/>,
+            },
+            {
+                path: "artists/:artistSlug",
+                element: <AdminArtistPage/>,
             },
         ],
     },

@@ -6,6 +6,7 @@ import {isAbortError} from "../../../lib/asyncHelpers/withAbortSignal";
 import Feedback from "../../../components/feedback/Feedback";
 import SimpleSpinner from "../../../components/spinners/SimpleSpinner";
 import type {Artist, SimpleMessage} from "../../../types";
+import {Link} from "react-router";
 
 export const AdminArtistsPage = () => {
 
@@ -20,14 +21,13 @@ export const AdminArtistsPage = () => {
     const [artists, setArtists] = useState<Artist[]>([]);
     const [loading, setLoading] = useState(true);
 
-    // Messages
-    const loadErrorMessage = t("features.artists.error.loadError");
-
     useEffect(() => {
 
         // Reset view state.
         setLoading(true);
         setLoadError(null);
+
+        const loadErrorMessage = t("features.artists.error.loadError");
 
         // Cancel in-flight request when component unmounts.
         const controller = new AbortController();
@@ -57,7 +57,7 @@ export const AdminArtistsPage = () => {
             controller.abort();
         };
 
-    }, [loadErrorMessage]);
+    }, [t]);
 
     const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -96,26 +96,31 @@ export const AdminArtistsPage = () => {
         }
     };
 
+    if (loading) {
+        return <SimpleSpinner/>;
+    }
+
+    if (loadError) {
+        return <Feedback errors={[loadError]}/>;
+    }
+
     return (
         <>
             <h1>{t("features.admin.artists.title")}</h1>
 
-            <Feedback errors={[loadError, submitError]} successes={[submitSuccess]}/>
+            <Feedback errors={[submitError]} successes={[submitSuccess]}/>
 
             <p className="lead">{t("features.admin.artists.lead")}</p>
 
-            {
-                !loading ?
-                    <ul>
-                        {artists.map((artist) => (
-                            <li key={artist.id}>
-                                {artist.name}
-                            </li>
-                        ))}
-                    </ul>
-                    :
-                    <SimpleSpinner/>
-            }
+            <ul>
+                {artists.map((artist) => (
+                    <li key={artist.id}>
+                        <Link to={`/admin/artists/${artist.slug}`}>
+                            {artist.name}
+                        </Link>
+                    </li>
+                ))}
+            </ul>
 
             <h2>{t("features.admin.artist.create.title")}</h2>
 
