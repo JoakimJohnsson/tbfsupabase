@@ -14,6 +14,12 @@ export type CreateArtistInput = {
     description?: string;
 };
 
+export type UpdateArtistInput = {
+    id: string;
+    name: string;
+    description?: string;
+};
+
 // Context values
 export type AuthContextValue = {
     session: Session | null;
