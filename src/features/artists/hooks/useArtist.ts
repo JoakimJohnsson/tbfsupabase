@@ -4,7 +4,7 @@ import {isAbortError} from "../../../lib/asyncHelpers/withAbortSignal";
 import type {Artist, SimpleMessage} from "../../../types";
 
 type UseArtistOptions = {
-    artistSlug: string;
+    artistSlug?: string;
     loadErrorMessage: string;
 };
 
