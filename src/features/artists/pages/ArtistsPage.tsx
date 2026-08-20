@@ -66,7 +66,7 @@ export const ArtistsPage = () => {
     }
 
     if (error) {
-        return <Feedback errors={[error]}/>
+        return <Feedback errors={[error]}/>;
     }
 
     return (

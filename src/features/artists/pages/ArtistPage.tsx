@@ -1,63 +1,19 @@
-import {useEffect, useState} from "react";
 import {useParams} from "react-router";
-import {getArtist} from "../api/getArtist";
-import {isAbortError} from "../../../lib/asyncHelpers/withAbortSignal";
 import {useTranslation} from "react-i18next";
 import Feedback from "../../../components/feedback/Feedback";
 import SimpleSpinner from "../../../components/spinners/SimpleSpinner";
-import type {Artist, SimpleMessage} from "../../../types";
+import {useArtist} from "../hooks/useArtist";
 
 export const ArtistPage = () => {
 
     const {t} = useTranslation();
 
     const {artistSlug} = useParams();
-    const [artist, setArtist] = useState<Artist | null>(null);
-    const [loadError, setLoadError] = useState<SimpleMessage>(null);
-    const [loading, setLoading] = useState<boolean>(true);
-
-    useEffect(() => {
-        const loadErrorMessage = t("features.artist.error.loadError");
-
-        // Reset view state
-        setLoading(true);
-        setLoadError(null);
-        setArtist(null);
-
-        if (!artistSlug) {
-            setLoadError(loadErrorMessage);
-            setLoading(false);
-            return;
-        }
-
-        // Cancel in-flight request when slug changes or component unmounts
-        const controller = new AbortController();
-
-        const loadArtist = async () => {
-            try {
-                const data = await getArtist(artistSlug, controller.signal);
-                setArtist(data);
-            } catch (error) {
-                // Ignore expected cancellation errors from AbortController
-                if (!isAbortError(error)) {
-                    console.error(error);
-                    setLoadError(loadErrorMessage);
-                }
-            } finally {
-                // Avoid state updates after cleanup has already aborted the request
-                if (!controller.signal.aborted) {
-                    setLoading(false);
-                }
-            }
-        };
-
-        void loadArtist();
-
-        return () => {
-            controller.abort();
-        };
-
-    }, [artistSlug, t]);
+    const loadErrorMessage = t("features.artist.error.loadError");
+    const {artist, loadError, loading} = useArtist({
+        artistSlug,
+        loadErrorMessage,
+    });
 
     // Error and state handling
     if (loadError) {
