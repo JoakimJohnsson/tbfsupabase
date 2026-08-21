@@ -25,8 +25,19 @@ export const en = {
                     success: {
                         editSuccess: "Edited artist successfully.",
                     },
-                    submit: "Edit artist",
+                    submitEdit: "Save artist",
                     submitting: "Editing artist...",
+                },
+                delete: {
+                    error: {
+                        deleteError: "Could not delete artist.",
+                    },
+                    success: {
+                        deleteSuccess: "Artist deleted.",
+                    },
+                    submitDelete: "Delete artist",
+                    deleting: "Deleting artist...",
+                    confirm: "Are you sure you want to delete {{name}}?",
                 },
                 title: "Artist",
                 error: {
