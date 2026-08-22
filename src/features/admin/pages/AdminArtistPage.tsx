@@ -8,6 +8,7 @@ import {updateArtist} from "../../artists/api/updateArtist";
 import type {SubmitEvent} from "react";
 import {SimpleMessage} from "../../../types";
 import {deleteArtist} from "../../artists/api/deleteArtist";
+import {useArtistRecords} from "../../records/hooks/useArtistRecords.ts";
 
 export const AdminArtistPage = () => {
 
@@ -17,11 +18,16 @@ export const AdminArtistPage = () => {
     const editErrorMessage = t("features.admin.artist.edit.error.editError");
     const editSuccessMessage = t("features.admin.artist.edit.success.editSuccess");
     const deleteErrorMessage = t("features.admin.artist.delete.error.deleteError");
+    const recordsLoadErrorMessage = t("features.admin.artist.error.loadRecordsError",);
 
     const {artistSlug} = useParams();
     const {artist, loadError, loading, setArtist} = useArtist({
         artistSlug,
         loadErrorMessage,
+    });
+    const {records, recordsLoadError, recordsLoading,} = useArtistRecords({
+        artistId: artist?.id,
+        recordsLoadErrorMessage,
     });
 
     const [name, setName] = useState("");
@@ -119,9 +125,7 @@ export const AdminArtistPage = () => {
 
             <Feedback errors={[editError, deleteError]} successes={[editSuccess]}/>
 
-            {artist.description && (
-                <p>{artist.description}</p>
-            )}
+            {artist.description && <p>{artist.description}</p>}
 
             <form onSubmit={handleSubmit}>
                 <div className="mb-3">
@@ -163,7 +167,27 @@ export const AdminArtistPage = () => {
                         : t("features.admin.artist.edit.submitEdit")}
                 </button>
             </form>
-            <hr/>
+
+            <h2>{t("features.admin.artist.recordsTitle")}</h2>
+
+            {recordsLoadError && <Feedback errors={[recordsLoadError]}/>}
+
+            {recordsLoading && <SimpleSpinner/>}
+
+            {!recordsLoading && !recordsLoadError && records.length === 0 && (
+                <p>{t("features.admin.artist.message.recordsEmpty")}</p>
+            )}
+
+            {records.length > 0 && (
+                <ul>
+                    {records.map((record) => (
+                        <li key={record.id}>
+                            {record.name}
+                            {record.year && ` (${record.year})`}
+                        </li>
+                    ))}
+                </ul>
+            )}
 
             <button
                 className="btn btn-danger"

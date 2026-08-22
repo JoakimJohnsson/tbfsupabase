@@ -40,12 +40,15 @@ export const en = {
                     confirm: "Are you sure you want to delete {{name}}?",
                 },
                 title: "Artist",
+                recordsTitle: "Records",
                 error: {
                     loadError: "Could not load artist.",
+                    loadRecordsError: "Could not load artist records.",
                 },
                 message: {
                     empty: "No artist found...",
                     loading: "Loading artist...",
+                    recordsEmpty: "No records found...",
                 },
             },
             artists: {
