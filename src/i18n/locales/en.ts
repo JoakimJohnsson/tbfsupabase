@@ -7,6 +7,9 @@ export const en = {
         admin: {
             artist: {
                 create: {
+                    title: "Create artist",
+                    submit: "Create artist",
+                    submitting: "Creating artist...",
                     error: {
                         createError: "Could not create artist.",
                         invalidNameError: "The artist name is invalid.",
@@ -14,30 +17,29 @@ export const en = {
                     success: {
                         createSuccess: "Artist created.",
                     },
-                    submit: "Create artist",
-                    submitting: "Creating artist...",
-                    title: "Create artist",
                 },
                 edit: {
+                    title: "Edit artist",
+                    submitEdit: "Save artist",
+                    submitting: "Editing artist...",
                     error: {
                         editError: "Could not edit artist.",
                     },
                     success: {
                         editSuccess: "Edited artist successfully.",
                     },
-                    submitEdit: "Save artist",
-                    submitting: "Editing artist...",
                 },
                 delete: {
+                    title: "Delete artist",
+                    submitDelete: "Delete artist",
+                    deleting: "Deleting artist...",
+                    confirm: "Are you sure you want to delete {{name}}?",
                     error: {
                         deleteError: "Could not delete artist.",
                     },
                     success: {
                         deleteSuccess: "Artist deleted.",
                     },
-                    submitDelete: "Delete artist",
-                    deleting: "Deleting artist...",
-                    confirm: "Are you sure you want to delete {{name}}?",
                 },
                 title: "Artist",
                 recordsTitle: "Records",
@@ -66,6 +68,7 @@ export const en = {
             }
         },
         artists: {
+            title: "Artists",
             error: {
                 loadError: "Could not load artists.",
             },
@@ -73,16 +76,15 @@ export const en = {
                 empty: "No artists found...",
                 loading: "Loading artists...",
             },
-            title: "Artists",
         },
         auth: {
             login: {
+                title: "Login",
+                submit: "Log in",
+                submitting: "Logging in...",
                 error: {
                     loginError: "Could not log in. Check your email and password.",
                 },
-                submit: "Log in",
-                submitting: "Logging in...",
-                title: "Login",
             },
         },
     },

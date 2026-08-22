@@ -127,6 +127,8 @@ export const AdminArtistPage = () => {
 
             {artist.description && <p>{artist.description}</p>}
 
+            <h2>{t("features.admin.artist.edit.title")}</h2>
+
             <form onSubmit={handleSubmit}>
                 <div className="mb-3">
                     <label className="form-label" htmlFor="name">
@@ -188,6 +190,8 @@ export const AdminArtistPage = () => {
                     ))}
                 </ul>
             )}
+
+            <h2>{t("features.admin.artist.delete.title")}</h2>
 
             <button
                 className="btn btn-danger"
