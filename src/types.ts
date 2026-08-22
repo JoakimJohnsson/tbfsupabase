@@ -3,6 +3,8 @@ import type {Session, User} from "@supabase/supabase-js";
 
 // Models
 export type Artist = Database["public"]["Tables"]["artists"]["Row"];
+export type Record = Database["public"]["Tables"]["records"]["Row"];
+
 export type Profile = Database["public"]["Tables"]["profiles"]["Row"];
 
 export type SimpleMessage = string | null;
