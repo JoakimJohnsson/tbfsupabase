@@ -120,7 +120,7 @@ export const AdminArtistPage = () => {
             }
 
             const createdRecord = await createRecord({
-                artist_id: artist.id,
+                artist_ids: [artist.id],
                 name: trimmedRecordName,
                 description: recordDescription.trim() || undefined,
                 year: parsedYear,

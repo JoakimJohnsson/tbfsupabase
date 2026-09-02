@@ -4,7 +4,7 @@ import type {Session, User} from "@supabase/supabase-js";
 // Models
 export type Artist = Database["public"]["Tables"]["artists"]["Row"];
 export type Record = Database["public"]["Tables"]["records"]["Row"];
-
+export type RecordArtist = Database["public"]["Tables"]["record_artists"]["Row"];
 export type Profile = Database["public"]["Tables"]["profiles"]["Row"];
 
 export type SimpleMessage = string | null;
@@ -23,7 +23,16 @@ export type UpdateArtistInput = {
 };
 
 export type CreateRecordInput = {
-    artist_id: string;
+    artist_ids: string[];
+    name: string;
+    description?: string;
+    format?: string;
+    type?: string;
+    year?: number;
+};
+
+export type UpdateRecordInput = {
+    id: string;
     name: string;
     description?: string;
     format?: string;
