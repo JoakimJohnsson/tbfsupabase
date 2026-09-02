@@ -36,6 +36,10 @@ export const AdminLayout = () => {
                     <Link className="me-2" to="/admin/artists">
                         {t("navigation.adminArtists")}
                     </Link>
+
+                    <Link className="me-2" to="/admin/records">
+                        {t("navigation.adminRecords")}
+                    </Link>
                 </nav>
             </header>
 

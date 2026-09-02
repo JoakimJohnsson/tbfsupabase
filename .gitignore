@@ -32,3 +32,7 @@ yarn-error.log*
 .idea/inspectionProfiles
 
 /cover-images
+
+repomix-output.txt
+repomix.config.json
+.repomixignore

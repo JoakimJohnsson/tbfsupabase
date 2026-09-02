@@ -12,6 +12,31 @@ export type Database = {
   __InternalSupabase: {
     PostgrestVersion: "12.2.3 (519615d)"
   }
+  graphql_public: {
+    Tables: {
+      [_ in never]: never
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      graphql: {
+        Args: {
+          extensions?: Json
+          operationName?: string
+          query?: string
+          variables?: Json
+        }
+        Returns: Json
+      }
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
+  }
   public: {
     Tables: {
       artist_members: {
@@ -119,9 +144,41 @@ export type Database = {
         }
         Relationships: []
       }
-      records: {
+      record_artists: {
         Row: {
           artist_id: string
+          is_primary: boolean
+          record_id: string
+        }
+        Insert: {
+          artist_id: string
+          is_primary?: boolean
+          record_id: string
+        }
+        Update: {
+          artist_id?: string
+          is_primary?: boolean
+          record_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "record_artists_artist_id_fkey"
+            columns: ["artist_id"]
+            isOneToOne: false
+            referencedRelation: "artists"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "record_artists_record_id_fkey"
+            columns: ["record_id"]
+            isOneToOne: false
+            referencedRelation: "records"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      records: {
+        Row: {
           cover_path: string | null
           created_at: string
           description: string | null
@@ -132,7 +189,6 @@ export type Database = {
           year: number | null
         }
         Insert: {
-          artist_id: string
           cover_path?: string | null
           created_at?: string
           description?: string | null
@@ -143,7 +199,6 @@ export type Database = {
           year?: number | null
         }
         Update: {
-          artist_id?: string
           cover_path?: string | null
           created_at?: string
           description?: string | null
@@ -153,19 +208,43 @@ export type Database = {
           type?: string | null
           year?: number | null
         }
+        Relationships: []
+      }
+      song_artists: {
+        Row: {
+          artist_id: string
+          is_primary: boolean
+          song_id: string
+        }
+        Insert: {
+          artist_id: string
+          is_primary?: boolean
+          song_id: string
+        }
+        Update: {
+          artist_id?: string
+          is_primary?: boolean
+          song_id?: string
+        }
         Relationships: [
           {
-            foreignKeyName: "records_artist_id_fkey"
+            foreignKeyName: "song_artists_artist_id_fkey"
             columns: ["artist_id"]
             isOneToOne: false
             referencedRelation: "artists"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "song_artists_song_id_fkey"
+            columns: ["song_id"]
+            isOneToOne: false
+            referencedRelation: "songs"
             referencedColumns: ["id"]
           },
         ]
       }
       songs: {
         Row: {
-          artist_id: string
           audio_path: string
           created_at: string
           id: string
@@ -174,7 +253,6 @@ export type Database = {
           track_number: number | null
         }
         Insert: {
-          artist_id: string
           audio_path: string
           created_at?: string
           id?: string
@@ -183,7 +261,6 @@ export type Database = {
           track_number?: number | null
         }
         Update: {
-          artist_id?: string
           audio_path?: string
           created_at?: string
           id?: string
@@ -192,13 +269,6 @@ export type Database = {
           track_number?: number | null
         }
         Relationships: [
-          {
-            foreignKeyName: "songs_artist_id_fkey"
-            columns: ["artist_id"]
-            isOneToOne: false
-            referencedRelation: "artists"
-            referencedColumns: ["id"]
-          },
           {
             foreignKeyName: "songs_record_id_fkey"
             columns: ["record_id"]
@@ -342,6 +412,9 @@ export type CompositeTypes<
     : never
 
 export const Constants = {
+  graphql_public: {
+    Enums: {},
+  },
   public: {
     Enums: {},
   },

@@ -60,5 +60,6 @@ export const useArtistRecords = ({
         records,
         recordsLoadError: hasLoadError ? recordsLoadErrorMessage : null,
         recordsLoading,
+        setRecords,
     };
 };
