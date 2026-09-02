@@ -1,11 +1,15 @@
 export const en = {
     common: {
+        cancel: "Cancel",
+        delete: "Delete",
+        edit: "Edit",
         loading: "Loading...",
         logout: "Log out",
     },
     features: {
         admin: {
             artist: {
+                title: "Artist",
                 create: {
                     title: "Create artist",
                     submit: "Create artist",
@@ -16,19 +20,6 @@ export const en = {
                     },
                     success: {
                         createSuccess: "Artist created.",
-                    },
-                },
-                createRecord: {
-                    title: "Add record",
-                    submit: "Create record",
-                    submitting: "Creating record...",
-                    error: {
-                        createError: "Could not create record.",
-                        invalidNameError: "The record name is invalid.",
-                        invalidYearError: "The year must be a valid number.",
-                    },
-                    success: {
-                        createSuccess: "Record created.",
                     },
                 },
                 edit: {
@@ -54,8 +45,6 @@ export const en = {
                         deleteSuccess: "Artist deleted.",
                     },
                 },
-                title: "Artist",
-                recordsTitle: "Records",
                 error: {
                     loadError: "Could not load artist.",
                     loadRecordsError: "Could not load artist records.",
@@ -65,10 +54,74 @@ export const en = {
                     loading: "Loading artist...",
                     recordsEmpty: "No records found...",
                 },
+                recordsTitle: "Records",
+                createRecord: {
+                    title: "Add record",
+                    submit: "Create record",
+                    submitting: "Creating record...",
+                    error: {
+                        createError: "Could not create record.",
+                        invalidNameError: "The record name is invalid.",
+                        invalidYearError: "The year must be a valid number.",
+                    },
+                    success: {
+                        createSuccess: "Record created.",
+                    },
+                },
+                editRecord: {
+                    title: "Edit record",
+                    submit: "Save record",
+                    submitting: "Saving record...",
+                    error: {
+                        editError: "Could not update record.",
+                        invalidNameError: "The record name is invalid.",
+                        invalidYearError: "The year must be a valid number.",
+                    },
+                    success: {
+                        editSuccess: "Record updated.",
+                    },
+                },
+                deleteRecord: {
+                    confirm: "Are you sure you want to delete {{name}}?",
+                    deleting: "Deleting record...",
+                    error: {
+                        deleteError: "Could not delete record.",
+                    },
+                    success: {
+                        deleteSuccess: "Record deleted.",
+                    },
+                },
             },
             artists: {
                 lead: "Here, you can administer the artists.",
                 title: "Artists",
+            },
+            records: {
+                title: "Records",
+                lead: "Here, you can administer all records across artists.",
+                create: {
+                    title: "Create record",
+                    submit: "Create record",
+                    submitting: "Creating record...",
+                    artistsLabel: "Associated artists",
+                    noArtistsHint: "No artists selected (compilation / various artists)",
+                    error: {
+                        createError: "Could not create record.",
+                        invalidNameError: "The record name is invalid.",
+                        invalidYearError: "The year must be a valid number.",
+                    },
+                    success: {
+                        createSuccess: "Record created successfully.",
+                    },
+                },
+                error: {
+                    loadError: "Could not load records.",
+                },
+                message: {
+                    empty: "No records found...",
+                    loading: "Loading records...",
+                    noArtists: "Various Artists / Compilation",
+                },
             },
         },
         artist: {
@@ -111,6 +164,7 @@ export const en = {
     navigation: {
         admin: "Admin",
         adminArtists: "Admin artists",
+        adminRecords: "Admin records",
         artists: "Artists",
         home: "TBF home",
         login: "Login",

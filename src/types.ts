@@ -10,6 +10,18 @@ export type Profile = Database["public"]["Tables"]["profiles"]["Row"];
 export type SimpleMessage = string | null;
 export type SimpleMessageList = SimpleMessage[];
 
+export type RecordArtistRelation = RecordArtist & {
+    artists: {
+        id: string;
+        name: string;
+        slug: string;
+    } | null;
+};
+
+export type RecordWithArtists = Record & {
+    record_artists: RecordArtistRelation[];
+};
+
 // Inputs
 export type CreateArtistInput = {
     name: string;

@@ -10,6 +10,7 @@ import {LoginPage} from "../features/auth/pages/LoginPage";
 import {HomePage} from "../features/home/pages/HomePage";
 import {NotFoundPage} from "../features/notfound/pages/NotFoundPage";
 import {AdminArtistPage} from "../features/admin/pages/AdminArtistPage";
+import {AdminRecordsPage} from "../features/admin/pages/AdminRecordsPage.tsx";
 
 export const router = createBrowserRouter([
     {
@@ -57,6 +58,10 @@ export const router = createBrowserRouter([
             {
                 path: "artists/:artistSlug",
                 element: <AdminArtistPage/>,
+            },
+            {
+                path: "records",
+                element: <AdminRecordsPage/>,
             },
         ],
     },
