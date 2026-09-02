@@ -18,6 +18,19 @@ export const en = {
                         createSuccess: "Artist created.",
                     },
                 },
+                createRecord: {
+                    title: "Add record",
+                    submit: "Create record",
+                    submitting: "Creating record...",
+                    error: {
+                        createError: "Could not create record.",
+                        invalidNameError: "The record name is invalid.",
+                        invalidYearError: "The year must be a valid number.",
+                    },
+                    success: {
+                        createSuccess: "Record created.",
+                    },
+                },
                 edit: {
                     title: "Edit artist",
                     submitEdit: "Save artist",
@@ -93,6 +106,7 @@ export const en = {
         email: "E-mail",
         name: "Name",
         password: "Password",
+        year: "Year",
     },
     navigation: {
         admin: "Admin",

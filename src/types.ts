@@ -22,6 +22,15 @@ export type UpdateArtistInput = {
     description?: string;
 };
 
+export type CreateRecordInput = {
+    artist_id: string;
+    name: string;
+    description?: string;
+    format?: string;
+    type?: string;
+    year?: number;
+};
+
 // Context values
 export type AuthContextValue = {
     session: Session | null;
