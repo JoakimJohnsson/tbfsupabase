@@ -96,9 +96,7 @@ export const en = {
                 lead: "Here, you can administer the artists.",
                 title: "Artists",
             },
-            records: {
-                title: "Records",
-                lead: "Here, you can administer all records across artists.",
+            record: {
                 create: {
                     title: "Create record",
                     submit: "Create record",
@@ -114,6 +112,23 @@ export const en = {
                         createSuccess: "Record created successfully.",
                     },
                 },
+                edit: {
+                    title: "Edit record",
+                    submit: "Save record",
+                    submitting: "Saving record...",
+                    error: {
+                        editError: "Could not update record.",
+                        invalidNameError: "The record name is invalid.",
+                        invalidYearError: "The year must be a valid number.",
+                    },
+                    success: {
+                        editSuccess: "Record updated successfully.",
+                    },
+                },
+            },
+            records: {
+                title: "Records",
+                lead: "Here, you can administer all records across artists.",
                 error: {
                     loadError: "Could not load records.",
                 },

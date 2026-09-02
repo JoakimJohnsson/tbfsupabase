@@ -45,6 +45,7 @@ export type CreateRecordInput = {
 
 export type UpdateRecordInput = {
     id: string;
+    artist_ids: string[];
     name: string;
     description?: string;
     format?: string;

@@ -4,7 +4,7 @@ import type {CreateRecordInput} from "../../../types";
 export const createRecord = async (input: CreateRecordInput) => {
     const {artist_ids, ...recordData} = input;
 
-    // Insert record
+    // 1. Insert record
     const {data: record, error: recordError} = await supabase
         .from("records")
         .insert({
@@ -21,7 +21,7 @@ export const createRecord = async (input: CreateRecordInput) => {
         throw recordError;
     }
 
-    // Link artists
+    // 2. Link artists
     if (artist_ids.length > 0) {
         const recordArtists = artist_ids.map((artistId, index) => ({
             record_id: record.id,
