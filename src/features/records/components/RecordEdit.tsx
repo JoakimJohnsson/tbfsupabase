@@ -102,7 +102,7 @@ export const RecordEdit = ({
                                     checked={editArtistIds.includes(artist.id)}
                                     className="form-check-input"
                                     id={`artist-${record.id}-${artist.id}`}
-                                    name={"artist-ids"}
+                                    name="artist-ids"
                                     onChange={() => {
                                         handleEditArtistCheckboxChange(
                                             artist.id,

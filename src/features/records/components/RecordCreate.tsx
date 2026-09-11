@@ -111,7 +111,7 @@ export const RecordCreate = ({
                                         )}
                                         className="form-check-input"
                                         id={`artist-${artist.id}`}
-                                        name={"artist-ids"}
+                                        name="artist-ids"
                                         onChange={() => {
                                             handleArtistCheckboxChange(
                                                 artist.id,

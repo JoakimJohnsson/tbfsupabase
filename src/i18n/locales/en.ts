@@ -10,7 +10,6 @@ export const en = {
     features: {
         admin: {
             artist: {
-                title: "Artist",
                 create: {
                     title: "Create artist",
                     submit: "Create artist",
@@ -42,9 +41,6 @@ export const en = {
                     error: {
                         deleteError: "Could not delete artist.",
                     },
-                    success: {
-                        deleteSuccess: "Artist deleted.",
-                    },
                 },
                 error: {
                     loadError: "Could not load artist.",
@@ -56,32 +52,6 @@ export const en = {
                     recordsEmpty: "No records found...",
                 },
                 recordsTitle: "Records",
-                createRecord: {
-                    title: "Add record",
-                    submit: "Create record",
-                    submitting: "Creating record...",
-                    error: {
-                        createError: "Could not create record.",
-                        invalidNameError: "The record name is invalid.",
-                        invalidYearError: "The year must be a valid number.",
-                    },
-                    success: {
-                        createSuccess: "Record created.",
-                    },
-                },
-                editRecord: {
-                    title: "Edit record",
-                    submit: "Save record",
-                    submitting: "Saving record...",
-                    error: {
-                        editError: "Could not update record.",
-                        invalidNameError: "The record name is invalid.",
-                        invalidYearError: "The year must be a valid number.",
-                    },
-                    success: {
-                        editSuccess: "Record updated.",
-                    },
-                },
                 deleteRecord: {
                     confirm: "Are you sure you want to delete {{name}}?",
                     deleting: "Deleting record...",
@@ -115,7 +85,6 @@ export const en = {
                     },
                 },
                 edit: {
-                    title: "Edit record",
                     submit: "Save record",
                     submitting: "Saving record...",
                     error: {
@@ -205,4 +174,4 @@ export const en = {
         home: "TBF home",
         login: "Login",
     },
-};
+} as const;

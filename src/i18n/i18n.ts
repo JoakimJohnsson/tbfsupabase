@@ -13,6 +13,13 @@ void i18n.use(initReactI18next).init({
     interpolation: {
         escapeValue: false,
     },
+
+    saveMissing: true,
+    missingKeyHandler: (lng, ns, key) => {
+        console.error(
+            `[i18n MISSING KEY] Key "${key}" not found in language "${lng}" (namespace: "${ns}").`,
+        );
+    },
 });
 
 export { i18n };
