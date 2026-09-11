@@ -1,6 +1,12 @@
+import { type Dispatch, type SetStateAction } from "react";
 import { useTranslation } from "react-i18next";
+import {
+    faMusic,
+    faPenToSquare,
+    faTrashCan,
+} from "@fortawesome/pro-solid-svg-icons";
+import { ToolButton } from "../../../components/buttons/ToolButton";
 import type { Artist, RecordWithArtists } from "../../../types";
-import { Dispatch, SetStateAction } from "react";
 import { RecordSongsManager } from "./RecordSongsManager";
 
 interface RecordRowProps {
@@ -25,6 +31,10 @@ export const RecordToolRow = ({
     artists,
 }: RecordRowProps) => {
     const { t } = useTranslation();
+    const deleteRecordText =
+        deletingRecordId === record.id
+            ? t("features.admin.artist.deleteRecord.deleting")
+            : t("common.delete");
 
     return (
         <>
@@ -39,38 +49,32 @@ export const RecordToolRow = ({
                 </div>
 
                 <div className="d-flex gap-2">
-                    <button
-                        className="btn btn-outline-secondary"
+                    <ToolButton
+                        icon={faPenToSquare}
                         onClick={() => {
                             handleStartEdit(record);
                         }}
-                        type="button"
-                    >
-                        {t("common.edit")}
-                    </button>
-                    <button
-                        className="btn btn-outline-danger"
-                        disabled={deletingRecordId === record.id}
+                        text={t("common.edit")}
+                        variant="outline-secondary"
+                    />
+                    <ToolButton
+                        icon={faTrashCan}
                         onClick={() => {
                             void handleDeleteRecord(record);
                         }}
-                        type="button"
-                    >
-                        {deletingRecordId === record.id
-                            ? t("features.admin.artist.deleteRecord.deleting")
-                            : t("common.delete")}
-                    </button>
-                    <button
-                        className="btn btn-outline-info"
-                        onClick={() =>
+                        text={deleteRecordText}
+                        variant="outline-danger"
+                    />
+                    <ToolButton
+                        icon={faMusic}
+                        onClick={() => {
                             setOpenTracklistRecordId((cur) =>
                                 cur === record.id ? null : record.id,
-                            )
-                        }
-                        type="button"
-                    >
-                        {t("features.admin.songs.tracks")}
-                    </button>
+                            );
+                        }}
+                        text={t("features.admin.songs.tracks")}
+                        variant="outline-info"
+                    />
                 </div>
             </li>
             {openTracklistRecordId === record.id && (

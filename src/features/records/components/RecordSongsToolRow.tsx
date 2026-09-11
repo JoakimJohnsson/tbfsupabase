@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
-
+import { faPenToSquare, faTrashCan } from "@fortawesome/pro-solid-svg-icons";
+import { ToolButton } from "../../../components/buttons/ToolButton";
 import type { SongWithArtists } from "../../../types";
 
 interface RecordSongsToolRowProps {
@@ -31,20 +32,22 @@ export const RecordSongsToolRow = ({
                 )}
             </div>
             <div className="d-flex gap-2">
-                <button
-                    className="btn btn-outline-secondary"
-                    onClick={() => handleStartEdit(song)}
-                    type="button"
-                >
-                    {t("common.edit")}
-                </button>
-                <button
-                    className="btn btn-outline-danger"
-                    onClick={() => void handleDeleteSong(song)}
-                    type="button"
-                >
-                    {t("common.delete")}
-                </button>
+                <ToolButton
+                    icon={faPenToSquare}
+                    onClick={() => {
+                        handleStartEdit(song);
+                    }}
+                    text={t("common.edit")}
+                    variant="outline-secondary"
+                />
+                <ToolButton
+                    icon={faTrashCan}
+                    onClick={() => {
+                        void handleDeleteSong(song);
+                    }}
+                    text={t("common.delete")}
+                    variant="outline-danger"
+                />
             </div>
         </li>
     );
