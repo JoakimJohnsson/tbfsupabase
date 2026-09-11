@@ -27,7 +27,7 @@ export const RecordSongsEdit = ({
     const {t} = useTranslation();
 
     return (
-        <li className="list-group-item" key={song.id}>
+        <li className="list-group-item">
             <form onSubmit={handleSaveEdit}>
                 <div className="row g-2 mb-2">
                     <div className="col-2">

@@ -126,48 +126,37 @@ export const AdminArtistsPage = () => {
 
             <form onSubmit={handleSubmit}>
                 <div className="mb-3">
-                    <label
-                        className="form-label"
-                        htmlFor="artist-name"
-                    >
-                        {t("forms.name")}
-                    </label>
+                    <label className="form-label" htmlFor="name">{t("forms.name")}</label>
 
-                    <input
-                        className="form-control"
-                        id="artist-name"
-                        onChange={(event) => {
-                            setName(event.target.value);
-                        }}
-                        required
-                        type="text"
-                        value={name}
+                    <input className="form-control"
+                           id="name"
+                           name="name"
+                           onChange={(event) => {
+                               setName(event.target.value);
+                           }}
+                           required
+                           type="text"
+                           value={name}
                     />
                 </div>
 
                 <div className="mb-3">
-                    <label
-                        className="form-label"
-                        htmlFor="artist-description"
-                    >
-                        {t("forms.description")}
-                    </label>
+                    <label className="form-label" htmlFor="description">{t("forms.description")}</label>
 
-                    <textarea
-                        className="form-control"
-                        id="artist-description"
-                        onChange={(event) => {
-                            setDescription(event.target.value);
-                        }}
-                        rows={5}
-                        value={description}
+                    <textarea className="form-control"
+                              id="description"
+                              name="description"
+                              onChange={(event) => {
+                                  setDescription(event.target.value);
+                              }}
+                              rows={5}
+                              value={description}
                     />
                 </div>
 
-                <button
-                    className="btn btn-primary"
-                    disabled={isSubmitting || loading}
-                    type="submit"
+                <button className="btn btn-primary"
+                        disabled={isSubmitting || loading}
+                        type="submit"
                 >
                     {isSubmitting
                         ? t("features.admin.artist.create.submitting")
