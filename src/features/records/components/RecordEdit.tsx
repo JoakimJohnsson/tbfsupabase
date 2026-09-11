@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import type { Artist, RecordWithArtists } from "../../../types";
 import { Dispatch, SetStateAction, type SubmitEvent } from "react";
+import { FormInput, FormTextArea } from "../../../components/form";
 
 interface RecordEditProps {
     record: RecordWithArtists;
@@ -38,58 +39,34 @@ export const RecordEdit = ({
     return (
         <li className="list-group-item">
             <form onSubmit={handleSaveEdit}>
-                <div className="mb-3">
-                    <label className="form-label" htmlFor={`name-${record.id}`}>
-                        {t("forms.name")}
-                    </label>
-                    <input
-                        className="form-control"
-                        id={`name-${record.id}`}
-                        name="name"
-                        onChange={(e) => {
-                            setEditName(e.target.value);
-                        }}
-                        required
-                        type="text"
-                        value={editName}
-                    />
-                </div>
+                <FormInput
+                    id={`name-${record.id}`}
+                    label={t("forms.name")}
+                    name="name"
+                    onChange={setEditName}
+                    required
+                    type="text"
+                    value={editName}
+                />
 
-                <div className="mb-3">
-                    <label className="form-label" htmlFor={`year-${record.id}`}>
-                        {t("forms.year")}
-                    </label>
-                    <input
-                        className="form-control"
-                        id={`year-${record.id}`}
-                        name="year"
-                        onChange={(e) => {
-                            setEditYear(e.target.value);
-                        }}
-                        placeholder="YYYY"
-                        type="number"
-                        value={editYear}
-                    />
-                </div>
+                <FormInput
+                    id={`year-${record.id}`}
+                    label={t("forms.year")}
+                    name="year"
+                    onChange={setEditYear}
+                    placeholder="YYYY"
+                    type="number"
+                    value={editYear}
+                />
 
-                <div className="mb-3">
-                    <label
-                        className="form-label"
-                        htmlFor={`description-${record.id}`}
-                    >
-                        {t("forms.description")}
-                    </label>
-                    <textarea
-                        className="form-control"
-                        id={`description-${record.id}`}
-                        name="description"
-                        onChange={(e) => {
-                            setEditDescription(e.target.value);
-                        }}
-                        rows={3}
-                        value={editDescription}
-                    />
-                </div>
+                <FormTextArea
+                    id={`description-${record.id}`}
+                    label={t("forms.description")}
+                    name="description"
+                    onChange={setEditDescription}
+                    rows={3}
+                    value={editDescription}
+                />
 
                 <fieldset className="mb-3">
                     <legend className="form-label col-form-label pt-0">

@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router";
 import { signIn } from "../api/signIn";
 import Feedback from "../../../components/feedback/Feedback";
+import { FormInput } from "../../../components/form";
 
 export const LoginPage = () => {
     const { t } = useTranslation();
@@ -44,43 +45,27 @@ export const LoginPage = () => {
             <Feedback errors={[error]} />
 
             <form onSubmit={handleSubmit}>
-                <div className="mb-3">
-                    <label className="form-label" htmlFor="email">
-                        {t("forms.email")}
-                    </label>
+                <FormInput
+                    autoComplete="email"
+                    id="email"
+                    label={t("forms.email")}
+                    name="email"
+                    onChange={setEmail}
+                    required
+                    type="email"
+                    value={email}
+                />
 
-                    <input
-                        autoComplete="email"
-                        className="form-control"
-                        id="email"
-                        name="email"
-                        onChange={(event) => {
-                            setEmail(event.target.value);
-                        }}
-                        required
-                        type="email"
-                        value={email}
-                    />
-                </div>
-
-                <div className="mb-3">
-                    <label className="form-label" htmlFor="password">
-                        {t("forms.password")}
-                    </label>
-
-                    <input
-                        autoComplete="current-password"
-                        className="form-control"
-                        id="password"
-                        name="password"
-                        onChange={(event) => {
-                            setPassword(event.target.value);
-                        }}
-                        required
-                        type="password"
-                        value={password}
-                    />
-                </div>
+                <FormInput
+                    autoComplete="current-password"
+                    id="password"
+                    label={t("forms.password")}
+                    name="password"
+                    onChange={setPassword}
+                    required
+                    type="password"
+                    value={password}
+                />
 
                 <button
                     className="btn btn-primary"

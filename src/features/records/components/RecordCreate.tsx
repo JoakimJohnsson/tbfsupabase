@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import type { Artist } from "../../../types";
 import { Dispatch, SetStateAction, type SubmitEvent } from "react";
+import { FormInput, FormTextArea } from "../../../components/form";
 
 interface RecordCreateProps {
     handleCreateRecord: (event: SubmitEvent<HTMLFormElement>) => Promise<void>;
@@ -36,55 +37,34 @@ export const RecordCreate = ({
             <h2>{t("features.admin.record.create.title")}</h2>
 
             <form onSubmit={handleCreateRecord}>
-                <div className="mb-3">
-                    <label className="form-label" htmlFor="name">
-                        {t("forms.name")}
-                    </label>
-                    <input
-                        className="form-control"
-                        id="name"
-                        name="name"
-                        onChange={(e) => {
-                            setName(e.target.value);
-                        }}
-                        required
-                        type="text"
-                        value={name}
-                    />
-                </div>
+                <FormInput
+                    id="name"
+                    label={t("forms.name")}
+                    name="name"
+                    onChange={setName}
+                    required
+                    type="text"
+                    value={name}
+                />
 
-                <div className="mb-3">
-                    <label className="form-label" htmlFor="year">
-                        {t("forms.year")}
-                    </label>
-                    <input
-                        className="form-control"
-                        id="year"
-                        name="year"
-                        onChange={(e) => {
-                            setYear(e.target.value);
-                        }}
-                        placeholder="YYYY"
-                        type="number"
-                        value={year}
-                    />
-                </div>
+                <FormInput
+                    id="year"
+                    label={t("forms.year")}
+                    name="year"
+                    onChange={setYear}
+                    placeholder="YYYY"
+                    type="number"
+                    value={year}
+                />
 
-                <div className="mb-3">
-                    <label className="form-label" htmlFor="description">
-                        {t("forms.description")}
-                    </label>
-                    <textarea
-                        className="form-control"
-                        id="description"
-                        name="description"
-                        onChange={(e) => {
-                            setDescription(e.target.value);
-                        }}
-                        rows={3}
-                        value={description}
-                    />
-                </div>
+                <FormTextArea
+                    id="description"
+                    label={t("forms.description")}
+                    name="description"
+                    onChange={setDescription}
+                    rows={3}
+                    value={description}
+                />
 
                 <fieldset
                     aria-describedby={
