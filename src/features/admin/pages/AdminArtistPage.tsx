@@ -9,6 +9,8 @@ import type { SubmitEvent } from "react";
 import type { SimpleMessage } from "../../../types";
 import { deleteArtist } from "../../artists/api/deleteArtist";
 import { useArtistRecords } from "../../records/hooks/useArtistRecords";
+import { ToolButton } from "../../../components/buttons/ToolButton";
+import { faPenToSquare } from "@fortawesome/pro-solid-svg-icons";
 
 export const AdminArtistPage = () => {
     const { t } = useTranslation();
@@ -219,12 +221,14 @@ export const AdminArtistPage = () => {
                                 <strong>{record.name}</strong>
                                 {record.year && ` (${record.year})`}
                             </div>
-                            <Link
-                                className="btn btn-outline-secondary"
-                                to="/admin/records"
-                            >
-                                {t("common.edit")}
-                            </Link>
+
+                            <ToolButton
+                                ariaLabel={`${t("common.edit")} ${record.name}`}
+                                icon={faPenToSquare}
+                                text={t("common.edit")}
+                                to={`/admin/records?edit=${record.id}`}
+                                variant="outline-secondary"
+                            />
                         </li>
                     ))}
                 </ul>

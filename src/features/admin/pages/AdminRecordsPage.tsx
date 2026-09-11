@@ -1,4 +1,4 @@
-import { type SubmitEvent, useEffect, useState } from "react";
+import { type SubmitEvent, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Feedback from "../../../components/feedback/Feedback";
 import SimpleSpinner from "../../../components/spinners/SimpleSpinner";
@@ -8,11 +8,8 @@ import { deleteRecord } from "../../records/api/deleteRecord";
 import { getRecords } from "../../records/api/getRecords";
 import { updateRecord } from "../../records/api/updateRecord";
 import { isAbortError } from "../../../lib/asyncHelpers/withAbortSignal";
-import type {
-    Artist,
-    RecordWithArtists,
-    SimpleMessage,
-} from "../../../types";
+import type { Artist, RecordWithArtists, SimpleMessage } from "../../../types";
+import { useSearchParams } from "react-router";
 import { RecordEdit } from "../../records/components/RecordEdit";
 import { RecordToolRow } from "../../records/components/RecordToolRow";
 import { RecordCreate } from "../../records/components/RecordCreate";
@@ -32,6 +29,9 @@ const sortRecordsList = (
 
 export const AdminRecordsPage = () => {
     const { t } = useTranslation();
+    const [searchParams] = useSearchParams();
+    const requestedEditRecordId = searchParams.get("edit");
+    const handledEditRecordIdRef = useRef<string | null>(null);
 
     const [records, setRecords] = useState<RecordWithArtists[]>([]);
     const [artists, setArtists] = useState<Artist[]>([]);
@@ -216,6 +216,27 @@ export const AdminRecordsPage = () => {
         setEditDescription("");
         setEditArtistIds([]);
     };
+
+    useEffect(() => {
+        if (loading || !requestedEditRecordId) {
+            return;
+        }
+
+        if (handledEditRecordIdRef.current === requestedEditRecordId) {
+            return;
+        }
+
+        const recordToEdit = records.find(
+            (record) => record.id === requestedEditRecordId,
+        );
+
+        if (!recordToEdit) {
+            return;
+        }
+
+        handledEditRecordIdRef.current = requestedEditRecordId;
+        handleStartEdit(recordToEdit);
+    }, [loading, records, requestedEditRecordId]);
 
     const handleSaveEdit = async (event: SubmitEvent<HTMLFormElement>) => {
         event.preventDefault();
