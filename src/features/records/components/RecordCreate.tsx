@@ -38,12 +38,12 @@ export const RecordCreate = ({
 
             <form onSubmit={handleCreateRecord}>
                 <div className="mb-3">
-                    <label className="form-label" htmlFor="record-name">
+                    <label className="form-label" htmlFor="name">
                         {t("forms.name")}
                     </label>
                     <input className="form-control"
-                           id="record-name"
-                           name="record-name"
+                           id="name"
+                           name="name"
                            onChange={(e) => {
                                setName(e.target.value);
                            }}
@@ -54,12 +54,12 @@ export const RecordCreate = ({
                 </div>
 
                 <div className="mb-3">
-                    <label className="form-label" htmlFor="record-year">
+                    <label className="form-label" htmlFor="year">
                         {t("forms.year")}
                     </label>
                     <input className="form-control"
-                           id="record-year"
-                           name="record-year"
+                           id="year"
+                           name="year"
                            onChange={(e) => {
                                setYear(e.target.value);
                            }}
@@ -70,12 +70,12 @@ export const RecordCreate = ({
                 </div>
 
                 <div className="mb-3">
-                    <label className="form-label" htmlFor="record-description">
+                    <label className="form-label" htmlFor="description">
                         {t("forms.description")}
                     </label>
                     <textarea className="form-control"
-                              id="record-description"
-                              name="record-description"
+                              id="description"
+                              name="description"
                               onChange={(e) => {
                                   setDescription(e.target.value);
                               }}
@@ -99,7 +99,7 @@ export const RecordCreate = ({
                                     <input checked={selectedArtistIds.includes(artist.id)}
                                            className="form-check-input"
                                            id={`artist-${artist.id}`}
-                                           name={`artist-${artist.id}`}
+                                           name={"artist-ids"}
                                            onChange={() => {
                                                handleArtistCheckboxChange(artist.id);
                                            }}

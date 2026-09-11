@@ -31,12 +31,12 @@ export const RecordSongsEdit = ({
             <form onSubmit={handleSaveEdit}>
                 <div className="row g-2 mb-2">
                     <div className="col-2">
-                        <label className="visually-hidden" htmlFor={`edit-track-${song.id}`}>
+                        <label className="visually-hidden" htmlFor={`track-number-${song.id}`}>
                             {t("forms.trackNumber")}
                         </label>
                         <input className="form-control"
-                               id={`edit-track-${song.id}`}
-                               name="edit-track-number"
+                               id={`track-number-${song.id}`}
+                               name="track-number"
                                onChange={(e) => setEditTrackNumber(e.target.value)}
                                placeholder="#"
                                type="number"
@@ -45,14 +45,13 @@ export const RecordSongsEdit = ({
                     </div>
                     <div className="col">
                         <label className="visually-hidden"
-                               htmlFor={`edit-song-name-${song.id}`}>
+                               htmlFor={`name-${song.id}`}>
                             {t("forms.name")}
                         </label>
                         <input className="form-control"
-                               id={`edit-song-name-${song.id}`}
-                               name="edit-song-name"
+                               id={`name-${song.id}`}
+                               name="name"
                                onChange={(e) => setEditSongName(e.target.value)}
-                               placeholder={t("forms.name")}
                                required
                                type="text"
                                value={editSongName}

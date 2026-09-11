@@ -175,7 +175,7 @@ export const AdminArtistPage = () => {
 
             <div className="d-flex justify-content-between align-items-center mt-5 mb-3">
                 <h2 className="mb-0">{t("features.admin.artist.recordsTitle")}</h2>
-                <Link className="btn btn-outline-primary btn-sm" to="/admin/records">
+                <Link className="btn btn-outline-primary" to="/admin/records">
                     {t("navigation.adminRecords")}
                 </Link>
             </div>
@@ -199,7 +199,7 @@ export const AdminArtistPage = () => {
                                 <strong>{record.name}</strong>
                                 {record.year && ` (${record.year})`}
                             </div>
-                            <Link className="btn btn-sm btn-outline-secondary" to="/admin/records">
+                            <Link className="btn btn-outline-secondary" to="/admin/records">
                                 {t("common.edit")}
                             </Link>
                         </li>

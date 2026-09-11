@@ -39,12 +39,12 @@ export const RecordEdit = ({
         <li className="list-group-item">
             <form onSubmit={handleSaveEdit}>
                 <div className="mb-3">
-                    <label className="form-label" htmlFor={`edit-name-${record.id}`}>
+                    <label className="form-label" htmlFor={`name-${record.id}`}>
                         {t("forms.name")}
                     </label>
                     <input className="form-control"
-                           id={`edit-name-${record.id}`}
-                           name="edit-name"
+                           id={`name-${record.id}`}
+                           name="name"
                            onChange={(e) => {
                                setEditName(e.target.value);
                            }}
@@ -55,12 +55,12 @@ export const RecordEdit = ({
                 </div>
 
                 <div className="mb-3">
-                    <label className="form-label" htmlFor={`edit-year-${record.id}`}>
+                    <label className="form-label" htmlFor={`year-${record.id}`}>
                         {t("forms.year")}
                     </label>
                     <input className="form-control"
-                           id={`edit-year-${record.id}`}
-                           name="edit-year"
+                           id={`year-${record.id}`}
+                           name="year"
                            onChange={(e) => {
                                setEditYear(e.target.value);
                            }}
@@ -71,12 +71,12 @@ export const RecordEdit = ({
                 </div>
 
                 <div className="mb-3">
-                    <label className="form-label" htmlFor={`edit-desc-${record.id}`}>
+                    <label className="form-label" htmlFor={`description-${record.id}`}>
                         {t("forms.description")}
                     </label>
                     <textarea className="form-control"
-                              id={`edit-desc-${record.id}`}
-                              name="edit-description"
+                              id={`description-${record.id}`}
+                              name="description"
                               onChange={(e) => {
                                   setEditDescription(e.target.value);
                               }}
@@ -94,15 +94,15 @@ export const RecordEdit = ({
                             <div className="form-check" key={artist.id}>
                                 <input checked={editArtistIds.includes(artist.id)}
                                        className="form-check-input"
-                                       id={`edit-artist-${record.id}-${artist.id}`}
-                                       name={`edit-artist-${artist.id}`}
+                                       id={`artist-${record.id}-${artist.id}`}
+                                       name={"artist-ids"}
                                        onChange={() => {
                                            handleEditArtistCheckboxChange(artist.id);
                                        }}
                                        type="checkbox"
                                 />
                                 <label className="form-check-label"
-                                       htmlFor={`edit-artist-${record.id}-${artist.id}`}
+                                       htmlFor={`artist-${record.id}-${artist.id}`}
                                 >
                                     {artist.name}
                                 </label>

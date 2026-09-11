@@ -26,12 +26,12 @@ export const RecordSongsAdd = ({
         <form onSubmit={handleCreateSong}>
             <div className="row g-2">
                 <div className="col-2">
-                    <label className="visually-hidden" htmlFor={`new-song-track-${recordId}`}>
+                    <label className="visually-hidden" htmlFor={`track-number-${recordId}`}>
                         {t("forms.trackNumber")}
                     </label>
                     <input className="form-control"
-                           id={`new-song-track-${recordId}`}
-                           name="new-track-number"
+                           id={`track-number-${recordId}`}
+                           name="track-number"
                            onChange={(e) => setTrackNumber(e.target.value)}
                            placeholder="#"
                            type="number"
@@ -39,14 +39,13 @@ export const RecordSongsAdd = ({
                     />
                 </div>
                 <div className="col">
-                    <label className="visually-hidden" htmlFor={`new-song-name-${recordId}`}>
+                    <label className="visually-hidden" htmlFor={`name-${recordId}`}>
                         {t("forms.name")}
                     </label>
                     <input className="form-control"
-                           id={`new-song-name-${recordId}`}
-                           name="new-song-name"
+                           id={`name-${recordId}`}
+                           name="name"
                            onChange={(e) => setSongName(e.target.value)}
-                           placeholder={t("forms.name")}
                            required
                            type="text"
                            value={songName}
