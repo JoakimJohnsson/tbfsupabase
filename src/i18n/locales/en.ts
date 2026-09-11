@@ -5,6 +5,7 @@ export const en = {
         edit: "Edit",
         loading: "Loading...",
         logout: "Log out",
+        save: "Save",
     },
     features: {
         admin: {
