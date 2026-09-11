@@ -103,7 +103,8 @@ export const en = {
                     submit: "Create record",
                     submitting: "Creating record...",
                     artistsLabel: "Associated artists",
-                    noArtistsHint: "No artists selected (compilation / various artists)",
+                    noArtistsHint:
+                        "No artists selected (compilation / various artists)",
                     error: {
                         createError: "Could not create record.",
                         invalidNameError: "The record name is invalid.",
@@ -164,7 +165,7 @@ export const en = {
             message: {
                 empty: "No artist found...",
                 loading: "Loading artist...",
-            }
+            },
         },
         artists: {
             title: "Artists",
@@ -182,7 +183,8 @@ export const en = {
                 submit: "Log in",
                 submitting: "Logging in...",
                 error: {
-                    loginError: "Could not log in. Check your email and password.",
+                    loginError:
+                        "Could not log in. Check your email and password.",
                 },
             },
         },

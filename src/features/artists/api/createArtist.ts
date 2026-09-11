@@ -1,19 +1,18 @@
-import {supabase} from "../../../lib/supabase/client";
-import {CreateArtistInput} from "../../../types.ts";
-import {createArtistSlug} from "../createArtistSlug.ts";
+import { supabase } from "../../../lib/supabase/client";
+import { CreateArtistInput } from "../../../types";
+import { createArtistSlug } from "../createArtistSlug";
 
 export const createArtist = async ({
-                                       name,
-                                       description,
-                                   }: CreateArtistInput) => {
-
+    name,
+    description,
+}: CreateArtistInput) => {
     const slug = createArtistSlug(name);
 
     if (!slug) {
         throw new Error("Slug missing!");
     }
 
-    const {data, error} = await supabase
+    const { data, error } = await supabase
         .from("artists")
         .insert({
             name,

@@ -1,7 +1,7 @@
-import {useTranslation} from "react-i18next";
-import type {Artist, RecordWithArtists} from "../../../types.ts";
-import {Dispatch, SetStateAction} from "react";
-import {RecordSongsManager} from "./RecordSongsManager.tsx";
+import { useTranslation } from "react-i18next";
+import type { Artist, RecordWithArtists } from "../../../types";
+import { Dispatch, SetStateAction } from "react";
+import { RecordSongsManager } from "./RecordSongsManager";
 
 interface RecordRowProps {
     record: RecordWithArtists;
@@ -15,16 +15,16 @@ interface RecordRowProps {
 }
 
 export const RecordToolRow = ({
-                              record,
-                              artistNames,
-                              handleStartEdit,
-                              deletingRecordId,
-                              handleDeleteRecord,
-                              setOpenTracklistRecordId,
-                              openTracklistRecordId,
-                              artists,
-                          }: RecordRowProps) => {
-    const {t} = useTranslation();
+    record,
+    artistNames,
+    handleStartEdit,
+    deletingRecordId,
+    handleDeleteRecord,
+    setOpenTracklistRecordId,
+    openTracklistRecordId,
+    artists,
+}: RecordRowProps) => {
+    const { t } = useTranslation();
 
     return (
         <>
@@ -33,42 +33,53 @@ export const RecordToolRow = ({
                     <strong>{record.name}</strong>
                     {record.year && ` (${record.year})`}
                     <div className="text-muted small">
-                        {artistNames || t("features.admin.records.message.noArtists")}
+                        {artistNames ||
+                            t("features.admin.records.message.noArtists")}
                     </div>
                 </div>
 
                 <div className="d-flex gap-2">
-                    <button className="btn btn-outline-secondary"
-                            onClick={() => {
-                                handleStartEdit(record);
-                            }}
-                            type="button"
+                    <button
+                        className="btn btn-outline-secondary"
+                        onClick={() => {
+                            handleStartEdit(record);
+                        }}
+                        type="button"
                     >
                         {t("common.edit")}
                     </button>
-                    <button className="btn btn-outline-danger"
-                            disabled={deletingRecordId === record.id}
-                            onClick={() => {
-                                void handleDeleteRecord(record);
-                            }}
-                            type="button"
+                    <button
+                        className="btn btn-outline-danger"
+                        disabled={deletingRecordId === record.id}
+                        onClick={() => {
+                            void handleDeleteRecord(record);
+                        }}
+                        type="button"
                     >
                         {deletingRecordId === record.id
                             ? t("features.admin.artist.deleteRecord.deleting")
                             : t("common.delete")}
                     </button>
-                    <button className="btn btn-outline-info"
-                            onClick={() => setOpenTracklistRecordId(cur => cur === record.id ? null : record.id)}
-                            type="button"
+                    <button
+                        className="btn btn-outline-info"
+                        onClick={() =>
+                            setOpenTracklistRecordId((cur) =>
+                                cur === record.id ? null : record.id,
+                            )
+                        }
+                        type="button"
                     >
                         {t("features.admin.songs.tracks")}
                     </button>
                 </div>
             </li>
             {openTracklistRecordId === record.id && (
-                <RecordSongsManager availableArtists={artists}
-                                    defaultArtistIds={record.record_artists.map(ra => ra.artist_id)}
-                                    recordId={record.id}
+                <RecordSongsManager
+                    availableArtists={artists}
+                    defaultArtistIds={record.record_artists.map(
+                        (ra) => ra.artist_id,
+                    )}
+                    recordId={record.id}
                 />
             )}
         </>

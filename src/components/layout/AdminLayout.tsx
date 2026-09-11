@@ -1,24 +1,24 @@
-import {useTranslation} from "react-i18next";
-import {Link, Navigate, Outlet} from "react-router";
-import {useAuth} from "../../features/auth/hooks/useAuth";
+import { useTranslation } from "react-i18next";
+import { Link, Navigate, Outlet } from "react-router";
+import { useAuth } from "../../features/auth/hooks/useAuth";
 import SimpleSpinner from "../spinners/SimpleSpinner";
 
 export const AdminLayout = () => {
-    const {t} = useTranslation();
-    const {user, profile, isLoading} = useAuth();
+    const { t } = useTranslation();
+    const { user, profile, isLoading } = useAuth();
 
     if (isLoading) {
-        return <SimpleSpinner/>;
+        return <SimpleSpinner />;
     }
 
     // Not logged in...
     if (!user) {
-        return <Navigate replace to="/login"/>;
+        return <Navigate replace to="/login" />;
     }
 
     // Logged in, but not admin...
     if (!profile?.is_admin) {
-        return <Navigate replace to="/"/>;
+        return <Navigate replace to="/" />;
     }
 
     return (
@@ -44,7 +44,7 @@ export const AdminLayout = () => {
             </header>
 
             <main id="main-content">
-                <Outlet/>
+                <Outlet />
             </main>
         </>
     );

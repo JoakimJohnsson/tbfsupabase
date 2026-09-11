@@ -1,17 +1,17 @@
-import {supabase} from "../../../lib/supabase/client";
-import type {UpdateRecordInput} from "../../../types";
+import { supabase } from "../../../lib/supabase/client";
+import type { UpdateRecordInput } from "../../../types";
 
 export const updateRecord = async ({
-                                       id,
-                                       artist_ids,
-                                       name,
-                                       description,
-                                       format,
-                                       type,
-                                       year,
-                                   }: UpdateRecordInput) => {
+    id,
+    artist_ids,
+    name,
+    description,
+    format,
+    type,
+    year,
+}: UpdateRecordInput) => {
     // 1. Update record fields
-    const {data: record, error: recordError} = await supabase
+    const { data: record, error: recordError } = await supabase
         .from("records")
         .update({
             name,
@@ -29,7 +29,7 @@ export const updateRecord = async ({
     }
 
     // 2. Remove existing artist relations for this record
-    const {error: deleteError} = await supabase
+    const { error: deleteError } = await supabase
         .from("record_artists")
         .delete()
         .eq("record_id", id);
@@ -46,7 +46,7 @@ export const updateRecord = async ({
             is_primary: index === 0,
         }));
 
-        const {error: insertError} = await supabase
+        const { error: insertError } = await supabase
             .from("record_artists")
             .insert(recordArtists);
 

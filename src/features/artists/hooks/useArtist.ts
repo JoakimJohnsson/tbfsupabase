@@ -1,8 +1,8 @@
-import {useEffect, useState} from "react";
-import type {Dispatch, SetStateAction} from "react";
-import {getArtist} from "../api/getArtist";
-import {isAbortError} from "../../../lib/asyncHelpers/withAbortSignal";
-import type {Artist, SimpleMessage} from "../../../types";
+import { useEffect, useState } from "react";
+import type { Dispatch, SetStateAction } from "react";
+import { getArtist } from "../api/getArtist";
+import { isAbortError } from "../../../lib/asyncHelpers/withAbortSignal";
+import type { Artist, SimpleMessage } from "../../../types";
 
 type UseArtistOptions = {
     artistSlug?: string;
@@ -16,7 +16,10 @@ type UseArtistResult = {
     setArtist: Dispatch<SetStateAction<Artist | null>>;
 };
 
-export const useArtist = ({artistSlug, loadErrorMessage}: UseArtistOptions): UseArtistResult => {
+export const useArtist = ({
+    artistSlug,
+    loadErrorMessage,
+}: UseArtistOptions): UseArtistResult => {
     const [artist, setArtist] = useState<Artist | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [hasLoadError, setHasLoadError] = useState<boolean>(false);

@@ -1,6 +1,6 @@
-import {useTranslation} from "react-i18next";
-import type {Artist, RecordWithArtists} from "../../../types.ts";
-import {Dispatch, SetStateAction, type SubmitEvent} from "react";
+import { useTranslation } from "react-i18next";
+import type { Artist, RecordWithArtists } from "../../../types";
+import { Dispatch, SetStateAction, type SubmitEvent } from "react";
 
 interface RecordEditProps {
     record: RecordWithArtists;
@@ -19,21 +19,21 @@ interface RecordEditProps {
 }
 
 export const RecordEdit = ({
-                               record,
-                               handleSaveEdit,
-                               setEditName,
-                               editName,
-                               setEditYear,
-                               editYear,
-                               setEditDescription,
-                               editDescription,
-                               artists,
-                               editArtistIds,
-                               handleEditArtistCheckboxChange,
-                               isSubmittingEdit,
-                               handleCancelEdit,
-                           }: RecordEditProps) => {
-    const {t} = useTranslation();
+    record,
+    handleSaveEdit,
+    setEditName,
+    editName,
+    setEditYear,
+    editYear,
+    setEditDescription,
+    editDescription,
+    artists,
+    editArtistIds,
+    handleEditArtistCheckboxChange,
+    isSubmittingEdit,
+    handleCancelEdit,
+}: RecordEditProps) => {
+    const { t } = useTranslation();
 
     return (
         <li className="list-group-item">
@@ -42,15 +42,16 @@ export const RecordEdit = ({
                     <label className="form-label" htmlFor={`name-${record.id}`}>
                         {t("forms.name")}
                     </label>
-                    <input className="form-control"
-                           id={`name-${record.id}`}
-                           name="name"
-                           onChange={(e) => {
-                               setEditName(e.target.value);
-                           }}
-                           required
-                           type="text"
-                           value={editName}
+                    <input
+                        className="form-control"
+                        id={`name-${record.id}`}
+                        name="name"
+                        onChange={(e) => {
+                            setEditName(e.target.value);
+                        }}
+                        required
+                        type="text"
+                        value={editName}
                     />
                 </div>
 
@@ -58,30 +59,35 @@ export const RecordEdit = ({
                     <label className="form-label" htmlFor={`year-${record.id}`}>
                         {t("forms.year")}
                     </label>
-                    <input className="form-control"
-                           id={`year-${record.id}`}
-                           name="year"
-                           onChange={(e) => {
-                               setEditYear(e.target.value);
-                           }}
-                           placeholder="YYYY"
-                           type="number"
-                           value={editYear}
+                    <input
+                        className="form-control"
+                        id={`year-${record.id}`}
+                        name="year"
+                        onChange={(e) => {
+                            setEditYear(e.target.value);
+                        }}
+                        placeholder="YYYY"
+                        type="number"
+                        value={editYear}
                     />
                 </div>
 
                 <div className="mb-3">
-                    <label className="form-label" htmlFor={`description-${record.id}`}>
+                    <label
+                        className="form-label"
+                        htmlFor={`description-${record.id}`}
+                    >
                         {t("forms.description")}
                     </label>
-                    <textarea className="form-control"
-                              id={`description-${record.id}`}
-                              name="description"
-                              onChange={(e) => {
-                                  setEditDescription(e.target.value);
-                              }}
-                              rows={3}
-                              value={editDescription}
+                    <textarea
+                        className="form-control"
+                        id={`description-${record.id}`}
+                        name="description"
+                        onChange={(e) => {
+                            setEditDescription(e.target.value);
+                        }}
+                        rows={3}
+                        value={editDescription}
                     />
                 </div>
 
@@ -92,17 +98,21 @@ export const RecordEdit = ({
                     <div className="border rounded p-2 form-scroll-box">
                         {artists.map((artist) => (
                             <div className="form-check" key={artist.id}>
-                                <input checked={editArtistIds.includes(artist.id)}
-                                       className="form-check-input"
-                                       id={`artist-${record.id}-${artist.id}`}
-                                       name={"artist-ids"}
-                                       onChange={() => {
-                                           handleEditArtistCheckboxChange(artist.id);
-                                       }}
-                                       type="checkbox"
+                                <input
+                                    checked={editArtistIds.includes(artist.id)}
+                                    className="form-check-input"
+                                    id={`artist-${record.id}-${artist.id}`}
+                                    name={"artist-ids"}
+                                    onChange={() => {
+                                        handleEditArtistCheckboxChange(
+                                            artist.id,
+                                        );
+                                    }}
+                                    type="checkbox"
                                 />
-                                <label className="form-check-label"
-                                       htmlFor={`artist-${record.id}-${artist.id}`}
+                                <label
+                                    className="form-check-label"
+                                    htmlFor={`artist-${record.id}-${artist.id}`}
                                 >
                                     {artist.name}
                                 </label>
@@ -112,18 +122,20 @@ export const RecordEdit = ({
                 </fieldset>
 
                 <div className="d-flex gap-2">
-                    <button className="btn btn-primary"
-                            disabled={isSubmittingEdit}
-                            type="submit"
+                    <button
+                        className="btn btn-primary"
+                        disabled={isSubmittingEdit}
+                        type="submit"
                     >
                         {isSubmittingEdit
                             ? t("features.admin.record.edit.submitting")
                             : t("features.admin.record.edit.submit")}
                     </button>
-                    <button className="btn btn-secondary"
-                            disabled={isSubmittingEdit}
-                            onClick={handleCancelEdit}
-                            type="button"
+                    <button
+                        className="btn btn-secondary"
+                        disabled={isSubmittingEdit}
+                        onClick={handleCancelEdit}
+                        type="button"
                     >
                         {t("common.cancel")}
                     </button>

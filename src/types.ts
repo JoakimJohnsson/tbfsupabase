@@ -1,10 +1,11 @@
-import {Database} from "./lib/supabase/database.types.ts";
-import type {Session, User} from "@supabase/supabase-js";
+import { Database } from "./lib/supabase/database.types";
+import type { Session, User } from "@supabase/supabase-js";
 
 // Models
 export type Artist = Database["public"]["Tables"]["artists"]["Row"];
 export type Record = Database["public"]["Tables"]["records"]["Row"];
-export type RecordArtist = Database["public"]["Tables"]["record_artists"]["Row"];
+export type RecordArtist =
+    Database["public"]["Tables"]["record_artists"]["Row"];
 export type Profile = Database["public"]["Tables"]["profiles"]["Row"];
 export type Song = Database["public"]["Tables"]["songs"]["Row"];
 export type SongArtist = Database["public"]["Tables"]["song_artists"]["Row"];

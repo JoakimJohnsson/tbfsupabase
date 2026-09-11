@@ -1,7 +1,7 @@
-import {supabase} from "../../../lib/supabase/client";
+import { supabase } from "../../../lib/supabase/client";
 
 export const getProfile = async (userId: string) => {
-    const {data, error} = await supabase
+    const { data, error } = await supabase
         .from("profiles")
         .select("*")
         .eq("id", userId)

@@ -1,4 +1,4 @@
-import {useTranslation} from "react-i18next";
+import { useTranslation } from "react-i18next";
 
 interface SimpleSpinnerProps {
     className?: string;
@@ -7,12 +7,11 @@ interface SimpleSpinnerProps {
 }
 
 const SimpleSpinner = ({
-                           className,
-                           message,
-                           variant = "spinner-grow"
-                       }: SimpleSpinnerProps) => {
-
-    const {t} = useTranslation();
+    className,
+    message,
+    variant = "spinner-grow",
+}: SimpleSpinnerProps) => {
+    const { t } = useTranslation();
     const defaultMessage = t("common.loading");
     const trimmedMessage = message?.trim();
     const messageToShow = trimmedMessage ? trimmedMessage : defaultMessage;

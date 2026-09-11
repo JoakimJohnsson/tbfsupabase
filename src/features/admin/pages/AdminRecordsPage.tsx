@@ -1,21 +1,28 @@
-import {type SubmitEvent, useEffect, useState} from "react";
-import {useTranslation} from "react-i18next";
-import Feedback from "../../../components/feedback/Feedback.tsx";
-import SimpleSpinner from "../../../components/spinners/SimpleSpinner.tsx";
-import {getArtists} from "../../artists/api/getArtists.ts";
-import {createRecord} from "../../records/api/createRecord.ts";
-import {deleteRecord} from "../../records/api/deleteRecord.ts";
-import {getRecords} from "../../records/api/getRecords.ts";
-import {updateRecord} from "../../records/api/updateRecord.ts";
-import {isAbortError} from "../../../lib/asyncHelpers/withAbortSignal.ts";
-import type {Artist, RecordWithArtists, SimpleMessage} from "../../../types.ts";
-import {RecordEdit} from "../../records/components/RecordEdit.tsx";
-import {RecordToolRow} from "../../records/components/RecordToolRow.tsx";
-import {RecordCreate} from "../../records/components/RecordCreate.tsx";
+import { type SubmitEvent, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import Feedback from "../../../components/feedback/Feedback";
+import SimpleSpinner from "../../../components/spinners/SimpleSpinner";
+import { getArtists } from "../../artists/api/getArtists";
+import { createRecord } from "../../records/api/createRecord";
+import { deleteRecord } from "../../records/api/deleteRecord";
+import { getRecords } from "../../records/api/getRecords";
+import { updateRecord } from "../../records/api/updateRecord";
+import { isAbortError } from "../../../lib/asyncHelpers/withAbortSignal";
+import type {
+    Artist,
+    RecordWithArtists,
+    SimpleMessage,
+} from "../../../types";
+import { RecordEdit } from "../../records/components/RecordEdit";
+import { RecordToolRow } from "../../records/components/RecordToolRow";
+import { RecordCreate } from "../../records/components/RecordCreate";
 
-const sortRecordsList = (recordsList: RecordWithArtists[]): RecordWithArtists[] => {
+const sortRecordsList = (
+    recordsList: RecordWithArtists[],
+): RecordWithArtists[] => {
     return [...recordsList].sort((a, b) => {
-        if (a.year === null && b.year === null) return a.name.localeCompare(b.name);
+        if (a.year === null && b.year === null)
+            return a.name.localeCompare(b.name);
         if (a.year === null) return 1;
         if (b.year === null) return -1;
         if (b.year !== a.year) return b.year - a.year;
@@ -24,7 +31,7 @@ const sortRecordsList = (recordsList: RecordWithArtists[]): RecordWithArtists[] 
 };
 
 export const AdminRecordsPage = () => {
-    const {t} = useTranslation();
+    const { t } = useTranslation();
 
     const [records, setRecords] = useState<RecordWithArtists[]>([]);
     const [artists, setArtists] = useState<Artist[]>([]);
@@ -47,11 +54,17 @@ export const AdminRecordsPage = () => {
     const [editDescription, setEditDescription] = useState("");
     const [editArtistIds, setEditArtistIds] = useState<string[]>([]);
     const [isSubmittingEdit, setIsSubmittingEdit] = useState(false);
-    const [recordActionError, setRecordActionError] = useState<SimpleMessage>(null);
-    const [recordActionSuccess, setRecordActionSuccess] = useState<SimpleMessage>(null);
+    const [recordActionError, setRecordActionError] =
+        useState<SimpleMessage>(null);
+    const [recordActionSuccess, setRecordActionSuccess] =
+        useState<SimpleMessage>(null);
 
-    const [deletingRecordId, setDeletingRecordId] = useState<string | null>(null);
-    const [openTracklistRecordId, setOpenTracklistRecordId] = useState<string | null>(null);
+    const [deletingRecordId, setDeletingRecordId] = useState<string | null>(
+        null,
+    );
+    const [openTracklistRecordId, setOpenTracklistRecordId] = useState<
+        string | null
+    >(null);
 
     useEffect(() => {
         setLoading(true);
@@ -91,7 +104,7 @@ export const AdminRecordsPage = () => {
         setSelectedArtistIds((current) =>
             current.includes(artistId)
                 ? current.filter((id) => id !== artistId)
-                : [...current, artistId]
+                : [...current, artistId],
         );
     };
 
@@ -99,7 +112,7 @@ export const AdminRecordsPage = () => {
         setEditArtistIds((current) =>
             current.includes(artistId)
                 ? current.filter((id) => id !== artistId)
-                : [...current, artistId]
+                : [...current, artistId],
         );
     };
 
@@ -132,7 +145,9 @@ export const AdminRecordsPage = () => {
             const trimmedName = name.trim();
 
             if (!trimmedName) {
-                setSubmitError(t("features.admin.record.create.error.invalidNameError"));
+                setSubmitError(
+                    t("features.admin.record.create.error.invalidNameError"),
+                );
                 return;
             }
 
@@ -143,7 +158,11 @@ export const AdminRecordsPage = () => {
                 const numericYear = Number(trimmedYear);
 
                 if (isNaN(numericYear) || !Number.isInteger(numericYear)) {
-                    setSubmitError(t("features.admin.record.create.error.invalidYearError"));
+                    setSubmitError(
+                        t(
+                            "features.admin.record.create.error.invalidYearError",
+                        ),
+                    );
                     return;
                 }
 
@@ -162,12 +181,16 @@ export const AdminRecordsPage = () => {
                 record_artists: mapArtistRelations(selectedArtistIds),
             };
 
-            setRecords((current) => sortRecordsList([...current, newRecordWithArtists]));
+            setRecords((current) =>
+                sortRecordsList([...current, newRecordWithArtists]),
+            );
             setName("");
             setYear("");
             setDescription("");
             setSelectedArtistIds([]);
-            setSubmitSuccess(t("features.admin.record.create.success.createSuccess"));
+            setSubmitSuccess(
+                t("features.admin.record.create.success.createSuccess"),
+            );
         } catch (err) {
             console.error(err);
             setSubmitError(t("features.admin.record.create.error.createError"));
@@ -207,7 +230,9 @@ export const AdminRecordsPage = () => {
             const trimmedName = editName.trim();
 
             if (!trimmedName) {
-                setRecordActionError(t("features.admin.record.edit.error.invalidNameError"));
+                setRecordActionError(
+                    t("features.admin.record.edit.error.invalidNameError"),
+                );
                 return;
             }
 
@@ -218,7 +243,9 @@ export const AdminRecordsPage = () => {
                 const numericYear = Number(trimmedYear);
 
                 if (isNaN(numericYear) || !Number.isInteger(numericYear)) {
-                    setRecordActionError(t("features.admin.record.edit.error.invalidYearError"));
+                    setRecordActionError(
+                        t("features.admin.record.edit.error.invalidYearError"),
+                    );
                     return;
                 }
 
@@ -240,15 +267,21 @@ export const AdminRecordsPage = () => {
 
             setRecords((current) =>
                 sortRecordsList(
-                    current.map((rec) => (rec.id === updated.id ? updatedRecordWithArtists : rec))
-                )
+                    current.map((rec) =>
+                        rec.id === updated.id ? updatedRecordWithArtists : rec,
+                    ),
+                ),
             );
 
             handleCancelEdit();
-            setRecordActionSuccess(t("features.admin.record.edit.success.editSuccess"));
+            setRecordActionSuccess(
+                t("features.admin.record.edit.success.editSuccess"),
+            );
         } catch (err) {
             console.error(err);
-            setRecordActionError(t("features.admin.record.edit.error.editError"));
+            setRecordActionError(
+                t("features.admin.record.edit.error.editError"),
+            );
         } finally {
             setIsSubmittingEdit(false);
         }
@@ -257,7 +290,9 @@ export const AdminRecordsPage = () => {
     const handleDeleteRecord = async (record: RecordWithArtists) => {
         const recordName = record.name;
         const confirmed = window.confirm(
-            t("features.admin.artist.deleteRecord.confirm", {name: recordName})
+            t("features.admin.artist.deleteRecord.confirm", {
+                name: recordName,
+            }),
         );
 
         if (!confirmed) {
@@ -271,21 +306,33 @@ export const AdminRecordsPage = () => {
         try {
             await deleteRecord(record.id);
             setRecords((current) => current.filter((r) => r.id !== record.id));
-            setRecordActionSuccess(t("features.admin.artist.deleteRecord.success.deleteSuccess", {name: recordName}));
+            setRecordActionSuccess(
+                t("features.admin.artist.deleteRecord.success.deleteSuccess", {
+                    name: recordName,
+                }),
+            );
         } catch (err) {
             console.error(err);
-            setRecordActionError(t("features.admin.artist.deleteRecord.error.deleteError", {name: recordName}));
+            setRecordActionError(
+                t("features.admin.artist.deleteRecord.error.deleteError", {
+                    name: recordName,
+                }),
+            );
         } finally {
             setDeletingRecordId(null);
         }
     };
 
     if (loading) {
-        return <SimpleSpinner message={t("features.admin.records.message.loading")}/>;
+        return (
+            <SimpleSpinner
+                message={t("features.admin.records.message.loading")}
+            />
+        );
     }
 
     if (loadError) {
-        return <Feedback errors={[loadError]}/>;
+        return <Feedback errors={[loadError]} />;
     }
 
     return (
@@ -293,7 +340,10 @@ export const AdminRecordsPage = () => {
             <h1>{t("features.admin.records.title")}</h1>
             <p className="lead">{t("features.admin.records.lead")}</p>
 
-            <Feedback errors={[submitError, recordActionError]} successes={[submitSuccess, recordActionSuccess]}/>
+            <Feedback
+                errors={[submitError, recordActionError]}
+                successes={[submitSuccess, recordActionSuccess]}
+            />
 
             {records.length === 0 ? (
                 <p>{t("features.admin.records.message.empty")}</p>
@@ -308,51 +358,58 @@ export const AdminRecordsPage = () => {
 
                         if (isEditing) {
                             return (
-                                <RecordEdit key={record.id}
-                                            record={record}
-                                            handleSaveEdit={handleSaveEdit}
-                                            setEditName={setEditName}
-                                            editName={editName}
-                                            setEditYear={setEditYear}
-                                            editYear={editYear}
-                                            setEditDescription={setEditDescription}
-                                            editDescription={editDescription}
-                                            artists={artists}
-                                            editArtistIds={editArtistIds}
-                                            handleEditArtistCheckboxChange={handleEditArtistCheckboxChange}
-                                            isSubmittingEdit={isSubmittingEdit}
-                                            handleCancelEdit={handleCancelEdit}
+                                <RecordEdit
+                                    key={record.id}
+                                    record={record}
+                                    handleSaveEdit={handleSaveEdit}
+                                    setEditName={setEditName}
+                                    editName={editName}
+                                    setEditYear={setEditYear}
+                                    editYear={editYear}
+                                    setEditDescription={setEditDescription}
+                                    editDescription={editDescription}
+                                    artists={artists}
+                                    editArtistIds={editArtistIds}
+                                    handleEditArtistCheckboxChange={
+                                        handleEditArtistCheckboxChange
+                                    }
+                                    isSubmittingEdit={isSubmittingEdit}
+                                    handleCancelEdit={handleCancelEdit}
                                 />
                             );
                         }
 
                         return (
-                            <RecordToolRow key={record.id}
-                                           record={record}
-                                           artistNames={artistNames}
-                                           handleStartEdit={handleStartEdit}
-                                           deletingRecordId={deletingRecordId}
-                                           handleDeleteRecord={handleDeleteRecord}
-                                           setOpenTracklistRecordId={setOpenTracklistRecordId}
-                                           openTracklistRecordId={openTracklistRecordId}
-                                           artists={artists}
+                            <RecordToolRow
+                                key={record.id}
+                                record={record}
+                                artistNames={artistNames}
+                                handleStartEdit={handleStartEdit}
+                                deletingRecordId={deletingRecordId}
+                                handleDeleteRecord={handleDeleteRecord}
+                                setOpenTracklistRecordId={
+                                    setOpenTracklistRecordId
+                                }
+                                openTracklistRecordId={openTracklistRecordId}
+                                artists={artists}
                             />
                         );
                     })}
                 </ul>
             )}
 
-            <RecordCreate handleCreateRecord={handleCreateRecord}
-                          setName={setName}
-                          name={name}
-                          setYear={setYear}
-                          year={year}
-                          setDescription={setDescription}
-                          description={description}
-                          artists={artists}
-                          selectedArtistIds={selectedArtistIds}
-                          handleArtistCheckboxChange={handleArtistCheckboxChange}
-                          isSubmitting={isSubmitting}
+            <RecordCreate
+                handleCreateRecord={handleCreateRecord}
+                setName={setName}
+                name={name}
+                setYear={setYear}
+                year={year}
+                setDescription={setDescription}
+                description={description}
+                artists={artists}
+                selectedArtistIds={selectedArtistIds}
+                handleArtistCheckboxChange={handleArtistCheckboxChange}
+                isSubmitting={isSubmitting}
             />
         </>
     );

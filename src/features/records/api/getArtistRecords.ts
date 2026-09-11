@@ -1,6 +1,6 @@
-import {supabase} from "../../../lib/supabase/client";
-import {withAbortSignal} from "../../../lib/asyncHelpers/withAbortSignal";
-import type {Record} from "../../../types";
+import { supabase } from "../../../lib/supabase/client";
+import { withAbortSignal } from "../../../lib/asyncHelpers/withAbortSignal";
+import type { Record } from "../../../types";
 
 export const getArtistRecords = async (
     artistId: string,
@@ -16,12 +16,12 @@ export const getArtistRecords = async (
         })
         .order("name");
 
-    const {data, error} = await withAbortSignal(query, signal);
+    const { data, error } = await withAbortSignal(query, signal);
 
     if (error) {
         throw error;
     }
 
     // Strip nested join relation before returning Record[]
-    return (data ?? []).map(({record_artists: _ra, ...record}) => record);
+    return (data ?? []).map(({ record_artists: _ra, ...record }) => record);
 };

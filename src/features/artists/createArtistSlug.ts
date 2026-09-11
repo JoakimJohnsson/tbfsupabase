@@ -5,7 +5,6 @@
 // Motörhead
 // → motorhead
 
-// src/features/artists/createArtistSlug.ts
 export const createArtistSlug = (name: string): string | null => {
     const slug = name
         .normalize("NFD")
@@ -21,4 +20,3 @@ export const createArtistSlug = (name: string): string | null => {
 
     return slug;
 };
-

@@ -1,6 +1,6 @@
-import {supabase} from "../../../lib/supabase/client";
-import {withAbortSignal} from "../../../lib/asyncHelpers/withAbortSignal";
-import type {SongWithArtists} from "../../../types";
+import { supabase } from "../../../lib/supabase/client";
+import { withAbortSignal } from "../../../lib/asyncHelpers/withAbortSignal";
+import type { SongWithArtists } from "../../../types";
 
 export const getRecordSongs = async (
     recordId: string,
@@ -8,7 +8,8 @@ export const getRecordSongs = async (
 ): Promise<SongWithArtists[]> => {
     const query = supabase
         .from("songs")
-        .select(`
+        .select(
+            `
             *,
             song_artists (
                 artist_id,
@@ -19,7 +20,8 @@ export const getRecordSongs = async (
                     slug
                 )
             )
-        `)
+        `,
+        )
         .eq("record_id", recordId)
         .order("track_number", {
             ascending: true,
@@ -27,7 +29,7 @@ export const getRecordSongs = async (
         })
         .order("name");
 
-    const {data, error} = await withAbortSignal(query, signal);
+    const { data, error } = await withAbortSignal(query, signal);
 
     if (error) {
         throw error;
