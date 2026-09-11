@@ -8,6 +8,9 @@ import {updateSong} from "../../songs/api/updateSong";
 import {deleteSong} from "../../songs/api/deleteSong";
 import {isAbortError} from "../../../lib/asyncHelpers/withAbortSignal";
 import type {Artist, SimpleMessage, SongWithArtists} from "../../../types";
+import {RecordSongsEdit} from "./RecordSongsEdit.tsx";
+import {RecordSongsToolRow} from "./RecordSongsToolRow.tsx";
+import {RecordSongsAdd} from "./RecordSongsAdd.tsx";
 
 interface RecordSongsManagerProps {
     availableArtists: Artist[];
@@ -35,7 +38,7 @@ export const RecordSongsManager = ({
     const [songs, setSongs] = useState<SongWithArtists[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<SimpleMessage>(null);
-    const [actionFeedback, setActionFeedback] = useState<{error: SimpleMessage; success: SimpleMessage}>({
+    const [actionFeedback, setActionFeedback] = useState<{ error: SimpleMessage; success: SimpleMessage }>({
         error: null,
         success: null,
     });
@@ -212,14 +215,14 @@ export const RecordSongsManager = ({
         }
     };
 
-    if (loading) return <SimpleSpinner />;
-    if (error) return <Feedback errors={[error]} />;
+    if (loading) return <SimpleSpinner/>;
+    if (error) return <Feedback errors={[error]}/>;
 
     return (
         <div className="mt-3 p-3 bg-body-tertiary rounded border">
             <h6 className="fw-bold mb-3">{t("features.admin.songs.title")}</h6>
 
-            <Feedback errors={[actionFeedback.error]} successes={[actionFeedback.success]} />
+            <Feedback errors={[actionFeedback.error]} successes={[actionFeedback.success]}/>
 
             {songs.length === 0 ? (
                 <p className="text-muted small">{t("features.admin.songs.noSongs")}</p>
@@ -231,90 +234,39 @@ export const RecordSongsManager = ({
 
                         if (isEditing) {
                             return (
-                                <li className="list-group-item" key={song.id}>
-                                    <form onSubmit={handleSaveEdit}>
-                                        <div className="row g-2 mb-2">
-                                            <div className="col-2">
-                                                <input
-                                                    className="form-control form-control-sm"
-                                                    onChange={(e) => setEditTrackNumber(e.target.value)}
-                                                    placeholder="#"
-                                                    type="number"
-                                                    value={editTrackNumber}
-                                                />
-                                            </div>
-                                            <div className="col">
-                                                <input
-                                                    className="form-control form-control-sm"
-                                                    onChange={(e) => setEditSongName(e.target.value)}
-                                                    required
-                                                    type="text"
-                                                    value={editSongName}
-                                                />
-                                            </div>
-                                        </div>
-                                        <div className="d-flex gap-2">
-                                            <button className="btn btn-sm btn-primary" disabled={isSavingEdit} type="submit">
-                                                {t("common.save")}
-                                            </button>
-                                            <button className="btn btn-sm btn-secondary" onClick={() => setEditingSongId(null)} type="button">
-                                                {t("common.cancel")}
-                                            </button>
-                                        </div>
-                                    </form>
-                                </li>
+                                <RecordSongsEdit key={song.id}
+                                                 song={song}
+                                                 handleSaveEdit={handleSaveEdit}
+                                                 setEditTrackNumber={setEditTrackNumber}
+                                                 editTrackNumber={editTrackNumber}
+                                                 setEditSongName={setEditSongName}
+                                                 editSongName={editSongName}
+                                                 isSavingEdit={isSavingEdit}
+                                                 setEditingSongId={setEditingSongId}
+                                />
                             );
                         }
 
                         return (
-                            <li className="list-group-item d-flex justify-content-between align-items-center" key={song.id}>
-                                <div>
-                                    <span className="fw-semibold">{song.name}</span>
-                                    {artistNames && <span className="text-muted small ms-2">({artistNames})</span>}
-                                </div>
-                                <div className="d-flex gap-1">
-                                    <button className="btn btn-sm btn-outline-secondary py-0" onClick={() => handleStartEdit(song)} type="button">
-                                        {t("common.edit")}
-                                    </button>
-                                    <button className="btn btn-sm btn-outline-danger py-0" onClick={() => void handleDeleteSong(song)} type="button">
-                                        {t("common.delete")}
-                                    </button>
-                                </div>
-                            </li>
+                            <RecordSongsToolRow key={song.id}
+                                                song={song}
+                                                artistNames={artistNames}
+                                                handleStartEdit={handleStartEdit}
+                                                handleDeleteSong={handleDeleteSong}
+                            />
                         );
                     })}
                 </ol>
             )}
 
-            {/* Quick Add Song Form */}
-            <form onSubmit={handleCreateSong}>
-                <div className="row g-2">
-                    <div className="col-2">
-                        <input
-                            className="form-control form-control-sm"
-                            onChange={(e) => setTrackNumber(e.target.value)}
-                            placeholder="#"
-                            type="number"
-                            value={trackNumber}
-                        />
-                    </div>
-                    <div className="col">
-                        <input
-                            className="form-control form-control-sm"
-                            onChange={(e) => setSongName(e.target.value)}
-                            placeholder={t("forms.name")}
-                            required
-                            type="text"
-                            value={songName}
-                        />
-                    </div>
-                    <div className="col-auto">
-                        <button className="btn btn-sm btn-outline-primary" disabled={isSubmitting} type="submit">
-                            {isSubmitting ? t("features.admin.songs.submitting") : t("features.admin.songs.addTrack")}
-                        </button>
-                    </div>
-                </div>
-            </form>
+            <RecordSongsAdd handleCreateSong={handleCreateSong}
+                            recordId={recordId}
+                            songName={songName}
+                            setSongName={setSongName}
+                            setTrackNumber={setTrackNumber}
+                            trackNumber={trackNumber}
+                            isSubmitting={isSubmitting}
+            />
         </div>
     );
 };

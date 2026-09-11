@@ -1,5 +1,5 @@
 import {useTranslation} from "react-i18next";
-import type {Artist} from "../../../../types.ts";
+import type {Artist} from "../../../types.ts";
 import {Dispatch, SetStateAction, type SubmitEvent} from "react";
 
 interface RecordCreateProps {
@@ -14,7 +14,6 @@ interface RecordCreateProps {
     selectedArtistIds: string[];
     handleArtistCheckboxChange: (artistId: string) => void;
     isSubmitting: boolean;
-
 }
 
 export const RecordCreate = ({
@@ -44,6 +43,7 @@ export const RecordCreate = ({
                     </label>
                     <input className="form-control"
                            id="record-name"
+                           name="record-name"
                            onChange={(e) => {
                                setName(e.target.value);
                            }}
@@ -59,6 +59,7 @@ export const RecordCreate = ({
                     </label>
                     <input className="form-control"
                            id="record-year"
+                           name="record-year"
                            onChange={(e) => {
                                setYear(e.target.value);
                            }}
@@ -74,6 +75,7 @@ export const RecordCreate = ({
                     </label>
                     <textarea className="form-control"
                               id="record-description"
+                              name="record-description"
                               onChange={(e) => {
                                   setDescription(e.target.value);
                               }}
@@ -82,31 +84,28 @@ export const RecordCreate = ({
                     />
                 </div>
 
-                <div className="mb-3">
-                    <label className="form-label d-block">
+                <fieldset aria-describedby={selectedArtistIds.length === 0 ? "artists-hint" : undefined}
+                          className="mb-3"
+                >
+                    <legend className="form-label col-form-label pt-0">
                         {t("features.admin.record.create.artistsLabel")}
-                    </label>
-                    <div className="border rounded p-2"
-                         style={{maxHeight: "180px", overflowY: "auto"}}
-                    >
+                    </legend>
+                    <div className="border rounded p-2 form-scroll-box">
                         {artists.length === 0 ? (
-                            <span className="text-muted small">
-                                {t("features.artists.message.empty")}
-                            </span>
+                            <span className="text-muted small">{t("features.artists.message.empty")}</span>
                         ) : (
                             artists.map((artist) => (
                                 <div className="form-check" key={artist.id}>
                                     <input checked={selectedArtistIds.includes(artist.id)}
                                            className="form-check-input"
                                            id={`artist-${artist.id}`}
+                                           name={`artist-${artist.id}`}
                                            onChange={() => {
                                                handleArtistCheckboxChange(artist.id);
                                            }}
                                            type="checkbox"
                                     />
-                                    <label className="form-check-label"
-                                           htmlFor={`artist-${artist.id}`}
-                                    >
+                                    <label className="form-check-label" htmlFor={`artist-${artist.id}`}>
                                         {artist.name}
                                     </label>
                                 </div>
@@ -114,11 +113,11 @@ export const RecordCreate = ({
                         )}
                     </div>
                     {selectedArtistIds.length === 0 && (
-                        <span className="form-text text-muted small">
+                        <div className="form-text" id="artists-hint">
                             {t("features.admin.record.create.noArtistsHint")}
-                        </span>
+                        </div>
                     )}
-                </div>
+                </fieldset>
 
                 <button className="btn btn-primary" disabled={isSubmitting} type="submit">
                     {isSubmitting

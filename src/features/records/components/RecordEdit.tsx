@@ -1,5 +1,5 @@
 import {useTranslation} from "react-i18next";
-import type {Artist, RecordWithArtists} from "../../../../types.ts";
+import type {Artist, RecordWithArtists} from "../../../types.ts";
 import {Dispatch, SetStateAction, type SubmitEvent} from "react";
 
 interface RecordEditProps {
@@ -33,18 +33,18 @@ export const RecordEdit = ({
                                isSubmittingEdit,
                                handleCancelEdit,
                            }: RecordEditProps) => {
-
     const {t} = useTranslation();
 
     return (
-        <li className="list-group-item" key={record.id}>
+        <li className="list-group-item">
             <form onSubmit={handleSaveEdit}>
-                <div className="mb-2">
+                <div className="mb-3">
                     <label className="form-label" htmlFor={`edit-name-${record.id}`}>
                         {t("forms.name")}
                     </label>
                     <input className="form-control"
                            id={`edit-name-${record.id}`}
+                           name="edit-name"
                            onChange={(e) => {
                                setEditName(e.target.value);
                            }}
@@ -54,12 +54,13 @@ export const RecordEdit = ({
                     />
                 </div>
 
-                <div className="mb-2">
+                <div className="mb-3">
                     <label className="form-label" htmlFor={`edit-year-${record.id}`}>
                         {t("forms.year")}
                     </label>
                     <input className="form-control"
                            id={`edit-year-${record.id}`}
+                           name="edit-year"
                            onChange={(e) => {
                                setEditYear(e.target.value);
                            }}
@@ -69,32 +70,32 @@ export const RecordEdit = ({
                     />
                 </div>
 
-                <div className="mb-2">
+                <div className="mb-3">
                     <label className="form-label" htmlFor={`edit-desc-${record.id}`}>
                         {t("forms.description")}
                     </label>
                     <textarea className="form-control"
                               id={`edit-desc-${record.id}`}
+                              name="edit-description"
                               onChange={(e) => {
                                   setEditDescription(e.target.value);
                               }}
-                              rows={2}
+                              rows={3}
                               value={editDescription}
                     />
                 </div>
 
-                <div className="mb-3">
-                    <label className="form-label d-block">
+                <fieldset className="mb-3">
+                    <legend className="form-label col-form-label pt-0">
                         {t("features.admin.record.create.artistsLabel")}
-                    </label>
-                    <div className="border rounded p-2"
-                         style={{maxHeight: "140px", overflowY: "auto"}}
-                    >
+                    </legend>
+                    <div className="border rounded p-2 form-scroll-box">
                         {artists.map((artist) => (
                             <div className="form-check" key={artist.id}>
                                 <input checked={editArtistIds.includes(artist.id)}
                                        className="form-check-input"
                                        id={`edit-artist-${record.id}-${artist.id}`}
+                                       name={`edit-artist-${artist.id}`}
                                        onChange={() => {
                                            handleEditArtistCheckboxChange(artist.id);
                                        }}
@@ -108,10 +109,10 @@ export const RecordEdit = ({
                             </div>
                         ))}
                     </div>
-                </div>
+                </fieldset>
 
                 <div className="d-flex gap-2">
-                    <button className="btn btn-sm btn-primary"
+                    <button className="btn btn-primary"
                             disabled={isSubmittingEdit}
                             type="submit"
                     >
@@ -119,7 +120,7 @@ export const RecordEdit = ({
                             ? t("features.admin.record.edit.submitting")
                             : t("features.admin.record.edit.submit")}
                     </button>
-                    <button className="btn btn-sm btn-secondary"
+                    <button className="btn btn-secondary"
                             disabled={isSubmittingEdit}
                             onClick={handleCancelEdit}
                             type="button"

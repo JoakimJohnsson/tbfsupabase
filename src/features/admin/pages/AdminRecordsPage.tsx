@@ -1,17 +1,17 @@
 import {type SubmitEvent, useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
-import Feedback from "../../../../components/feedback/Feedback.tsx";
-import SimpleSpinner from "../../../../components/spinners/SimpleSpinner.tsx";
-import {getArtists} from "../../../artists/api/getArtists.ts";
-import {createRecord} from "../../../records/api/createRecord.ts";
-import {deleteRecord} from "../../../records/api/deleteRecord.ts";
-import {getRecords} from "../../../records/api/getRecords.ts";
-import {updateRecord} from "../../../records/api/updateRecord.ts";
-import {isAbortError} from "../../../../lib/asyncHelpers/withAbortSignal.ts";
-import type {Artist, RecordWithArtists, SimpleMessage} from "../../../../types.ts";
-import {RecordEdit} from "./RecordEdit.tsx";
-import {RecordRow} from "./RecordRow.tsx";
-import {RecordCreate} from "./RecordCreate.tsx";
+import Feedback from "../../../components/feedback/Feedback.tsx";
+import SimpleSpinner from "../../../components/spinners/SimpleSpinner.tsx";
+import {getArtists} from "../../artists/api/getArtists.ts";
+import {createRecord} from "../../records/api/createRecord.ts";
+import {deleteRecord} from "../../records/api/deleteRecord.ts";
+import {getRecords} from "../../records/api/getRecords.ts";
+import {updateRecord} from "../../records/api/updateRecord.ts";
+import {isAbortError} from "../../../lib/asyncHelpers/withAbortSignal.ts";
+import type {Artist, RecordWithArtists, SimpleMessage} from "../../../types.ts";
+import {RecordEdit} from "../../records/components/RecordEdit.tsx";
+import {RecordToolRow} from "../../records/components/RecordToolRow.tsx";
+import {RecordCreate} from "../../records/components/RecordCreate.tsx";
 
 const sortRecordsList = (recordsList: RecordWithArtists[]): RecordWithArtists[] => {
     return [...recordsList].sort((a, b) => {
@@ -308,7 +308,8 @@ export const AdminRecordsPage = () => {
 
                         if (isEditing) {
                             return (
-                                <RecordEdit record={record}
+                                <RecordEdit key={record.id}
+                                            record={record}
                                             handleSaveEdit={handleSaveEdit}
                                             setEditName={setEditName}
                                             editName={editName}
@@ -326,14 +327,15 @@ export const AdminRecordsPage = () => {
                         }
 
                         return (
-                            <RecordRow record={record}
-                                       artistNames={artistNames}
-                                       handleStartEdit={handleStartEdit}
-                                       deletingRecordId={deletingRecordId}
-                                       handleDeleteRecord={handleDeleteRecord}
-                                       setOpenTracklistRecordId={setOpenTracklistRecordId}
-                                       openTracklistRecordId={openTracklistRecordId}
-                                       artists={artists}
+                            <RecordToolRow key={record.id}
+                                           record={record}
+                                           artistNames={artistNames}
+                                           handleStartEdit={handleStartEdit}
+                                           deletingRecordId={deletingRecordId}
+                                           handleDeleteRecord={handleDeleteRecord}
+                                           setOpenTracklistRecordId={setOpenTracklistRecordId}
+                                           openTracklistRecordId={openTracklistRecordId}
+                                           artists={artists}
                             />
                         );
                     })}
