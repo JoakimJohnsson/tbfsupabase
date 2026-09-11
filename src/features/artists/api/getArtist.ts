@@ -1,5 +1,5 @@
-import {supabase} from "../../../lib/supabase/client.ts";
-import {withAbortSignal} from "../../../lib/asyncHelpers/withAbortSignal.ts";
+import { supabase } from "../../../lib/supabase/client";
+import { withAbortSignal } from "../../../lib/asyncHelpers/withAbortSignal";
 
 export const getArtist = async (slug: string, signal?: AbortSignal) => {
     const queryPromise = supabase
@@ -8,7 +8,7 @@ export const getArtist = async (slug: string, signal?: AbortSignal) => {
         .eq("slug", slug)
         .single();
 
-    const {data, error} = await withAbortSignal(queryPromise, signal);
+    const { data, error } = await withAbortSignal(queryPromise, signal);
 
     if (error) {
         throw error;

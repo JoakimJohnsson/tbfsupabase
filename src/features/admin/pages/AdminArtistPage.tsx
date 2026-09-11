@@ -1,32 +1,39 @@
-// src/features/admin/pages/AdminArtistPage.tsx
-import {Link, useNavigate, useParams} from "react-router";
-import {useTranslation} from "react-i18next";
+import { Link, useNavigate, useParams } from "react-router";
+import { useTranslation } from "react-i18next";
 import SimpleSpinner from "../../../components/spinners/SimpleSpinner";
 import Feedback from "../../../components/feedback/Feedback";
-import {useArtist} from "../../artists/hooks/useArtist";
-import {useEffect, useState} from "react";
-import {updateArtist} from "../../artists/api/updateArtist";
-import type {SubmitEvent} from "react";
-import type {SimpleMessage} from "../../../types";
-import {deleteArtist} from "../../artists/api/deleteArtist";
-import {useArtistRecords} from "../../records/hooks/useArtistRecords";
+import { useArtist } from "../../artists/hooks/useArtist";
+import { useEffect, useState } from "react";
+import { updateArtist } from "../../artists/api/updateArtist";
+import type { SubmitEvent } from "react";
+import type { SimpleMessage } from "../../../types";
+import { deleteArtist } from "../../artists/api/deleteArtist";
+import { useArtistRecords } from "../../records/hooks/useArtistRecords";
+import { ToolButton } from "../../../components/buttons/ToolButton";
+import { faPenToSquare } from "@fortawesome/pro-solid-svg-icons";
 
 export const AdminArtistPage = () => {
-    const {t} = useTranslation();
+    const { t } = useTranslation();
     const navigate = useNavigate();
 
     const loadErrorMessage = t("features.admin.artist.error.loadError");
     const editErrorMessage = t("features.admin.artist.edit.error.editError");
-    const editSuccessMessage = t("features.admin.artist.edit.success.editSuccess");
-    const deleteErrorMessage = t("features.admin.artist.delete.error.deleteError");
-    const recordsLoadErrorMessage = t("features.admin.artist.error.loadRecordsError");
+    const editSuccessMessage = t(
+        "features.admin.artist.edit.success.editSuccess",
+    );
+    const deleteErrorMessage = t(
+        "features.admin.artist.delete.error.deleteError",
+    );
+    const recordsLoadErrorMessage = t(
+        "features.admin.artist.error.loadRecordsError",
+    );
 
-    const {artistSlug} = useParams();
-    const {artist, loadError, loading, setArtist} = useArtist({
+    const { artistSlug } = useParams();
+    const { artist, loadError, loading, setArtist } = useArtist({
         artistSlug,
         loadErrorMessage,
     });
-    const {records, recordsLoadError, recordsLoading} = useArtistRecords({
+    const { records, recordsLoadError, recordsLoading } = useArtistRecords({
         artistId: artist?.id,
         recordsLoadErrorMessage,
     });
@@ -109,22 +116,31 @@ export const AdminArtistPage = () => {
     };
 
     if (loadError) {
-        return <Feedback errors={[loadError]}/>;
+        return <Feedback errors={[loadError]} />;
     }
 
     if (loading) {
-        return <SimpleSpinner message={t("features.admin.artist.message.loading")}/>;
+        return (
+            <SimpleSpinner
+                message={t("features.admin.artist.message.loading")}
+            />
+        );
     }
 
     if (!artist) {
-        return <Feedback warnings={[t("features.admin.artist.message.empty")]}/>;
+        return (
+            <Feedback warnings={[t("features.admin.artist.message.empty")]} />
+        );
     }
 
     return (
         <>
             <h1>{artist.name}</h1>
 
-            <Feedback errors={[editError, deleteError]} successes={[editSuccess]}/>
+            <Feedback
+                errors={[editError, deleteError]}
+                successes={[editSuccess]}
+            />
 
             {artist.description && <p>{artist.description}</p>}
 
@@ -166,7 +182,11 @@ export const AdminArtistPage = () => {
                     />
                 </div>
 
-                <button className="btn btn-primary" disabled={isSubmitting} type="submit">
+                <button
+                    className="btn btn-primary"
+                    disabled={isSubmitting}
+                    type="submit"
+                >
                     {isSubmitting
                         ? t("features.admin.artist.edit.submitting")
                         : t("features.admin.artist.edit.submitEdit")}
@@ -174,15 +194,17 @@ export const AdminArtistPage = () => {
             </form>
 
             <div className="d-flex justify-content-between align-items-center mt-5 mb-3">
-                <h2 className="mb-0">{t("features.admin.artist.recordsTitle")}</h2>
-                <Link className="btn btn-outline-primary btn-sm" to="/admin/records">
+                <h2 className="mb-0">
+                    {t("features.admin.artist.recordsTitle")}
+                </h2>
+                <Link className="btn btn-outline-primary" to="/admin/records">
                     {t("navigation.adminRecords")}
                 </Link>
             </div>
 
-            {recordsLoadError && <Feedback errors={[recordsLoadError]}/>}
+            {recordsLoadError && <Feedback errors={[recordsLoadError]} />}
 
-            {recordsLoading && <SimpleSpinner/>}
+            {recordsLoading && <SimpleSpinner />}
 
             {!recordsLoading && !recordsLoadError && records.length === 0 && (
                 <p>{t("features.admin.artist.message.recordsEmpty")}</p>
@@ -199,9 +221,14 @@ export const AdminArtistPage = () => {
                                 <strong>{record.name}</strong>
                                 {record.year && ` (${record.year})`}
                             </div>
-                            <Link className="btn btn-sm btn-outline-secondary" to="/admin/records">
-                                {t("common.edit")}
-                            </Link>
+
+                            <ToolButton
+                                ariaLabel={`${t("common.edit")} ${record.name}`}
+                                icon={faPenToSquare}
+                                text={t("common.edit")}
+                                to={`/admin/records?edit=${record.id}`}
+                                variant="outline-secondary"
+                            />
                         </li>
                     ))}
                 </ul>

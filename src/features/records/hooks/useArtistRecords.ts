@@ -1,7 +1,7 @@
-import {useEffect, useState} from "react";
-import type {Record} from "../../../types";
-import {isAbortError} from "../../../lib/asyncHelpers/withAbortSignal";
-import {getArtistRecords} from "../api/getArtistRecords";
+import { useEffect, useState } from "react";
+import type { Record } from "../../../types";
+import { isAbortError } from "../../../lib/asyncHelpers/withAbortSignal";
+import { getArtistRecords } from "../api/getArtistRecords";
 
 type UseArtistRecordsOptions = {
     artistId?: string;
@@ -9,9 +9,9 @@ type UseArtistRecordsOptions = {
 };
 
 export const useArtistRecords = ({
-                                     artistId,
-                                     recordsLoadErrorMessage,
-                                 }: UseArtistRecordsOptions) => {
+    artistId,
+    recordsLoadErrorMessage,
+}: UseArtistRecordsOptions) => {
     const [records, setRecords] = useState<Record[]>([]);
     const [recordsLoading, setRecordsLoading] = useState(true);
     const [hasLoadError, setHasLoadError] = useState(false);

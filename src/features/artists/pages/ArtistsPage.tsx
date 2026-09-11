@@ -1,15 +1,14 @@
-import {useEffect, useState} from "react";
-import {getArtists} from "../api/getArtists";
-import {isAbortError} from "../../../lib/asyncHelpers/withAbortSignal";
-import {Link} from "react-router";
-import {useTranslation} from "react-i18next";
+import { useEffect, useState } from "react";
+import { getArtists } from "../api/getArtists";
+import { isAbortError } from "../../../lib/asyncHelpers/withAbortSignal";
+import { Link } from "react-router";
+import { useTranslation } from "react-i18next";
 import Feedback from "../../../components/feedback/Feedback";
 import SimpleSpinner from "../../../components/spinners/SimpleSpinner";
-import type {Artist, SimpleMessage} from "../../../types";
+import type { Artist, SimpleMessage } from "../../../types";
 
 export const ArtistsPage = () => {
-
-    const {t} = useTranslation();
+    const { t } = useTranslation();
 
     const [artists, setArtists] = useState<Artist[]>([]);
     const [error, setError] = useState<SimpleMessage>(null);
@@ -21,7 +20,6 @@ export const ArtistsPage = () => {
     const loadWarning = t("features.artists.message.empty");
 
     useEffect(() => {
-
         // Reset view state.
         setLoading(true);
         setError(null);
@@ -58,23 +56,23 @@ export const ArtistsPage = () => {
         return () => {
             controller.abort();
         };
-
     }, [loadError, loadWarning]);
 
     if (loading) {
-        return <SimpleSpinner message={t("features.artists.message.loading")}/>;
+        return (
+            <SimpleSpinner message={t("features.artists.message.loading")} />
+        );
     }
 
     if (error) {
-        return <Feedback errors={[error]}/>;
+        return <Feedback errors={[error]} />;
     }
 
     return (
         <>
             <h1>{t("features.artists.title")}</h1>
-            <Feedback warnings={[warning]}/>
-            {
-                !!artists.length &&
+            <Feedback warnings={[warning]} />
+            {!!artists.length && (
                 <ul>
                     {artists.map((artist) => (
                         <li key={artist.id}>
@@ -84,7 +82,7 @@ export const ArtistsPage = () => {
                         </li>
                     ))}
                 </ul>
-            }
+            )}
         </>
     );
 };

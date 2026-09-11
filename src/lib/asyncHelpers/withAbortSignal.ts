@@ -7,7 +7,10 @@ const createAbortError = (): Error => {
     return error;
 };
 
-export const withAbortSignal = async <T>(promiseLike: PromiseLike<T>, signal?: AbortSignal): Promise<T> => {
+export const withAbortSignal = async <T>(
+    promiseLike: PromiseLike<T>,
+    signal?: AbortSignal,
+): Promise<T> => {
     const promise = Promise.resolve(promiseLike);
 
     if (!signal) {
@@ -24,7 +27,7 @@ export const withAbortSignal = async <T>(promiseLike: PromiseLike<T>, signal?: A
             reject(createAbortError());
         };
 
-        signal.addEventListener(ABORT_ERROR_TYPE, onAbort, {once: true});
+        signal.addEventListener(ABORT_ERROR_TYPE, onAbort, { once: true });
 
         promise
             .then(resolve)

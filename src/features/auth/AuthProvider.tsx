@@ -1,16 +1,16 @@
-import type {ReactNode} from "react";
-import type {Session} from "@supabase/supabase-js";
-import {useEffect, useState} from "react";
-import {supabase} from "../../lib/supabase/client";
-import type {Profile} from "../../types";
-import {getProfile} from "./api/getProfile";
-import {AuthContext} from "./AuthContext";
+import type { ReactNode } from "react";
+import type { Session } from "@supabase/supabase-js";
+import { useEffect, useState } from "react";
+import { supabase } from "../../lib/supabase/client";
+import type { Profile } from "../../types";
+import { getProfile } from "./api/getProfile";
+import { AuthContext } from "./AuthContext";
 
 type AuthProviderProps = {
     children: ReactNode;
 };
 
-export const AuthProvider = ({children}: AuthProviderProps) => {
+export const AuthProvider = ({ children }: AuthProviderProps) => {
     const [session, setSession] = useState<Session | null>(null);
     const [profile, setProfile] = useState<Profile | null>(null);
     const [isSessionLoading, setIsSessionLoading] = useState(true);
@@ -21,7 +21,7 @@ export const AuthProvider = ({children}: AuthProviderProps) => {
 
         const loadSession = async () => {
             const {
-                data: {session: currentSession},
+                data: { session: currentSession },
                 error,
             } = await supabase.auth.getSession();
 
@@ -38,7 +38,7 @@ export const AuthProvider = ({children}: AuthProviderProps) => {
         void loadSession();
 
         const {
-            data: {subscription},
+            data: { subscription },
         } = supabase.auth.onAuthStateChange((_event, currentSession) => {
             if (!ignore) {
                 setSession(currentSession);
@@ -99,9 +99,5 @@ export const AuthProvider = ({children}: AuthProviderProps) => {
         isLoading: isSessionLoading || isProfileLoading,
     };
 
-    return (
-        <AuthContext value={value}>
-            {children}
-        </AuthContext>
-    );
+    return <AuthContext value={value}>{children}</AuthContext>;
 };

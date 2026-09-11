@@ -1,16 +1,15 @@
-import {type SubmitEvent, useEffect, useState} from "react";
-import {useTranslation} from "react-i18next";
-import {createArtist} from "../../artists/api/createArtist";
-import {getArtists} from "../../artists/api/getArtists";
-import {isAbortError} from "../../../lib/asyncHelpers/withAbortSignal";
+import { type SubmitEvent, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { createArtist } from "../../artists/api/createArtist";
+import { getArtists } from "../../artists/api/getArtists";
+import { isAbortError } from "../../../lib/asyncHelpers/withAbortSignal";
 import Feedback from "../../../components/feedback/Feedback";
 import SimpleSpinner from "../../../components/spinners/SimpleSpinner";
-import type {Artist, SimpleMessage} from "../../../types";
-import {Link} from "react-router";
+import type { Artist, SimpleMessage } from "../../../types";
+import { Link } from "react-router";
 
 export const AdminArtistsPage = () => {
-
-    const {t} = useTranslation();
+    const { t } = useTranslation();
 
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
@@ -22,7 +21,6 @@ export const AdminArtistsPage = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-
         // Reset view state.
         setLoading(true);
         setLoadError(null);
@@ -56,7 +54,6 @@ export const AdminArtistsPage = () => {
         return () => {
             controller.abort();
         };
-
     }, [t]);
 
     const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
@@ -70,7 +67,9 @@ export const AdminArtistsPage = () => {
             const trimmedName = name.trim();
 
             if (!trimmedName) {
-                setSubmitError(t("features.admin.artist.create.error.invalidNameError"));
+                setSubmitError(
+                    t("features.admin.artist.create.error.invalidNameError"),
+                );
                 return;
             }
 
@@ -80,14 +79,17 @@ export const AdminArtistsPage = () => {
             });
 
             // Add created artist to list
-            setArtists((currentArtists) => [
-                ...currentArtists,
-                createdArtist,
-            ].sort((a, b) => a.name.localeCompare(b.name)));
+            setArtists((currentArtists) =>
+                [...currentArtists, createdArtist].sort((a, b) =>
+                    a.name.localeCompare(b.name),
+                ),
+            );
 
             setName("");
             setDescription("");
-            setSubmitSuccess(t("features.admin.artist.create.success.createSuccess"));
+            setSubmitSuccess(
+                t("features.admin.artist.create.success.createSuccess"),
+            );
         } catch (err) {
             console.error(err);
             setSubmitError(t("features.admin.artist.create.error.createError"));
@@ -97,18 +99,18 @@ export const AdminArtistsPage = () => {
     };
 
     if (loading) {
-        return <SimpleSpinner/>;
+        return <SimpleSpinner />;
     }
 
     if (loadError) {
-        return <Feedback errors={[loadError]}/>;
+        return <Feedback errors={[loadError]} />;
     }
 
     return (
         <>
             <h1>{t("features.admin.artists.title")}</h1>
 
-            <Feedback errors={[submitError]} successes={[submitSuccess]}/>
+            <Feedback errors={[submitError]} successes={[submitSuccess]} />
 
             <p className="lead">{t("features.admin.artists.lead")}</p>
 
@@ -126,16 +128,14 @@ export const AdminArtistsPage = () => {
 
             <form onSubmit={handleSubmit}>
                 <div className="mb-3">
-                    <label
-                        className="form-label"
-                        htmlFor="artist-name"
-                    >
+                    <label className="form-label" htmlFor="name">
                         {t("forms.name")}
                     </label>
 
                     <input
                         className="form-control"
-                        id="artist-name"
+                        id="name"
+                        name="name"
                         onChange={(event) => {
                             setName(event.target.value);
                         }}
@@ -146,16 +146,14 @@ export const AdminArtistsPage = () => {
                 </div>
 
                 <div className="mb-3">
-                    <label
-                        className="form-label"
-                        htmlFor="artist-description"
-                    >
+                    <label className="form-label" htmlFor="description">
                         {t("forms.description")}
                     </label>
 
                     <textarea
                         className="form-control"
-                        id="artist-description"
+                        id="description"
+                        name="description"
                         onChange={(event) => {
                             setDescription(event.target.value);
                         }}

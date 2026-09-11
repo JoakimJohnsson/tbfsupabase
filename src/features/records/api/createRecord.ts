@@ -1,11 +1,11 @@
-import {supabase} from "../../../lib/supabase/client";
-import type {CreateRecordInput} from "../../../types";
+import { supabase } from "../../../lib/supabase/client";
+import type { CreateRecordInput } from "../../../types";
 
 export const createRecord = async (input: CreateRecordInput) => {
-    const {artist_ids, ...recordData} = input;
+    const { artist_ids, ...recordData } = input;
 
-    // Insert record
-    const {data: record, error: recordError} = await supabase
+    // 1. Insert record
+    const { data: record, error: recordError } = await supabase
         .from("records")
         .insert({
             name: recordData.name,
@@ -21,7 +21,7 @@ export const createRecord = async (input: CreateRecordInput) => {
         throw recordError;
     }
 
-    // Link artists
+    // 2. Link artists
     if (artist_ids.length > 0) {
         const recordArtists = artist_ids.map((artistId, index) => ({
             record_id: record.id,
@@ -29,7 +29,7 @@ export const createRecord = async (input: CreateRecordInput) => {
             is_primary: index === 0,
         }));
 
-        const {error: linkError} = await supabase
+        const { error: linkError } = await supabase
             .from("record_artists")
             .insert(recordArtists);
 

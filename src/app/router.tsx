@@ -1,67 +1,67 @@
-import {createBrowserRouter} from "react-router";
-import {AdminLayout} from "../components/layout/AdminLayout";
-import {AuthenticatedLayout} from "../components/layout/AuthenticatedLayout";
-import {SiteLayout} from "../components/layout/SiteLayout";
-import {AdminArtistsPage} from "../features/admin/pages/AdminArtistsPage";
-import {AdminPage} from "../features/admin/pages/AdminPage";
-import {ArtistPage} from "../features/artists/pages/ArtistPage";
-import {ArtistsPage} from "../features/artists/pages/ArtistsPage";
-import {LoginPage} from "../features/auth/pages/LoginPage";
-import {HomePage} from "../features/home/pages/HomePage";
-import {NotFoundPage} from "../features/notfound/pages/NotFoundPage";
-import {AdminArtistPage} from "../features/admin/pages/AdminArtistPage";
-import {AdminRecordsPage} from "../features/admin/pages/AdminRecordsPage.tsx";
+import { createBrowserRouter } from "react-router";
+import { AdminLayout } from "../components/layout/AdminLayout";
+import { AuthenticatedLayout } from "../components/layout/AuthenticatedLayout";
+import { SiteLayout } from "../components/layout/SiteLayout";
+import { AdminArtistsPage } from "../features/admin/pages/AdminArtistsPage";
+import { AdminPage } from "../features/admin/pages/AdminPage";
+import { ArtistPage } from "../features/artists/pages/ArtistPage";
+import { ArtistsPage } from "../features/artists/pages/ArtistsPage";
+import { LoginPage } from "../features/auth/pages/LoginPage";
+import { HomePage } from "../features/home/pages/HomePage";
+import { NotFoundPage } from "../features/notfound/pages/NotFoundPage";
+import { AdminArtistPage } from "../features/admin/pages/AdminArtistPage";
+import { AdminRecordsPage } from "../features/admin/pages/AdminRecordsPage";
 
 export const router = createBrowserRouter([
     {
-        element: <SiteLayout/>,
+        element: <SiteLayout />,
         children: [
             {
                 index: true,
-                element: <HomePage/>,
+                element: <HomePage />,
             },
             {
                 path: "login",
-                element: <LoginPage/>,
+                element: <LoginPage />,
             },
             {
-                element: <AuthenticatedLayout/>,
+                element: <AuthenticatedLayout />,
                 children: [
                     {
                         path: "artists",
-                        element: <ArtistsPage/>,
+                        element: <ArtistsPage />,
                     },
                     {
                         path: "artists/:artistSlug",
-                        element: <ArtistPage/>,
+                        element: <ArtistPage />,
                     },
                 ],
             },
             {
                 path: "*",
-                element: <NotFoundPage/>,
+                element: <NotFoundPage />,
             },
         ],
     },
     {
         path: "admin",
-        element: <AdminLayout/>,
+        element: <AdminLayout />,
         children: [
             {
                 index: true,
-                element: <AdminPage/>,
+                element: <AdminPage />,
             },
             {
                 path: "artists",
-                element: <AdminArtistsPage/>,
+                element: <AdminArtistsPage />,
             },
             {
                 path: "artists/:artistSlug",
-                element: <AdminArtistPage/>,
+                element: <AdminArtistPage />,
             },
             {
                 path: "records",
-                element: <AdminRecordsPage/>,
+                element: <AdminRecordsPage />,
             },
         ],
     },

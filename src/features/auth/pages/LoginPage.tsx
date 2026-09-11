@@ -1,12 +1,12 @@
-import type {SubmitEvent} from "react";
-import {useState} from "react";
-import {useTranslation} from "react-i18next";
-import {useLocation, useNavigate} from "react-router";
-import {signIn} from "../api/signIn";
+import type { SubmitEvent } from "react";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useLocation, useNavigate } from "react-router";
+import { signIn } from "../api/signIn";
 import Feedback from "../../../components/feedback/Feedback";
 
 export const LoginPage = () => {
-    const {t} = useTranslation();
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -28,7 +28,7 @@ export const LoginPage = () => {
 
         try {
             await signIn(email, password);
-            navigate(redirectTo, {replace: true});
+            navigate(redirectTo, { replace: true });
         } catch (err) {
             console.error(err);
             setError(t("features.auth.login.error.loginError"));
@@ -41,14 +41,11 @@ export const LoginPage = () => {
         <>
             <h1>{t("features.auth.login.title")}</h1>
 
-            <Feedback errors={[error]}/>
+            <Feedback errors={[error]} />
 
             <form onSubmit={handleSubmit}>
                 <div className="mb-3">
-                    <label
-                        className="form-label"
-                        htmlFor="email"
-                    >
+                    <label className="form-label" htmlFor="email">
                         {t("forms.email")}
                     </label>
 
@@ -67,10 +64,7 @@ export const LoginPage = () => {
                 </div>
 
                 <div className="mb-3">
-                    <label
-                        className="form-label"
-                        htmlFor="password"
-                    >
+                    <label className="form-label" htmlFor="password">
                         {t("forms.password")}
                     </label>
 

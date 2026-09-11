@@ -1,16 +1,17 @@
 import { supabase } from "../../../lib/supabase/client";
 import { withAbortSignal } from "../../../lib/asyncHelpers/withAbortSignal";
-import type { RecordWithArtists } from "../../../types";
+import type { SongWithArtists } from "../../../types";
 
-export const getRecords = async (
+export const getRecordSongs = async (
+    recordId: string,
     signal?: AbortSignal,
-): Promise<RecordWithArtists[]> => {
+): Promise<SongWithArtists[]> => {
     const query = supabase
-        .from("records")
+        .from("songs")
         .select(
             `
             *,
-            record_artists (
+            song_artists (
                 artist_id,
                 is_primary,
                 artists (
@@ -21,8 +22,9 @@ export const getRecords = async (
             )
         `,
         )
-        .order("year", {
-            ascending: false,
+        .eq("record_id", recordId)
+        .order("track_number", {
+            ascending: true,
             nullsFirst: false,
         })
         .order("name");
@@ -33,5 +35,5 @@ export const getRecords = async (
         throw error;
     }
 
-    return (data ?? []) as unknown as RecordWithArtists[];
+    return (data ?? []) as unknown as SongWithArtists[];
 };

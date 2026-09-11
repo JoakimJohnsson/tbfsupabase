@@ -5,6 +5,7 @@ export const en = {
         edit: "Edit",
         loading: "Loading...",
         logout: "Log out",
+        save: "Save",
     },
     features: {
         admin: {
@@ -85,10 +86,10 @@ export const en = {
                     confirm: "Are you sure you want to delete {{name}}?",
                     deleting: "Deleting record...",
                     error: {
-                        deleteError: "Could not delete record.",
+                        deleteError: "Could not delete record {{name}}.",
                     },
                     success: {
-                        deleteSuccess: "Record deleted.",
+                        deleteSuccess: "The record {{name}} was deleted.",
                     },
                 },
             },
@@ -96,15 +97,14 @@ export const en = {
                 lead: "Here, you can administer the artists.",
                 title: "Artists",
             },
-            records: {
-                title: "Records",
-                lead: "Here, you can administer all records across artists.",
+            record: {
                 create: {
                     title: "Create record",
                     submit: "Create record",
                     submitting: "Creating record...",
                     artistsLabel: "Associated artists",
-                    noArtistsHint: "No artists selected (compilation / various artists)",
+                    noArtistsHint:
+                        "No artists selected (compilation / various artists)",
                     error: {
                         createError: "Could not create record.",
                         invalidNameError: "The record name is invalid.",
@@ -114,6 +114,23 @@ export const en = {
                         createSuccess: "Record created successfully.",
                     },
                 },
+                edit: {
+                    title: "Edit record",
+                    submit: "Save record",
+                    submitting: "Saving record...",
+                    error: {
+                        editError: "Could not update record.",
+                        invalidNameError: "The record name is invalid.",
+                        invalidYearError: "The year must be a valid number.",
+                    },
+                    success: {
+                        editSuccess: "Record updated successfully.",
+                    },
+                },
+            },
+            records: {
+                title: "Records",
+                lead: "Here, you can administer all records across artists.",
                 error: {
                     loadError: "Could not load records.",
                 },
@@ -123,6 +140,23 @@ export const en = {
                     noArtists: "Various Artists / Compilation",
                 },
             },
+            songs: {
+                title: "Tracklist",
+                tracks: "Tracks",
+                addTrack: "Add song",
+                submitting: "Saving track...",
+                noSongs: "No songs added yet.",
+                loadError: "Could not load tracklist.",
+                createError: "Could not add song.",
+                createSuccess: "Song added.",
+                editError: "Could not update song.",
+                editSuccess: "Song updated.",
+                deleteConfirm: "Are you sure you want to delete {{name}}?",
+                deleteError: "Could not delete song.",
+                deleteSuccess: "Song deleted.",
+                invalidNameError: "The song title is required.",
+                invalidTrackError: "Track number must be a valid number.",
+            },
         },
         artist: {
             error: {
@@ -131,7 +165,7 @@ export const en = {
             message: {
                 empty: "No artist found...",
                 loading: "Loading artist...",
-            }
+            },
         },
         artists: {
             title: "Artists",
@@ -149,7 +183,8 @@ export const en = {
                 submit: "Log in",
                 submitting: "Logging in...",
                 error: {
-                    loginError: "Could not log in. Check your email and password.",
+                    loginError:
+                        "Could not log in. Check your email and password.",
                 },
             },
         },
@@ -159,6 +194,7 @@ export const en = {
         email: "E-mail",
         name: "Name",
         password: "Password",
+        trackNumber: "Track #",
         year: "Year",
     },
     navigation: {

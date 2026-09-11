@@ -1,0 +1,7 @@
+node_modules/
+dist/
+coverage/
+supabase/.temp/
+src/lib/supabase/database.types.ts
+repomix-output.txt
+
