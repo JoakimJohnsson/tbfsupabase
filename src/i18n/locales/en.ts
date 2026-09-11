@@ -85,10 +85,10 @@ export const en = {
                     confirm: "Are you sure you want to delete {{name}}?",
                     deleting: "Deleting record...",
                     error: {
-                        deleteError: "Could not delete record.",
+                        deleteError: "Could not delete record {{name}}.",
                     },
                     success: {
-                        deleteSuccess: "Record deleted.",
+                        deleteSuccess: "The record {{name}} was deleted.",
                     },
                 },
             },
@@ -138,6 +138,23 @@ export const en = {
                     noArtists: "Various Artists / Compilation",
                 },
             },
+            songs: {
+                title: "Tracklist",
+                tracks: "Tracks",
+                addTrack: "Add song",
+                submitting: "Saving track...",
+                noSongs: "No songs added yet.",
+                loadError: "Could not load tracklist.",
+                createError: "Could not add song.",
+                createSuccess: "Song added.",
+                editError: "Could not update song.",
+                editSuccess: "Song updated.",
+                deleteConfirm: "Are you sure you want to delete {{name}}?",
+                deleteError: "Could not delete song.",
+                deleteSuccess: "Song deleted.",
+                invalidNameError: "The song title is required.",
+                invalidTrackError: "Track number must be a valid number.",
+            },
         },
         artist: {
             error: {
@@ -174,6 +191,7 @@ export const en = {
         email: "E-mail",
         name: "Name",
         password: "Password",
+        trackNumber: "Track #",
         year: "Year",
     },
     navigation: {
