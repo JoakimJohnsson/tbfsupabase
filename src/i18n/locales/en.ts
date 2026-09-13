@@ -112,7 +112,7 @@ export const en = {
             songs: {
                 title: "Songs",
                 songList: "Song list",
-                addTrack: "Add song",
+                addSong: "Add song",
                 submitting: "Saving song...",
                 noSongs: "No songs added yet.",
                 loadError: "Could not load song list.",
@@ -139,7 +139,7 @@ export const en = {
             },
             loginPrompt: {
                 description:
-                    "You must be logged in to view discography, tracklists, and listen to songs.",
+                    "You must be logged in to view discography, song lists, and listen to songs.",
                 submit: "Log in to view albums and songs",
                 title: "Do you want to listen to the music?",
             },
