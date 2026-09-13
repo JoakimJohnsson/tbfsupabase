@@ -134,7 +134,16 @@ export const en = {
             message: {
                 empty: "No artist found...",
                 loading: "Loading artist...",
+                noBiography: "No biography available.",
+                recordsEmpty: "No records were found for this artist.",
             },
+            loginPrompt: {
+                description:
+                    "You must be logged in to view discography, tracklists, and listen to songs.",
+                submit: "Log in to view albums and songs",
+                title: "Do you want to listen to the music?",
+            },
+            recordsTitle: "Releases & music",
         },
         artists: {
             title: "Artists",
