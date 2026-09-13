@@ -15,8 +15,8 @@ interface RecordRowProps {
     handleStartEdit: (record: RecordWithArtists) => void;
     deletingRecordId: string | null;
     handleDeleteRecord: (record: RecordWithArtists) => void;
-    setOpenTracklistRecordId: Dispatch<SetStateAction<string | null>>;
-    openTracklistRecordId: string | null;
+    setOpenSongListRecordId: Dispatch<SetStateAction<string | null>>;
+    openSongListRecordId: string | null;
     artists: Artist[];
 }
 
@@ -26,8 +26,8 @@ export const RecordToolRow = ({
     handleStartEdit,
     deletingRecordId,
     handleDeleteRecord,
-    setOpenTracklistRecordId,
-    openTracklistRecordId,
+    setOpenSongListRecordId,
+    openSongListRecordId,
     artists,
 }: RecordRowProps) => {
     const { t } = useTranslation();
@@ -68,16 +68,16 @@ export const RecordToolRow = ({
                     <ToolButton
                         icon={faMusic}
                         onClick={() => {
-                            setOpenTracklistRecordId((cur) =>
+                            setOpenSongListRecordId((cur) =>
                                 cur === record.id ? null : record.id,
                             );
                         }}
-                        text={t("features.admin.songs.tracks")}
+                        text={t("features.admin.songs.songList")}
                         variant="outline-info"
                     />
                 </div>
             </li>
-            {openTracklistRecordId === record.id && (
+            {openSongListRecordId === record.id && (
                 <RecordSongsManager
                     availableArtists={artists}
                     defaultArtistIds={record.record_artists.map(

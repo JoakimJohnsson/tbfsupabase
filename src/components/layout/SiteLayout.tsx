@@ -111,7 +111,7 @@ export const SiteLayout = () => {
                                             onClick={handleNavigation}
                                             to="/records"
                                         >
-                                            {t("navigation.adminRecords")}
+                                            {t("navigation.records")}
                                         </NavLink>
                                     </li>
                                     <li className="nav-item">
@@ -120,7 +120,7 @@ export const SiteLayout = () => {
                                             onClick={handleNavigation}
                                             to="/songs"
                                         >
-                                            {t("features.admin.songs.title")}
+                                            {t("navigation.songs")}
                                         </NavLink>
                                     </li>
                                 </>

@@ -62,7 +62,7 @@ export const AdminRecordsPage = () => {
     const [deletingRecordId, setDeletingRecordId] = useState<string | null>(
         null,
     );
-    const [openTracklistRecordId, setOpenTracklistRecordId] = useState<
+    const [openSongListRecordId, setOpenSongListRecordId] = useState<
         string | null
     >(null);
 
@@ -408,10 +408,10 @@ export const AdminRecordsPage = () => {
                                 handleStartEdit={handleStartEdit}
                                 deletingRecordId={deletingRecordId}
                                 handleDeleteRecord={handleDeleteRecord}
-                                setOpenTracklistRecordId={
-                                    setOpenTracklistRecordId
+                                setOpenSongListRecordId={
+                                    setOpenSongListRecordId
                                 }
-                                openTracklistRecordId={openTracklistRecordId}
+                                openSongListRecordId={openSongListRecordId}
                                 artists={artists}
                             />
                         );
