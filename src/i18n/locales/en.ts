@@ -157,6 +157,12 @@ export const en = {
                 },
             },
         },
+        records: {
+            title: "Records",
+        },
+        songs: {
+            title: "Songs",
+        },
     },
     forms: {
         description: "Description",
