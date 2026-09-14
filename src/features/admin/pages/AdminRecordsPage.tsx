@@ -41,6 +41,8 @@ export const AdminRecordsPage = () => {
     // Create form state
     const [name, setName] = useState("");
     const [year, setYear] = useState("");
+    const [format, setFormat] = useState("");
+    const [type, setType] = useState("");
     const [description, setDescription] = useState("");
     const [selectedArtistIds, setSelectedArtistIds] = useState<string[]>([]);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -51,6 +53,8 @@ export const AdminRecordsPage = () => {
     const [editingRecordId, setEditingRecordId] = useState<string | null>(null);
     const [editName, setEditName] = useState("");
     const [editYear, setEditYear] = useState("");
+    const [editFormat, setEditFormat] = useState("");
+    const [editType, setEditType] = useState("");
     const [editDescription, setEditDescription] = useState("");
     const [editArtistIds, setEditArtistIds] = useState<string[]>([]);
     const [isSubmittingEdit, setIsSubmittingEdit] = useState(false);
@@ -173,6 +177,8 @@ export const AdminRecordsPage = () => {
                 artist_ids: selectedArtistIds,
                 name: trimmedName,
                 description: description.trim() || undefined,
+                format: format.trim() || undefined,
+                type: type.trim() || undefined,
                 year: parsedYear,
             });
 
@@ -186,6 +192,8 @@ export const AdminRecordsPage = () => {
             );
             setName("");
             setYear("");
+            setFormat("");
+            setType("");
             setDescription("");
             setSelectedArtistIds([]);
             setSubmitSuccess(
@@ -205,6 +213,8 @@ export const AdminRecordsPage = () => {
         setEditingRecordId(record.id);
         setEditName(record.name);
         setEditYear(record.year !== null ? String(record.year) : "");
+        setEditFormat(record.format ?? "");
+        setEditType(record.type ?? "");
         setEditDescription(record.description ?? "");
         setEditArtistIds(record.record_artists.map((ra) => ra.artist_id));
     };
@@ -213,6 +223,8 @@ export const AdminRecordsPage = () => {
         setEditingRecordId(null);
         setEditName("");
         setEditYear("");
+        setEditFormat("");
+        setEditType("");
         setEditDescription("");
         setEditArtistIds([]);
     };
@@ -278,6 +290,8 @@ export const AdminRecordsPage = () => {
                 artist_ids: editArtistIds,
                 name: trimmedName,
                 description: editDescription.trim() || undefined,
+                format: editFormat.trim() || undefined,
+                type: editType.trim() || undefined,
                 year: parsedYear,
             });
 
@@ -380,22 +394,26 @@ export const AdminRecordsPage = () => {
                         if (isEditing) {
                             return (
                                 <RecordEdit
-                                    key={record.id}
-                                    record={record}
-                                    handleSaveEdit={handleSaveEdit}
-                                    setEditName={setEditName}
-                                    editName={editName}
-                                    setEditYear={setEditYear}
-                                    editYear={editYear}
-                                    setEditDescription={setEditDescription}
-                                    editDescription={editDescription}
                                     artists={artists}
                                     editArtistIds={editArtistIds}
+                                    editDescription={editDescription}
+                                    editFormat={editFormat}
+                                    editName={editName}
+                                    editType={editType}
+                                    editYear={editYear}
+                                    handleCancelEdit={handleCancelEdit}
                                     handleEditArtistCheckboxChange={
                                         handleEditArtistCheckboxChange
                                     }
+                                    handleSaveEdit={handleSaveEdit}
                                     isSubmittingEdit={isSubmittingEdit}
-                                    handleCancelEdit={handleCancelEdit}
+                                    key={record.id}
+                                    record={record}
+                                    setEditDescription={setEditDescription}
+                                    setEditFormat={setEditFormat}
+                                    setEditName={setEditName}
+                                    setEditType={setEditType}
+                                    setEditYear={setEditYear}
                                 />
                             );
                         }
@@ -420,17 +438,21 @@ export const AdminRecordsPage = () => {
             )}
 
             <RecordCreate
-                handleCreateRecord={handleCreateRecord}
-                setName={setName}
-                name={name}
-                setYear={setYear}
-                year={year}
-                setDescription={setDescription}
-                description={description}
                 artists={artists}
-                selectedArtistIds={selectedArtistIds}
+                description={description}
+                format={format}
                 handleArtistCheckboxChange={handleArtistCheckboxChange}
+                handleCreateRecord={handleCreateRecord}
                 isSubmitting={isSubmitting}
+                name={name}
+                selectedArtistIds={selectedArtistIds}
+                setDescription={setDescription}
+                setFormat={setFormat}
+                setName={setName}
+                setType={setType}
+                setYear={setYear}
+                type={type}
+                year={year}
             />
         </>
     );

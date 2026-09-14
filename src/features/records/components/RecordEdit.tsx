@@ -1,7 +1,8 @@
 import { useTranslation } from "react-i18next";
 import type { Artist, RecordWithArtists } from "../../../types";
 import { Dispatch, SetStateAction, type SubmitEvent } from "react";
-import { FormInput, FormTextArea } from "../../../components/form";
+import { FormInput, FormSelect, FormTextArea } from "../../../components/form";
+import { RECORD_FORMATS, RECORD_TYPES } from "../constants";
 
 interface RecordEditProps {
     record: RecordWithArtists;
@@ -10,6 +11,10 @@ interface RecordEditProps {
     editName: string;
     setEditYear: Dispatch<SetStateAction<string>>;
     editYear: string;
+    setEditFormat: Dispatch<SetStateAction<string>>;
+    editFormat: string;
+    setEditType: Dispatch<SetStateAction<string>>;
+    editType: string;
     setEditDescription: Dispatch<SetStateAction<string>>;
     editDescription: string;
     artists: Artist[];
@@ -26,6 +31,10 @@ export const RecordEdit = ({
     editName,
     setEditYear,
     editYear,
+    setEditFormat,
+    editFormat,
+    setEditType,
+    editType,
     setEditDescription,
     editDescription,
     artists,
@@ -35,6 +44,16 @@ export const RecordEdit = ({
     handleCancelEdit,
 }: RecordEditProps) => {
     const { t } = useTranslation();
+
+    const formatOptions = RECORD_FORMATS.map((formatId) => ({
+        label: t(`forms.formats.${formatId}` as const),
+        value: formatId,
+    }));
+
+    const typeOptions = RECORD_TYPES.map((typeId) => ({
+        label: t(`forms.types.${typeId}` as const),
+        value: typeId,
+    }));
 
     return (
         <li className="list-group-item">
@@ -49,15 +68,41 @@ export const RecordEdit = ({
                     value={editName}
                 />
 
-                <FormInput
-                    id={`year-${record.id}`}
-                    label={t("forms.year")}
-                    name="year"
-                    onChange={setEditYear}
-                    placeholder="YYYY"
-                    type="number"
-                    value={editYear}
-                />
+                <div className="row">
+                    <div className="col-12 col-md-4">
+                        <FormInput
+                            id={`year-${record.id}`}
+                            label={t("forms.year")}
+                            name="year"
+                            onChange={setEditYear}
+                            placeholder="YYYY"
+                            type="number"
+                            value={editYear}
+                        />
+                    </div>
+                    <div className="col-12 col-md-4">
+                        <FormSelect
+                            id={`format-${record.id}`}
+                            label={t("forms.format")}
+                            name="format"
+                            onChange={setEditFormat}
+                            options={formatOptions}
+                            placeholder={t("forms.selectFormatPlaceholder")}
+                            value={editFormat}
+                        />
+                    </div>
+                    <div className="col-12 col-md-4">
+                        <FormSelect
+                            id={`type-${record.id}`}
+                            label={t("forms.type")}
+                            name="type"
+                            onChange={setEditType}
+                            options={typeOptions}
+                            placeholder={t("forms.selectTypePlaceholder")}
+                            value={editType}
+                        />
+                    </div>
+                </div>
 
                 <FormTextArea
                     id={`description-${record.id}`}

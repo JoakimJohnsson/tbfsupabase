@@ -176,9 +176,28 @@ export const en = {
     forms: {
         description: "Description",
         email: "E-mail",
+        format: "Format",
+        selectFormatPlaceholder: "-- Select format --",
+        formats: {
+            cassette: "Cassette",
+            cd: "CD",
+            cdr: "CD-R",
+            digital: "Digital",
+            "vinyl-12": '12" Vinyl',
+            "vinyl-7": '7" Vinyl',
+        },
         name: "Name",
         password: "Password",
         trackNumber: "Track #",
+        type: "Type",
+        selectTypePlaceholder: "-- Select type --",
+        types: {
+            album: "Album",
+            compilation: "Compilation",
+            ep: "EP",
+            single: "Single",
+            split: "Split",
+        },
         year: "Year",
     },
     navigation: {

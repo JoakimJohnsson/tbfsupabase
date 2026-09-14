@@ -8,6 +8,7 @@ import {
 import { ToolButton } from "../../../components/buttons/ToolButton";
 import type { Artist, RecordWithArtists } from "../../../types";
 import { RecordSongsManager } from "./RecordSongsManager";
+import { RecordBadges } from "./RecordBadges";
 
 interface RecordRowProps {
     record: RecordWithArtists;
@@ -40,9 +41,18 @@ export const RecordToolRow = ({
         <>
             <li className="list-group-item d-flex justify-content-between align-items-center">
                 <div>
-                    <strong>{record.name}</strong>
-                    {record.year && ` (${record.year})`}
-                    <div className="text-muted small">
+                    <div className="d-flex align-items-center flex-wrap gap-2">
+                        <strong>{record.name}</strong>
+                        {record.year && (
+                            <span className="text-muted">({record.year})</span>
+                        )}
+                        <RecordBadges
+                            format={record.format}
+                            type={record.type}
+                        />
+                    </div>
+
+                    <div className="text-muted small mt-1">
                         {artistNames ||
                             t("features.admin.records.message.noArtists")}
                     </div>

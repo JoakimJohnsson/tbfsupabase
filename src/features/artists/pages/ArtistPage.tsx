@@ -5,6 +5,7 @@ import SimpleSpinner from "../../../components/spinners/SimpleSpinner";
 import { useArtist } from "../hooks/useArtist";
 import { useArtistRecords } from "../../records/hooks/useArtistRecords";
 import { useAuth } from "../../auth/hooks/useAuth";
+import { RecordBadges } from "../../records/components/RecordBadges";
 
 export const ArtistPage = () => {
     const { t } = useTranslation();
@@ -115,16 +116,25 @@ export const ArtistPage = () => {
                                         key={record.id}
                                     >
                                         <div className="card-body">
-                                            <h3 className="h5 card-title fw-semibold">
-                                                {record.name}
-                                                {record.year && (
-                                                    <span className="text-muted fs-6 fw-normal ms-2">
-                                                        ({record.year})
-                                                    </span>
-                                                )}
-                                            </h3>
+                                            <div className="d-flex justify-content-between align-items-start gap-2 mb-2">
+                                                <h3 className="h5 card-title fw-semibold mb-0">
+                                                    {record.name}
+                                                    {record.year && (
+                                                        <span className="text-muted fs-6 fw-normal ms-2">
+                                                            ({record.year})
+                                                        </span>
+                                                    )}
+                                                </h3>
+
+                                                {/* Format and Type badges */}
+                                                <RecordBadges
+                                                    format={record.format}
+                                                    type={record.type}
+                                                />
+                                            </div>
+
                                             {record.description && (
-                                                <p className="card-text text-muted small">
+                                                <p className="card-text text-muted small mb-0">
                                                     {record.description}
                                                 </p>
                                             )}

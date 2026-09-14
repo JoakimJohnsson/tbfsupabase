@@ -1,7 +1,8 @@
 import { useTranslation } from "react-i18next";
 import type { Artist } from "../../../types";
 import { Dispatch, SetStateAction, type SubmitEvent } from "react";
-import { FormInput, FormTextArea } from "../../../components/form";
+import { FormInput, FormSelect, FormTextArea } from "../../../components/form";
+import { RECORD_FORMATS, RECORD_TYPES } from "../constants";
 
 interface RecordCreateProps {
     handleCreateRecord: (event: SubmitEvent<HTMLFormElement>) => Promise<void>;
@@ -9,6 +10,10 @@ interface RecordCreateProps {
     name: string;
     setYear: Dispatch<SetStateAction<string>>;
     year: string;
+    setFormat: Dispatch<SetStateAction<string>>;
+    format: string;
+    setType: Dispatch<SetStateAction<string>>;
+    type: string;
     setDescription: Dispatch<SetStateAction<string>>;
     description: string;
     artists: Artist[];
@@ -23,6 +28,10 @@ export const RecordCreate = ({
     name,
     setYear,
     year,
+    setFormat,
+    format,
+    setType,
+    type,
     setDescription,
     description,
     artists,
@@ -31,6 +40,16 @@ export const RecordCreate = ({
     isSubmitting,
 }: RecordCreateProps) => {
     const { t } = useTranslation();
+
+    const formatOptions = RECORD_FORMATS.map((formatId) => ({
+        label: t(`forms.formats.${formatId}` as const),
+        value: formatId,
+    }));
+
+    const typeOptions = RECORD_TYPES.map((typeId) => ({
+        label: t(`forms.types.${typeId}` as const),
+        value: typeId,
+    }));
 
     return (
         <>
@@ -47,15 +66,41 @@ export const RecordCreate = ({
                     value={name}
                 />
 
-                <FormInput
-                    id="year"
-                    label={t("forms.year")}
-                    name="year"
-                    onChange={setYear}
-                    placeholder="YYYY"
-                    type="number"
-                    value={year}
-                />
+                <div className="row">
+                    <div className="col-12 col-md-4">
+                        <FormInput
+                            id="year"
+                            label={t("forms.year")}
+                            name="year"
+                            onChange={setYear}
+                            placeholder="YYYY"
+                            type="number"
+                            value={year}
+                        />
+                    </div>
+                    <div className="col-12 col-md-4">
+                        <FormSelect
+                            id="format"
+                            label={t("forms.format")}
+                            name="format"
+                            onChange={setFormat}
+                            options={formatOptions}
+                            placeholder={t("forms.selectFormatPlaceholder")}
+                            value={format}
+                        />
+                    </div>
+                    <div className="col-12 col-md-4">
+                        <FormSelect
+                            id="type"
+                            label={t("forms.type")}
+                            name="type"
+                            onChange={setType}
+                            options={typeOptions}
+                            placeholder={t("forms.selectTypePlaceholder")}
+                            value={type}
+                        />
+                    </div>
+                </div>
 
                 <FormTextArea
                     id="description"
