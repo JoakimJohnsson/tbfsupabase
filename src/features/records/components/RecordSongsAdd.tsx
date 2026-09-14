@@ -67,7 +67,7 @@ export const RecordSongsAdd = ({
                     >
                         {isSubmitting
                             ? t("features.admin.songs.submitting")
-                            : t("features.admin.songs.addTrack")}
+                            : t("features.admin.songs.addSong")}
                     </button>
                 </div>
             </div>

@@ -10,7 +10,6 @@ export const en = {
     features: {
         admin: {
             artist: {
-                title: "Artist",
                 create: {
                     title: "Create artist",
                     submit: "Create artist",
@@ -42,9 +41,6 @@ export const en = {
                     error: {
                         deleteError: "Could not delete artist.",
                     },
-                    success: {
-                        deleteSuccess: "Artist deleted.",
-                    },
                 },
                 error: {
                     loadError: "Could not load artist.",
@@ -56,32 +52,6 @@ export const en = {
                     recordsEmpty: "No records found...",
                 },
                 recordsTitle: "Records",
-                createRecord: {
-                    title: "Add record",
-                    submit: "Create record",
-                    submitting: "Creating record...",
-                    error: {
-                        createError: "Could not create record.",
-                        invalidNameError: "The record name is invalid.",
-                        invalidYearError: "The year must be a valid number.",
-                    },
-                    success: {
-                        createSuccess: "Record created.",
-                    },
-                },
-                editRecord: {
-                    title: "Edit record",
-                    submit: "Save record",
-                    submitting: "Saving record...",
-                    error: {
-                        editError: "Could not update record.",
-                        invalidNameError: "The record name is invalid.",
-                        invalidYearError: "The year must be a valid number.",
-                    },
-                    success: {
-                        editSuccess: "Record updated.",
-                    },
-                },
                 deleteRecord: {
                     confirm: "Are you sure you want to delete {{name}}?",
                     deleting: "Deleting record...",
@@ -115,7 +85,6 @@ export const en = {
                     },
                 },
                 edit: {
-                    title: "Edit record",
                     submit: "Save record",
                     submitting: "Saving record...",
                     error: {
@@ -141,12 +110,12 @@ export const en = {
                 },
             },
             songs: {
-                title: "Tracklist",
-                tracks: "Tracks",
-                addTrack: "Add song",
-                submitting: "Saving track...",
+                title: "Songs",
+                songList: "Song list",
+                addSong: "Add song",
+                submitting: "Saving song...",
                 noSongs: "No songs added yet.",
-                loadError: "Could not load tracklist.",
+                loadError: "Could not load song list.",
                 createError: "Could not add song.",
                 createSuccess: "Song added.",
                 editError: "Could not update song.",
@@ -165,7 +134,16 @@ export const en = {
             message: {
                 empty: "No artist found...",
                 loading: "Loading artist...",
+                noBiography: "No biography available.",
+                recordsEmpty: "No records were found for this artist.",
             },
+            loginPrompt: {
+                description:
+                    "You must be logged in to view discography, song lists, and listen to songs.",
+                submit: "Log in to view albums and songs",
+                title: "Do you want to listen to the music?",
+            },
+            recordsTitle: "Releases & music",
         },
         artists: {
             title: "Artists",
@@ -188,13 +166,38 @@ export const en = {
                 },
             },
         },
+        records: {
+            title: "Records",
+        },
+        songs: {
+            title: "Songs",
+        },
     },
     forms: {
         description: "Description",
         email: "E-mail",
+        format: "Format",
+        selectFormatPlaceholder: "-- Select format --",
+        formats: {
+            cassette: "Cassette",
+            cd: "CD",
+            cdr: "CD-R",
+            digital: "Digital",
+            "vinyl-12": '12" Vinyl',
+            "vinyl-7": '7" Vinyl',
+        },
         name: "Name",
         password: "Password",
         trackNumber: "Track #",
+        type: "Type",
+        selectTypePlaceholder: "-- Select type --",
+        types: {
+            album: "Album",
+            compilation: "Compilation",
+            ep: "EP",
+            single: "Single",
+            split: "Split",
+        },
         year: "Year",
     },
     navigation: {
@@ -204,5 +207,7 @@ export const en = {
         artists: "Artists",
         home: "TBF home",
         login: "Login",
+        records: "Records",
+        songs: "Songs",
     },
-};
+} as const;

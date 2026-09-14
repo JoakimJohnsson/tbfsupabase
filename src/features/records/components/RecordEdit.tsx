@@ -1,6 +1,8 @@
 import { useTranslation } from "react-i18next";
 import type { Artist, RecordWithArtists } from "../../../types";
 import { Dispatch, SetStateAction, type SubmitEvent } from "react";
+import { FormInput, FormSelect, FormTextArea } from "../../../components/form";
+import { RECORD_FORMATS, RECORD_TYPES } from "../constants";
 
 interface RecordEditProps {
     record: RecordWithArtists;
@@ -9,6 +11,10 @@ interface RecordEditProps {
     editName: string;
     setEditYear: Dispatch<SetStateAction<string>>;
     editYear: string;
+    setEditFormat: Dispatch<SetStateAction<string>>;
+    editFormat: string;
+    setEditType: Dispatch<SetStateAction<string>>;
+    editType: string;
     setEditDescription: Dispatch<SetStateAction<string>>;
     editDescription: string;
     artists: Artist[];
@@ -25,6 +31,10 @@ export const RecordEdit = ({
     editName,
     setEditYear,
     editYear,
+    setEditFormat,
+    editFormat,
+    setEditType,
+    editType,
     setEditDescription,
     editDescription,
     artists,
@@ -35,61 +45,73 @@ export const RecordEdit = ({
 }: RecordEditProps) => {
     const { t } = useTranslation();
 
+    const formatOptions = RECORD_FORMATS.map((formatId) => ({
+        label: t(`forms.formats.${formatId}` as const),
+        value: formatId,
+    }));
+
+    const typeOptions = RECORD_TYPES.map((typeId) => ({
+        label: t(`forms.types.${typeId}` as const),
+        value: typeId,
+    }));
+
     return (
         <li className="list-group-item">
             <form onSubmit={handleSaveEdit}>
-                <div className="mb-3">
-                    <label className="form-label" htmlFor={`name-${record.id}`}>
-                        {t("forms.name")}
-                    </label>
-                    <input
-                        className="form-control"
-                        id={`name-${record.id}`}
-                        name="name"
-                        onChange={(e) => {
-                            setEditName(e.target.value);
-                        }}
-                        required
-                        type="text"
-                        value={editName}
-                    />
+                <FormInput
+                    id={`name-${record.id}`}
+                    label={t("forms.name")}
+                    name="name"
+                    onChange={setEditName}
+                    required
+                    type="text"
+                    value={editName}
+                />
+
+                <div className="row">
+                    <div className="col-12 col-md-4">
+                        <FormInput
+                            id={`year-${record.id}`}
+                            label={t("forms.year")}
+                            name="year"
+                            onChange={setEditYear}
+                            placeholder="YYYY"
+                            type="number"
+                            value={editYear}
+                        />
+                    </div>
+                    <div className="col-12 col-md-4">
+                        <FormSelect
+                            id={`format-${record.id}`}
+                            label={t("forms.format")}
+                            name="format"
+                            onChange={setEditFormat}
+                            options={formatOptions}
+                            placeholder={t("forms.selectFormatPlaceholder")}
+                            value={editFormat}
+                        />
+                    </div>
+                    <div className="col-12 col-md-4">
+                        <FormSelect
+                            id={`type-${record.id}`}
+                            label={t("forms.type")}
+                            name="type"
+                            onChange={setEditType}
+                            options={typeOptions}
+                            placeholder={t("forms.selectTypePlaceholder")}
+                            value={editType}
+                        />
+                    </div>
                 </div>
 
-                <div className="mb-3">
-                    <label className="form-label" htmlFor={`year-${record.id}`}>
-                        {t("forms.year")}
-                    </label>
-                    <input
-                        className="form-control"
-                        id={`year-${record.id}`}
-                        name="year"
-                        onChange={(e) => {
-                            setEditYear(e.target.value);
-                        }}
-                        placeholder="YYYY"
-                        type="number"
-                        value={editYear}
-                    />
-                </div>
-
-                <div className="mb-3">
-                    <label
-                        className="form-label"
-                        htmlFor={`description-${record.id}`}
-                    >
-                        {t("forms.description")}
-                    </label>
-                    <textarea
-                        className="form-control"
-                        id={`description-${record.id}`}
-                        name="description"
-                        onChange={(e) => {
-                            setEditDescription(e.target.value);
-                        }}
-                        rows={3}
-                        value={editDescription}
-                    />
-                </div>
+                <FormTextArea
+                    id={`description-${record.id}`}
+                    label={t("forms.description")}
+                    name="description"
+                    onChange={setEditDescription}
+                    rows={3}
+                    value={editDescription}
+                />
 
                 <fieldset className="mb-3">
                     <legend className="form-label col-form-label pt-0">
@@ -102,7 +124,7 @@ export const RecordEdit = ({
                                     checked={editArtistIds.includes(artist.id)}
                                     className="form-check-input"
                                     id={`artist-${record.id}-${artist.id}`}
-                                    name={"artist-ids"}
+                                    name="artist-ids"
                                     onChange={() => {
                                         handleEditArtistCheckboxChange(
                                             artist.id,

@@ -8,6 +8,7 @@ import {
 import { ToolButton } from "../../../components/buttons/ToolButton";
 import type { Artist, RecordWithArtists } from "../../../types";
 import { RecordSongsManager } from "./RecordSongsManager";
+import { RecordBadges } from "./RecordBadges";
 
 interface RecordRowProps {
     record: RecordWithArtists;
@@ -15,8 +16,8 @@ interface RecordRowProps {
     handleStartEdit: (record: RecordWithArtists) => void;
     deletingRecordId: string | null;
     handleDeleteRecord: (record: RecordWithArtists) => void;
-    setOpenTracklistRecordId: Dispatch<SetStateAction<string | null>>;
-    openTracklistRecordId: string | null;
+    setOpenSongListRecordId: Dispatch<SetStateAction<string | null>>;
+    openSongListRecordId: string | null;
     artists: Artist[];
 }
 
@@ -26,8 +27,8 @@ export const RecordToolRow = ({
     handleStartEdit,
     deletingRecordId,
     handleDeleteRecord,
-    setOpenTracklistRecordId,
-    openTracklistRecordId,
+    setOpenSongListRecordId,
+    openSongListRecordId,
     artists,
 }: RecordRowProps) => {
     const { t } = useTranslation();
@@ -40,9 +41,18 @@ export const RecordToolRow = ({
         <>
             <li className="list-group-item d-flex justify-content-between align-items-center">
                 <div>
-                    <strong>{record.name}</strong>
-                    {record.year && ` (${record.year})`}
-                    <div className="text-muted small">
+                    <div className="d-flex align-items-center flex-wrap gap-2">
+                        <strong>{record.name}</strong>
+                        {record.year && (
+                            <span className="text-muted">({record.year})</span>
+                        )}
+                        <RecordBadges
+                            format={record.format}
+                            type={record.type}
+                        />
+                    </div>
+
+                    <div className="text-muted small mt-1">
                         {artistNames ||
                             t("features.admin.records.message.noArtists")}
                     </div>
@@ -68,16 +78,16 @@ export const RecordToolRow = ({
                     <ToolButton
                         icon={faMusic}
                         onClick={() => {
-                            setOpenTracklistRecordId((cur) =>
+                            setOpenSongListRecordId((cur) =>
                                 cur === record.id ? null : record.id,
                             );
                         }}
-                        text={t("features.admin.songs.tracks")}
+                        text={t("features.admin.songs.songList")}
                         variant="outline-info"
                     />
                 </div>
             </li>
-            {openTracklistRecordId === record.id && (
+            {openSongListRecordId === record.id && (
                 <RecordSongsManager
                     availableArtists={artists}
                     defaultArtistIds={record.record_artists.map(

@@ -1,6 +1,8 @@
 import { useTranslation } from "react-i18next";
 import type { Artist } from "../../../types";
 import { Dispatch, SetStateAction, type SubmitEvent } from "react";
+import { FormInput, FormSelect, FormTextArea } from "../../../components/form";
+import { RECORD_FORMATS, RECORD_TYPES } from "../constants";
 
 interface RecordCreateProps {
     handleCreateRecord: (event: SubmitEvent<HTMLFormElement>) => Promise<void>;
@@ -8,6 +10,10 @@ interface RecordCreateProps {
     name: string;
     setYear: Dispatch<SetStateAction<string>>;
     year: string;
+    setFormat: Dispatch<SetStateAction<string>>;
+    format: string;
+    setType: Dispatch<SetStateAction<string>>;
+    type: string;
     setDescription: Dispatch<SetStateAction<string>>;
     description: string;
     artists: Artist[];
@@ -22,6 +28,10 @@ export const RecordCreate = ({
     name,
     setYear,
     year,
+    setFormat,
+    format,
+    setType,
+    type,
     setDescription,
     description,
     artists,
@@ -31,60 +41,75 @@ export const RecordCreate = ({
 }: RecordCreateProps) => {
     const { t } = useTranslation();
 
+    const formatOptions = RECORD_FORMATS.map((formatId) => ({
+        label: t(`forms.formats.${formatId}` as const),
+        value: formatId,
+    }));
+
+    const typeOptions = RECORD_TYPES.map((typeId) => ({
+        label: t(`forms.types.${typeId}` as const),
+        value: typeId,
+    }));
+
     return (
         <>
             <h2>{t("features.admin.record.create.title")}</h2>
 
             <form onSubmit={handleCreateRecord}>
-                <div className="mb-3">
-                    <label className="form-label" htmlFor="name">
-                        {t("forms.name")}
-                    </label>
-                    <input
-                        className="form-control"
-                        id="name"
-                        name="name"
-                        onChange={(e) => {
-                            setName(e.target.value);
-                        }}
-                        required
-                        type="text"
-                        value={name}
-                    />
+                <FormInput
+                    id="name"
+                    label={t("forms.name")}
+                    name="name"
+                    onChange={setName}
+                    required
+                    type="text"
+                    value={name}
+                />
+
+                <div className="row">
+                    <div className="col-12 col-md-4">
+                        <FormInput
+                            id="year"
+                            label={t("forms.year")}
+                            name="year"
+                            onChange={setYear}
+                            placeholder="YYYY"
+                            type="number"
+                            value={year}
+                        />
+                    </div>
+                    <div className="col-12 col-md-4">
+                        <FormSelect
+                            id="format"
+                            label={t("forms.format")}
+                            name="format"
+                            onChange={setFormat}
+                            options={formatOptions}
+                            placeholder={t("forms.selectFormatPlaceholder")}
+                            value={format}
+                        />
+                    </div>
+                    <div className="col-12 col-md-4">
+                        <FormSelect
+                            id="type"
+                            label={t("forms.type")}
+                            name="type"
+                            onChange={setType}
+                            options={typeOptions}
+                            placeholder={t("forms.selectTypePlaceholder")}
+                            value={type}
+                        />
+                    </div>
                 </div>
 
-                <div className="mb-3">
-                    <label className="form-label" htmlFor="year">
-                        {t("forms.year")}
-                    </label>
-                    <input
-                        className="form-control"
-                        id="year"
-                        name="year"
-                        onChange={(e) => {
-                            setYear(e.target.value);
-                        }}
-                        placeholder="YYYY"
-                        type="number"
-                        value={year}
-                    />
-                </div>
-
-                <div className="mb-3">
-                    <label className="form-label" htmlFor="description">
-                        {t("forms.description")}
-                    </label>
-                    <textarea
-                        className="form-control"
-                        id="description"
-                        name="description"
-                        onChange={(e) => {
-                            setDescription(e.target.value);
-                        }}
-                        rows={3}
-                        value={description}
-                    />
-                </div>
+                <FormTextArea
+                    id="description"
+                    label={t("forms.description")}
+                    name="description"
+                    onChange={setDescription}
+                    rows={3}
+                    value={description}
+                />
 
                 <fieldset
                     aria-describedby={
@@ -111,7 +136,7 @@ export const RecordCreate = ({
                                         )}
                                         className="form-check-input"
                                         id={`artist-${artist.id}`}
-                                        name={"artist-ids"}
+                                        name="artist-ids"
                                         onChange={() => {
                                             handleArtistCheckboxChange(
                                                 artist.id,

@@ -1,5 +1,6 @@
 import { Database } from "./lib/supabase/database.types";
 import type { Session, User } from "@supabase/supabase-js";
+import { RecordFormat, RecordType } from "./features/records/constants";
 
 // Models
 export type Artist = Database["public"]["Tables"]["artists"]["Row"];
@@ -53,8 +54,8 @@ export type CreateRecordInput = {
     artist_ids: string[];
     name: string;
     description?: string;
-    format?: string;
-    type?: string;
+    format?: RecordFormat | string;
+    type?: RecordType | string;
     year?: number;
 };
 
@@ -63,8 +64,8 @@ export type UpdateRecordInput = {
     artist_ids: string[];
     name: string;
     description?: string;
-    format?: string;
-    type?: string;
+    format?: RecordFormat | string;
+    type?: RecordType | string;
     year?: number;
 };
 
