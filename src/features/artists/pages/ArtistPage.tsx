@@ -77,7 +77,7 @@ export const ArtistPage = () => {
                 </h2>
 
                 {!user ? (
-                    // Not logged in users are propted to log in
+                    // Not logged in users are prompted to log in
                     <div className="card border p-4 text-center bg-body-tertiary">
                         <div className="card-body">
                             <h3 className="h5 fw-bold mb-2">

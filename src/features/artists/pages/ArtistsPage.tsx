@@ -93,20 +93,16 @@ export const ArtistsPage = () => {
                                     </div>
                                 )}
                                 <div className="card-body d-flex flex-column">
-                                    <h2 className="h5 card-title fw-bold">
-                                        {artist.name}
-                                    </h2>
+                                    <Link to={`/artists/${artist.slug}`}>
+                                        <h2 className="h5 card-title fw-bold">
+                                            {artist.name}
+                                        </h2>
+                                    </Link>
                                     {artist.description && (
                                         <p className="card-text text-secondary small text-truncate">
                                             {artist.description}
                                         </p>
                                     )}
-                                    <Link
-                                        className="btn btn-outline-primary mt-auto"
-                                        to={`/artists/${artist.slug}`}
-                                    >
-                                        Visa artist
-                                    </Link>
                                 </div>
                             </div>
                         </div>

@@ -14,26 +14,34 @@ export const SiteLayout = () => {
     // State for admin dropdown menu
     const [isAdminMenuOpen, setIsAdminMenuOpen] = useState(false);
     const dropdownRef = useRef<HTMLLIElement>(null);
+    const headerRef = useRef<HTMLElement>(null);
 
-    // Close admin dropdown when clicking outside
+    // Close menus and dropdowns when clicking outside relevant areas
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
+            const targetNode = event.target as Node;
+
             if (
                 dropdownRef.current &&
-                !dropdownRef.current.contains(event.target as Node)
+                !dropdownRef.current.contains(targetNode)
             ) {
+                setIsAdminMenuOpen(false);
+            }
+
+            if (headerRef.current && !headerRef.current.contains(targetNode)) {
+                setIsNavOpen(false);
                 setIsAdminMenuOpen(false);
             }
         };
 
-        if (isAdminMenuOpen) {
+        if (isAdminMenuOpen || isNavOpen) {
             document.addEventListener("mousedown", handleClickOutside);
         }
 
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
-    }, [isAdminMenuOpen]);
+    }, [isAdminMenuOpen, isNavOpen]);
 
     // Close mobile nav when clicking a link
     const handleNavigation = () => {
@@ -52,7 +60,10 @@ export const SiteLayout = () => {
     return (
         <div className="d-flex flex-column min-vh-100">
             {/* Main Header / Top Navigation */}
-            <header className="navbar navbar-expand-md border-bottom bg-body-tertiary px-3 py-2">
+            <header
+                className="navbar navbar-expand-md border-bottom bg-body-tertiary px-3 py-2"
+                ref={headerRef}
+            >
                 <div className="container-fluid">
                     <Link
                         className="navbar-brand fw-bold me-4"
