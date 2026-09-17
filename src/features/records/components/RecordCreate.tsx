@@ -52,7 +52,7 @@ export const RecordCreate = ({
     }));
 
     return (
-        <>
+        <div className="mb-5">
             <h2>{t("features.admin.record.create.title")}</h2>
 
             <form onSubmit={handleCreateRecord}>
@@ -171,6 +171,6 @@ export const RecordCreate = ({
                         : t("features.admin.record.create.submit")}
                 </button>
             </form>
-        </>
+        </div>
     );
 };

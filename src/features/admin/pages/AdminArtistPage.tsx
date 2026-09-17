@@ -12,6 +12,7 @@ import { useArtistRecords } from "../../records/hooks/useArtistRecords";
 import { ToolButton } from "../../../components/buttons/ToolButton";
 import { faPenToSquare } from "@fortawesome/pro-solid-svg-icons";
 import { FormInput, FormTextArea } from "../../../components/form";
+import { RecordBadges } from "../../records/components/RecordBadges";
 
 export const AdminArtistPage = () => {
     const { t } = useTranslation();
@@ -202,9 +203,13 @@ export const AdminArtistPage = () => {
                             className="list-group-item d-flex justify-content-between align-items-center"
                             key={record.id}
                         >
-                            <div>
+                            <div className="d-flex align-items-center flex-wrap gap-2">
                                 <strong>{record.name}</strong>
                                 {record.year && ` (${record.year})`}
+                                <RecordBadges
+                                    format={record.format}
+                                    type={record.type}
+                                />
                             </div>
 
                             <ToolButton

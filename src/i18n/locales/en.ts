@@ -103,6 +103,9 @@ export const en = {
                 error: {
                     loadError: "Could not load records.",
                 },
+                list: {
+                    title: "List of records",
+                },
                 message: {
                     empty: "No records found...",
                     loading: "Loading records...",

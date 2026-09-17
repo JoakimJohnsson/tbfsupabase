@@ -380,6 +380,26 @@ export const AdminRecordsPage = () => {
                 successes={[submitSuccess, recordActionSuccess]}
             />
 
+            <RecordCreate
+                artists={artists}
+                description={description}
+                format={format}
+                handleArtistCheckboxChange={handleArtistCheckboxChange}
+                handleCreateRecord={handleCreateRecord}
+                isSubmitting={isSubmitting}
+                name={name}
+                selectedArtistIds={selectedArtistIds}
+                setDescription={setDescription}
+                setFormat={setFormat}
+                setName={setName}
+                setType={setType}
+                setYear={setYear}
+                type={type}
+                year={year}
+            />
+
+            <h2>{t("features.admin.records.list.title")}</h2>
+
             {records.length === 0 ? (
                 <p>{t("features.admin.records.message.empty")}</p>
             ) : (
@@ -436,24 +456,6 @@ export const AdminRecordsPage = () => {
                     })}
                 </ul>
             )}
-
-            <RecordCreate
-                artists={artists}
-                description={description}
-                format={format}
-                handleArtistCheckboxChange={handleArtistCheckboxChange}
-                handleCreateRecord={handleCreateRecord}
-                isSubmitting={isSubmitting}
-                name={name}
-                selectedArtistIds={selectedArtistIds}
-                setDescription={setDescription}
-                setFormat={setFormat}
-                setName={setName}
-                setType={setType}
-                setYear={setYear}
-                type={type}
-                year={year}
-            />
         </>
     );
 };
