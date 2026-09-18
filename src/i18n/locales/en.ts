@@ -10,6 +10,7 @@ export const en = {
     features: {
         admin: {
             artist: {
+                title: "Artist",
                 create: {
                     title: "Create artist",
                     submit: "Create artist",
@@ -65,16 +66,20 @@ export const en = {
             },
             artists: {
                 lead: "Here, you can administer the artists.",
+                search: "Search artists...",
                 title: "Artists",
+                list: {
+                    title: "List of artists",
+                },
             },
             record: {
+                title: "Record",
                 create: {
                     title: "Create record",
                     submit: "Create record",
                     submitting: "Creating record...",
                     artistsLabel: "Associated artists",
-                    noArtistsHint:
-                        "No artists selected (compilation / various artists)",
+                    noArtistsHint: "No artists selected (compilation / various artists)",
                     error: {
                         createError: "Could not create record.",
                         invalidNameError: "The record name is invalid.",
@@ -100,6 +105,7 @@ export const en = {
             records: {
                 title: "Records",
                 lead: "Here, you can administer all records across artists.",
+                search: "Search records...",
                 error: {
                     loadError: "Could not load records.",
                 },
@@ -141,8 +147,7 @@ export const en = {
                 recordsEmpty: "No records were found for this artist.",
             },
             loginPrompt: {
-                description:
-                    "You must be logged in to view discography, song lists, and listen to songs.",
+                description: "You must be logged in to view discography, song lists, and listen to songs.",
                 submit: "Log in to view albums and songs",
                 title: "Do you want to listen to the music?",
             },
@@ -164,8 +169,7 @@ export const en = {
                 submit: "Log in",
                 submitting: "Logging in...",
                 error: {
-                    loginError:
-                        "Could not log in. Check your email and password.",
+                    loginError: "Could not log in. Check your email and password.",
                 },
             },
         },
@@ -202,6 +206,7 @@ export const en = {
             split: "Split",
         },
         year: "Year",
+        yearPlaceholder: "YYYY",
     },
     navigation: {
         admin: "Admin",

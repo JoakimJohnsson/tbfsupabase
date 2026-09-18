@@ -75,7 +75,7 @@ export const RecordEdit = ({
                             label={t("forms.year")}
                             name="year"
                             onChange={setEditYear}
-                            placeholder="YYYY"
+                            placeholder={t("forms.yearPlaceholder")}
                             type="number"
                             value={editYear}
                         />
@@ -126,16 +126,11 @@ export const RecordEdit = ({
                                     id={`artist-${record.id}-${artist.id}`}
                                     name="artist-ids"
                                     onChange={() => {
-                                        handleEditArtistCheckboxChange(
-                                            artist.id,
-                                        );
+                                        handleEditArtistCheckboxChange(artist.id);
                                     }}
                                     type="checkbox"
                                 />
-                                <label
-                                    className="form-check-label"
-                                    htmlFor={`artist-${record.id}-${artist.id}`}
-                                >
+                                <label className="form-check-label" htmlFor={`artist-${record.id}-${artist.id}`}>
                                     {artist.name}
                                 </label>
                             </div>
@@ -144,11 +139,7 @@ export const RecordEdit = ({
                 </fieldset>
 
                 <div className="d-flex gap-2">
-                    <button
-                        className="btn btn-primary"
-                        disabled={isSubmittingEdit}
-                        type="submit"
-                    >
+                    <button className="btn btn-primary" disabled={isSubmittingEdit} type="submit">
                         {isSubmittingEdit
                             ? t("features.admin.record.edit.submitting")
                             : t("features.admin.record.edit.submit")}
