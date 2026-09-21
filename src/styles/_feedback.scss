@@ -1,0 +1,32 @@
+@keyframes alert-countdown {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0;
+  }
+}
+
+.alert-progress-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background-color: currentColor;
+  opacity: 0.35;
+  border-radius: 0 0 var(--bs-alert-border-radius) var(--bs-alert-border-radius);
+  animation-name: alert-countdown;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+
+  // WCAG 2.3.3: Disable motion if the user has enabled "Reduce motion"
+  @media (prefers-reduced-motion: reduce) {
+    display: none;
+  }
+}
+
+// Pause the animation on mouse hover OR keyboard focus
+.alert:hover .alert-progress-bar,
+.alert:focus-within .alert-progress-bar {
+  animation-play-state: paused;
+}
