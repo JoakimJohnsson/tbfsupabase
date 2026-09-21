@@ -11,6 +11,8 @@ import { deleteArtist } from "../../artists/api/deleteArtist";
 import { useArtistRecords } from "../../records/hooks/useArtistRecords";
 import { ToolButton } from "../../../components/buttons/ToolButton";
 import { faPenToSquare } from "@fortawesome/pro-solid-svg-icons";
+import { FormInput, FormTextArea } from "../../../components/form";
+import { RecordBadges } from "../../records/components/RecordBadges";
 
 export const AdminArtistPage = () => {
     const { t } = useTranslation();
@@ -147,40 +149,24 @@ export const AdminArtistPage = () => {
             <h2>{t("features.admin.artist.edit.title")}</h2>
 
             <form onSubmit={handleSubmit}>
-                <div className="mb-3">
-                    <label className="form-label" htmlFor="name">
-                        {t("forms.name")}
-                    </label>
+                <FormInput
+                    id="name"
+                    label={t("forms.name")}
+                    name="name"
+                    onChange={setName}
+                    required
+                    type="text"
+                    value={name}
+                />
 
-                    <input
-                        className="form-control"
-                        id="name"
-                        name="name"
-                        onChange={(event) => {
-                            setName(event.target.value);
-                        }}
-                        required
-                        type="text"
-                        value={name}
-                    />
-                </div>
-
-                <div className="mb-3">
-                    <label className="form-label" htmlFor="description">
-                        {t("forms.description")}
-                    </label>
-
-                    <textarea
-                        className="form-control"
-                        id="description"
-                        name="description"
-                        onChange={(event) => {
-                            setDescription(event.target.value);
-                        }}
-                        rows={5}
-                        value={description}
-                    />
-                </div>
+                <FormTextArea
+                    id="description"
+                    label={t("forms.description")}
+                    name="description"
+                    onChange={setDescription}
+                    rows={5}
+                    value={description}
+                />
 
                 <button
                     className="btn btn-primary"
@@ -217,9 +203,13 @@ export const AdminArtistPage = () => {
                             className="list-group-item d-flex justify-content-between align-items-center"
                             key={record.id}
                         >
-                            <div>
+                            <div className="d-flex align-items-center flex-wrap gap-2">
                                 <strong>{record.name}</strong>
                                 {record.year && ` (${record.year})`}
+                                <RecordBadges
+                                    format={record.format}
+                                    type={record.type}
+                                />
                             </div>
 
                             <ToolButton

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { getArtists } from "../api/getArtists";
-import { isAbortError } from "../../../lib/asyncHelpers/withAbortSignal";
 import { Link } from "react-router";
 import { useTranslation } from "react-i18next";
+import { getArtists } from "../api/getArtists";
+import { isAbortError } from "../../../lib/asyncHelpers/withAbortSignal";
 import Feedback from "../../../components/feedback/Feedback";
 import SimpleSpinner from "../../../components/spinners/SimpleSpinner";
 import type { Artist, SimpleMessage } from "../../../types";
@@ -15,18 +15,15 @@ export const ArtistsPage = () => {
     const [warning, setWarning] = useState<SimpleMessage>(null);
     const [loading, setLoading] = useState<boolean>(true);
 
-    // Messages
     const loadError = t("features.artists.error.loadError");
     const loadWarning = t("features.artists.message.empty");
 
     useEffect(() => {
-        // Reset view state.
         setLoading(true);
         setError(null);
         setWarning(null);
         setArtists([]);
 
-        // Cancel in-flight request when component unmounts.
         const controller = new AbortController();
 
         const loadArtists = async () => {
@@ -36,15 +33,13 @@ export const ArtistsPage = () => {
                 if (!data?.length) {
                     setWarning(loadWarning);
                 }
-            } catch (error) {
-                // Ignore expected cancellation errors from AbortController.
-                if (!isAbortError(error)) {
-                    console.error(error);
+            } catch (err) {
+                if (!isAbortError(err)) {
+                    console.error(err);
                     setError(loadError);
                     setArtists([]);
                 }
             } finally {
-                // Avoid state updates after cleanup has already aborted the request.
                 if (!controller.signal.aborted) {
                     setLoading(false);
                 }
@@ -69,20 +64,51 @@ export const ArtistsPage = () => {
     }
 
     return (
-        <>
-            <h1>{t("features.artists.title")}</h1>
+        <div className="container-fluid">
+            <h1 className="mb-4">{t("features.artists.title")}</h1>
             <Feedback warnings={[warning]} />
+
             {!!artists.length && (
-                <ul>
+                <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
                     {artists.map((artist) => (
-                        <li key={artist.id}>
-                            <Link to={`/artists/${artist.slug}`}>
-                                {artist.name}
-                            </Link>
-                        </li>
+                        <div className="col" key={artist.id}>
+                            <div className="card h-100 shadow-sm border-0 bg-body-tertiary">
+                                {artist.image_path ? (
+                                    <img
+                                        alt={artist.name}
+                                        className="card-img-top object-fit-cover"
+                                        src={artist.image_path}
+                                        style={{ height: "180px" }}
+                                    />
+                                ) : (
+                                    <div
+                                        className="d-flex align-items-center justify-content-center bg-secondary-subtle text-muted"
+                                        style={{ height: "180px" }}
+                                    >
+                                        <span className="fs-1 fw-bold">
+                                            {artist.name
+                                                .charAt(0)
+                                                .toUpperCase()}
+                                        </span>
+                                    </div>
+                                )}
+                                <div className="card-body d-flex flex-column">
+                                    <Link to={`/artists/${artist.slug}`}>
+                                        <h2 className="h5 card-title fw-bold">
+                                            {artist.name}
+                                        </h2>
+                                    </Link>
+                                    {artist.description && (
+                                        <p className="card-text text-secondary small text-truncate">
+                                            {artist.description}
+                                        </p>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
                     ))}
-                </ul>
+                </div>
             )}
-        </>
+        </div>
     );
 };

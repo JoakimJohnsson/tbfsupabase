@@ -73,18 +73,18 @@ const renderContent = ({
     iconPosition?: "start" | "end";
     text?: string;
 }) => {
+    const iconMargin = iconPosition === "start" ? "me-2" : "ms-2";
+
     const iconNode = (
         <span
             aria-hidden="true"
-            className={buildClassName("tool-button__icon", iconClassName)}
+            className={buildClassName(iconMargin, iconClassName)}
         >
             <FontAwesomeIcon icon={icon} />
         </span>
     );
 
-    const textNode = text ? (
-        <span className="tool-button__text">{text}</span>
-    ) : null;
+    const textNode = text ? <span>{text}</span> : null;
 
     if (!textNode) {
         return iconNode;
@@ -112,7 +112,7 @@ const sharedClassName = ({
         "btn",
         `btn-${variant}`,
         size ? `btn-${size}` : undefined,
-        "tool-button",
+        "tbf-tool-button",
         className,
     );
 };
