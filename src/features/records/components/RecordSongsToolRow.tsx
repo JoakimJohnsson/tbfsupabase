@@ -19,19 +19,12 @@ export const RecordSongsToolRow = ({
     const { t } = useTranslation();
 
     return (
-        <li
-            className="list-group-item d-flex justify-content-between align-items-center"
-            key={song.id}
-        >
-            <div>
+        <li className="list-group-item d-flex justify-content-between align-items-center">
+            <div className="ps-2 flex-grow-1">
                 <span className="fw-semibold">{song.name}</span>
-                {artistNames && (
-                    <span className="text-muted small ms-2">
-                        ({artistNames})
-                    </span>
-                )}
+                {artistNames && <span className="text-muted small ms-2">({artistNames})</span>}
             </div>
-            <div className="d-flex gap-2">
+            <div className="d-flex gap-2 ms-3">
                 <ToolButton
                     icon={faPenToSquare}
                     onClick={() => {

@@ -138,7 +138,7 @@ export const RecordEdit = ({
                     </div>
                 </fieldset>
 
-                <div className="d-flex gap-2">
+                <div className="d-flex gap-2 pb-3">
                     <button className="btn btn-primary" disabled={isSubmittingEdit} type="submit">
                         {isSubmittingEdit
                             ? t("features.admin.record.edit.submitting")

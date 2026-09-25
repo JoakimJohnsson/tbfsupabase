@@ -20,21 +20,15 @@ interface RecordSongsManagerProps {
 
 const sortSongs = (list: SongWithArtists[]) => {
     return [...list].sort((a, b) => {
-        if (a.track_number === null && b.track_number === null)
-            return a.name.localeCompare(b.name);
+        if (a.track_number === null && b.track_number === null) return a.name.localeCompare(b.name);
         if (a.track_number === null) return 1;
         if (b.track_number === null) return -1;
-        if (a.track_number !== b.track_number)
-            return a.track_number - b.track_number;
+        if (a.track_number !== b.track_number) return a.track_number - b.track_number;
         return a.name.localeCompare(b.name);
     });
 };
 
-export const RecordSongsManager = ({
-    availableArtists,
-    defaultArtistIds = [],
-    recordId,
-}: RecordSongsManagerProps) => {
+export const RecordSongsManager = ({ availableArtists, defaultArtistIds = [], recordId }: RecordSongsManagerProps) => {
     const { t } = useTranslation();
 
     const [songs, setSongs] = useState<SongWithArtists[]>([]);
@@ -51,8 +45,7 @@ export const RecordSongsManager = ({
     // Create form state
     const [songName, setSongName] = useState("");
     const [trackNumber, setTrackNumber] = useState("");
-    const [selectedArtistIds, setSelectedArtistIds] =
-        useState<string[]>(defaultArtistIds);
+    const [selectedArtistIds, setSelectedArtistIds] = useState<string[]>(defaultArtistIds);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     // Edit form state
@@ -171,9 +164,7 @@ export const RecordSongsManager = ({
     const handleStartEdit = (song: SongWithArtists) => {
         setEditingSongId(song.id);
         setEditSongName(song.name);
-        setEditTrackNumber(
-            song.track_number !== null ? String(song.track_number) : "",
-        );
+        setEditTrackNumber(song.track_number !== null ? String(song.track_number) : "");
         setEditArtistIds(song.song_artists.map((sa) => sa.artist_id));
         setActionFeedback({ error: null, success: null });
     };
@@ -219,11 +210,7 @@ export const RecordSongsManager = ({
                 song_artists: mapArtistRelations(editArtistIds),
             };
 
-            setSongs((cur) =>
-                sortSongs(
-                    cur.map((s) => (s.id === updated.id ? withArtists : s)),
-                ),
-            );
+            setSongs((cur) => sortSongs(cur.map((s) => (s.id === updated.id ? withArtists : s))));
             setEditingSongId(null);
             setActionFeedback({
                 error: null,
@@ -241,11 +228,7 @@ export const RecordSongsManager = ({
     };
 
     const handleDeleteSong = async (song: SongWithArtists) => {
-        if (
-            !window.confirm(
-                t("features.admin.songs.deleteConfirm", { name: song.name }),
-            )
-        ) {
+        if (!window.confirm(t("features.admin.songs.deleteConfirm", { name: song.name }))) {
             return;
         }
 
@@ -269,18 +252,13 @@ export const RecordSongsManager = ({
     if (error) return <Feedback errors={[error]} />;
 
     return (
-        <div className="mt-3 p-3 bg-body-tertiary rounded border">
+        <div className="my-3 p-3 bg-body-tertiary rounded border">
             <h6 className="fw-bold mb-3">{t("features.admin.songs.title")}</h6>
 
-            <Feedback
-                errors={[actionFeedback.error]}
-                successes={[actionFeedback.success]}
-            />
+            <Feedback errors={[actionFeedback.error]} successes={[actionFeedback.success]} />
 
             {songs.length === 0 ? (
-                <p className="text-muted small">
-                    {t("features.admin.songs.noSongs")}
-                </p>
+                <p className="text-muted small">{t("features.admin.songs.noSongs")}</p>
             ) : (
                 <ol className="list-group list-group-numbered mb-3">
                     {songs.map((song) => {
