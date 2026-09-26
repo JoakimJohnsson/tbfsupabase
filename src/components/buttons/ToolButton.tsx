@@ -73,18 +73,15 @@ const renderContent = ({
     iconPosition?: "start" | "end";
     text?: string;
 }) => {
-    const iconMargin = iconPosition === "start" ? "me-2" : "ms-2";
+    const iconMargin = iconPosition === "start" ? "me-0 me-md-2" : "ms-0 ms-md-2";
 
     const iconNode = (
-        <span
-            aria-hidden="true"
-            className={buildClassName(iconMargin, iconClassName)}
-        >
+        <span aria-hidden="true" className={buildClassName(iconMargin, iconClassName)}>
             <FontAwesomeIcon icon={icon} />
         </span>
     );
 
-    const textNode = text ? <span>{text}</span> : null;
+    const textNode = text ? <span className="d-none d-md-inline-block d-lg-none d-xl-inline-block">{text}</span> : null;
 
     if (!textNode) {
         return iconNode;
@@ -108,25 +105,11 @@ const sharedClassName = ({
     size,
     variant = "outline-secondary",
 }: Pick<ToolButtonBaseProps, "className" | "size" | "variant">) => {
-    return buildClassName(
-        "btn",
-        `btn-${variant}`,
-        size ? `btn-${size}` : undefined,
-        "tbf-tool-button",
-        className,
-    );
+    return buildClassName("btn", `btn-${variant}`, size ? `btn-${size}` : undefined, "tbf-tool-button", className);
 };
 
 export const ToolButton = (props: ToolButtonProps) => {
-    const {
-        icon,
-        className,
-        iconClassName,
-        iconPosition,
-        size,
-        text,
-        variant,
-    } = props;
+    const { icon, className, iconClassName, iconPosition, size, text, variant } = props;
 
     const commonContent = renderContent({
         icon,
@@ -153,17 +136,10 @@ export const ToolButton = (props: ToolButtonProps) => {
 
     if (props.href !== undefined) {
         const { href, rel, target } = props;
-        const safeRel =
-            target === "_blank" && !rel ? "noopener noreferrer" : rel;
+        const safeRel = target === "_blank" && !rel ? "noopener noreferrer" : rel;
 
         return (
-            <a
-                aria-label={accessibleLabel}
-                className={classNames}
-                href={href}
-                rel={safeRel}
-                target={target}
-            >
+            <a aria-label={accessibleLabel} className={classNames} href={href} rel={safeRel} target={target}>
                 {commonContent}
             </a>
         );
@@ -172,12 +148,7 @@ export const ToolButton = (props: ToolButtonProps) => {
     const { onClick, type = "button" } = props;
 
     return (
-        <button
-            aria-label={accessibleLabel}
-            className={classNames}
-            onClick={onClick}
-            type={type}
-        >
+        <button aria-label={accessibleLabel} className={classNames} onClick={onClick} type={type}>
             {commonContent}
         </button>
     );

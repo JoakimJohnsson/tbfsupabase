@@ -1,7 +1,7 @@
 import { Link, useNavigate, useParams } from "react-router";
 import { useTranslation } from "react-i18next";
-import SimpleSpinner from "../../../components/spinners/SimpleSpinner";
-import Feedback from "../../../components/feedback/Feedback";
+import Feedback from "../../../components/feedback";
+import { SimpleSpinner } from "../../../components/spinners";
 import { useArtist } from "../../artists/hooks/useArtist";
 import { useEffect, useState } from "react";
 import { updateArtist } from "../../artists/api/updateArtist";
@@ -9,7 +9,8 @@ import type { SubmitEvent } from "react";
 import type { SimpleMessage } from "../../../types";
 import { deleteArtist } from "../../artists/api/deleteArtist";
 import { useArtistRecords } from "../../records/hooks/useArtistRecords";
-import { ToolButton } from "../../../components/buttons/ToolButton";
+import { ToolButton } from "../../../components/buttons";
+import { ListRowItem } from "../../../components/layout";
 import { faPenToSquare } from "@fortawesome/pro-solid-svg-icons";
 import { FormInput, FormTextArea } from "../../../components/form";
 import { RecordBadges } from "../../records/components/RecordBadges";
@@ -199,8 +200,16 @@ export const AdminArtistPage = () => {
             {records.length > 0 && (
                 <ul className="list-group mb-4">
                     {records.map((record) => (
-                        <li
-                            className="list-group-item d-flex justify-content-between align-items-center"
+                        <ListRowItem
+                            actions={
+                                <ToolButton
+                                    ariaLabel={`${t("common.edit")} ${record.name}`}
+                                    icon={faPenToSquare}
+                                    text={t("common.edit")}
+                                    to={`/admin/records?edit=${record.id}`}
+                                    variant="outline-secondary"
+                                />
+                            }
                             key={record.id}
                         >
                             <div className="d-flex align-items-center flex-wrap gap-2">
@@ -211,15 +220,7 @@ export const AdminArtistPage = () => {
                                     type={record.type}
                                 />
                             </div>
-
-                            <ToolButton
-                                ariaLabel={`${t("common.edit")} ${record.name}`}
-                                icon={faPenToSquare}
-                                text={t("common.edit")}
-                                to={`/admin/records?edit=${record.id}`}
-                                variant="outline-secondary"
-                            />
-                        </li>
+                        </ListRowItem>
                     ))}
                 </ul>
             )}

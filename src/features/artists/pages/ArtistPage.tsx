@@ -1,7 +1,7 @@
 import { useLocation, useNavigate, useParams } from "react-router";
 import { useTranslation } from "react-i18next";
-import Feedback from "../../../components/feedback/Feedback";
-import SimpleSpinner from "../../../components/spinners/SimpleSpinner";
+import Feedback from "../../../components/feedback";
+import { SimpleSpinner } from "../../../components/spinners";
 import { useArtist } from "../hooks/useArtist";
 import { useArtistRecords } from "../../records/hooks/useArtistRecords";
 import { useAuth } from "../../auth/hooks/useAuth";

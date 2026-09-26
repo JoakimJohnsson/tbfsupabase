@@ -5,6 +5,8 @@ export const en = {
         edit: "Edit",
         loading: "Loading...",
         logout: "Log out",
+        open: "Open",
+        close: "Close",
         save: "Save",
     },
     features: {

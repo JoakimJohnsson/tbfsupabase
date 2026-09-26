@@ -6,11 +6,7 @@ interface SimpleSpinnerProps {
     variant?: "spinner-border" | "spinner-grow";
 }
 
-const SimpleSpinner = ({
-    className,
-    message,
-    variant = "spinner-grow",
-}: SimpleSpinnerProps) => {
+export const SimpleSpinner = ({ className, message, variant = "spinner-grow" }: SimpleSpinnerProps) => {
     const { t } = useTranslation();
     const defaultMessage = t("common.loading");
     const trimmedMessage = message?.trim();
@@ -18,14 +14,9 @@ const SimpleSpinner = ({
 
     return (
         <div className="w-100 text-center">
-            <div
-                role="status"
-                className={`${variant}${className ? ` ${className}` : ""}`}
-            >
+            <div role="status" className={`${variant}${className ? ` ${className}` : ""}`}>
                 <span className="visually-hidden">{messageToShow}</span>
             </div>
         </div>
     );
 };
-
-export default SimpleSpinner;
