@@ -1,7 +1,7 @@
 import { type SubmitEvent, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import Feedback from "../../../components/feedback/Feedback";
-import SimpleSpinner from "../../../components/spinners/SimpleSpinner";
+import Feedback from "../../../components/feedback";
+import { SimpleSpinner } from "../../../components/spinners";
 import { getRecordSongs } from "../../songs/api/getRecordSongs";
 import { createSong } from "../../songs/api/createSong";
 import { updateSong } from "../../songs/api/updateSong";

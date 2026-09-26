@@ -1,7 +1,8 @@
 import { type Dispatch, type SetStateAction } from "react";
 import { useTranslation } from "react-i18next";
 import { faMusic, faPenToSquare, faTrashCan } from "@fortawesome/pro-solid-svg-icons";
-import { ToolButton } from "../../../components/buttons/ToolButton";
+import { ToolButton } from "../../../components/buttons";
+import { ListRowItem } from "../../../components/layout";
 import type { Artist, RecordWithArtists } from "../../../types";
 import { RecordSongsManager } from "./RecordSongsManager";
 import { RecordBadges } from "./RecordBadges";
@@ -33,7 +34,36 @@ export const RecordToolRow = ({
 
     return (
         <>
-            <li className="list-group-item d-flex justify-content-between align-items-center">
+            <ListRowItem
+                actions={
+                    <>
+                        <ToolButton
+                            icon={faPenToSquare}
+                            onClick={() => {
+                                handleStartEdit(record);
+                            }}
+                            text={t("common.edit")}
+                            variant="outline-secondary"
+                        />
+                        <ToolButton
+                            icon={faTrashCan}
+                            onClick={() => {
+                                void handleDeleteRecord(record);
+                            }}
+                            text={deleteRecordText}
+                            variant="outline-danger"
+                        />
+                        <ToolButton
+                            icon={faMusic}
+                            onClick={() => {
+                                setOpenSongListRecordId((cur) => (cur === record.id ? null : record.id));
+                            }}
+                            text={t("features.admin.songs.songList")}
+                            variant="outline-info"
+                        />
+                    </>
+                }
+            >
                 <div>
                     <div className="d-flex align-items-center flex-wrap gap-2">
                         <strong>{record.name}</strong>
@@ -45,34 +75,7 @@ export const RecordToolRow = ({
                         {artistNames || t("features.admin.records.message.noArtists")}
                     </div>
                 </div>
-
-                <div className="d-flex gap-2 ms-3">
-                    <ToolButton
-                        icon={faPenToSquare}
-                        onClick={() => {
-                            handleStartEdit(record);
-                        }}
-                        text={t("common.edit")}
-                        variant="outline-secondary"
-                    />
-                    <ToolButton
-                        icon={faTrashCan}
-                        onClick={() => {
-                            void handleDeleteRecord(record);
-                        }}
-                        text={deleteRecordText}
-                        variant="outline-danger"
-                    />
-                    <ToolButton
-                        icon={faMusic}
-                        onClick={() => {
-                            setOpenSongListRecordId((cur) => (cur === record.id ? null : record.id));
-                        }}
-                        text={t("features.admin.songs.songList")}
-                        variant="outline-info"
-                    />
-                </div>
-            </li>
+            </ListRowItem>
             {openSongListRecordId === record.id && (
                 <RecordSongsManager
                     availableArtists={artists}

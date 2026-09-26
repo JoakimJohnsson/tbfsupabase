@@ -3,8 +3,8 @@ import { Link } from "react-router";
 import { useTranslation } from "react-i18next";
 import { getArtists } from "../api/getArtists";
 import { isAbortError } from "../../../lib/asyncHelpers/withAbortSignal";
-import Feedback from "../../../components/feedback/Feedback";
-import SimpleSpinner from "../../../components/spinners/SimpleSpinner";
+import Feedback from "../../../components/feedback";
+import { SimpleSpinner } from "../../../components/spinners";
 import type { Artist, SimpleMessage } from "../../../types";
 
 export const ArtistsPage = () => {

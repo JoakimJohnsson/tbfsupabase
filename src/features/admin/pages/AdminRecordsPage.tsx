@@ -1,10 +1,9 @@
 import { type SubmitEvent, useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "react-router";
 import { useTranslation } from "react-i18next";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch } from "@fortawesome/pro-solid-svg-icons";
-import Feedback from "../../../components/feedback/Feedback";
-import SimpleSpinner from "../../../components/spinners/SimpleSpinner";
+import Feedback from "../../../components/feedback";
+import { AdminPageLayout, EmptyStateCard, SearchToolbar } from "../../../components/layout";
+import { SimpleSpinner } from "../../../components/spinners";
 import { getArtists } from "../../artists/api/getArtists";
 import { createRecord } from "../../records/api/createRecord";
 import { deleteRecord } from "../../records/api/deleteRecord";
@@ -346,122 +345,100 @@ export const AdminRecordsPage = () => {
     }
 
     return (
-        <div className="container-fluid">
-            <div className="mb-4">
-                <h1 className="h2 fw-bold">{t("features.admin.records.title")}</h1>
-                <p className="text-secondary mb-0">{t("features.admin.records.lead")}</p>
-            </div>
-
+        <AdminPageLayout
+            lead={t("features.admin.records.lead")}
+            sidebar={
+                <div className="sticky-top" style={{ top: "1rem" }}>
+                    <RecordCreate
+                        artists={artists}
+                        description={description}
+                        format={format}
+                        handleArtistCheckboxChange={handleArtistCheckboxChange}
+                        handleCreateRecord={handleCreateRecord}
+                        isSubmitting={isSubmitting}
+                        name={name}
+                        selectedArtistIds={selectedArtistIds}
+                        setDescription={setDescription}
+                        setFormat={setFormat}
+                        setName={setName}
+                        setType={setType}
+                        setYear={setYear}
+                        type={type}
+                        year={year}
+                    />
+                </div>
+            }
+            title={t("features.admin.records.title")}
+        >
             <Feedback errors={[submitError, recordActionError]} successes={[submitSuccess, recordActionSuccess]} />
+            <SearchToolbar
+                countText={
+                    <>
+                        {filteredRecords.length}{" "}
+                        {filteredRecords.length === 1
+                            ? t("features.admin.record.title")
+                            : t("features.admin.records.title")}
+                    </>
+                }
+                onSearchChange={setSearchTerm}
+                searchPlaceholder={t("features.admin.records.search")}
+                searchValue={searchTerm}
+                showSearch={records.length > 5}
+                title={t("features.admin.records.list.title")}
+            />
 
-            <div className="row g-4">
-                {/* Left column: Create Record Card */}
-                <aside className="col-12 col-lg-5 col-xl-4">
-                    <div className="sticky-top" style={{ top: "1rem" }}>
-                        <RecordCreate
-                            artists={artists}
-                            description={description}
-                            format={format}
-                            handleArtistCheckboxChange={handleArtistCheckboxChange}
-                            handleCreateRecord={handleCreateRecord}
-                            isSubmitting={isSubmitting}
-                            name={name}
-                            selectedArtistIds={selectedArtistIds}
-                            setDescription={setDescription}
-                            setFormat={setFormat}
-                            setName={setName}
-                            setType={setType}
-                            setYear={setYear}
-                            type={type}
-                            year={year}
-                        />
-                    </div>
-                </aside>
+            {filteredRecords.length === 0 ? (
+                <EmptyStateCard message={t("features.admin.records.message.empty")} />
+            ) : (
+                <ul className="list-group shadow-sm mb-4">
+                    {filteredRecords.map((record) => {
+                        const isEditing = editingRecordId === record.id;
+                        const artistNames = record.record_artists
+                            .map((ra) => ra.artists?.name)
+                            .filter(Boolean)
+                            .join(", ");
 
-                {/* Right column: Search & Record List */}
-                <main className="col-12 col-lg-7 col-xl-8">
-                    <div className="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-                        <h2 className="h4 fw-bold mb-0">{t("features.admin.records.list.title")}</h2>
-
-                        <span className="text-secondary small">
-                            {filteredRecords.length}{" "}
-                            {filteredRecords.length === 1
-                                ? t("features.admin.record.title")
-                                : t("features.admin.records.title")}
-                        </span>
-
-                        {records.length > 5 && (
-                            <div className="input-group input-group-sm w-auto">
-                                <span className="input-group-text bg-body border-end-0">
-                                    <FontAwesomeIcon className="text-muted" icon={faSearch} />
-                                </span>
-                                <input
-                                    className="form-control border-start-0"
-                                    onChange={(e) => setSearchTerm(e.target.value)}
-                                    placeholder={t("features.admin.records.search")}
-                                    type="search"
-                                    value={searchTerm}
+                        if (isEditing) {
+                            return (
+                                <RecordEdit
+                                    artists={artists}
+                                    editArtistIds={editArtistIds}
+                                    editDescription={editDescription}
+                                    editFormat={editFormat}
+                                    editName={editName}
+                                    editType={editType}
+                                    editYear={editYear}
+                                    handleCancelEdit={handleCancelEdit}
+                                    handleEditArtistCheckboxChange={handleEditArtistCheckboxChange}
+                                    handleSaveEdit={handleSaveEdit}
+                                    isSubmittingEdit={isSubmittingEdit}
+                                    key={record.id}
+                                    record={record}
+                                    setEditDescription={setEditDescription}
+                                    setEditFormat={setEditFormat}
+                                    setEditName={setEditName}
+                                    setEditType={setEditType}
+                                    setEditYear={setEditYear}
                                 />
-                            </div>
-                        )}
-                    </div>
+                            );
+                        }
 
-                    {filteredRecords.length === 0 ? (
-                        <div className="card border-0 bg-body-tertiary p-4 text-center text-muted">
-                            {t("features.admin.records.message.empty")}
-                        </div>
-                    ) : (
-                        <ul className="list-group shadow-sm mb-4">
-                            {filteredRecords.map((record) => {
-                                const isEditing = editingRecordId === record.id;
-                                const artistNames = record.record_artists
-                                    .map((ra) => ra.artists?.name)
-                                    .filter(Boolean)
-                                    .join(", ");
-
-                                if (isEditing) {
-                                    return (
-                                        <RecordEdit
-                                            artists={artists}
-                                            editArtistIds={editArtistIds}
-                                            editDescription={editDescription}
-                                            editFormat={editFormat}
-                                            editName={editName}
-                                            editType={editType}
-                                            editYear={editYear}
-                                            handleCancelEdit={handleCancelEdit}
-                                            handleEditArtistCheckboxChange={handleEditArtistCheckboxChange}
-                                            handleSaveEdit={handleSaveEdit}
-                                            isSubmittingEdit={isSubmittingEdit}
-                                            key={record.id}
-                                            record={record}
-                                            setEditDescription={setEditDescription}
-                                            setEditFormat={setEditFormat}
-                                            setEditName={setEditName}
-                                            setEditType={setEditType}
-                                            setEditYear={setEditYear}
-                                        />
-                                    );
-                                }
-
-                                return (
-                                    <RecordToolRow
-                                        artists={artists}
-                                        artistNames={artistNames}
-                                        deletingRecordId={deletingRecordId}
-                                        handleDeleteRecord={handleDeleteRecord}
-                                        handleStartEdit={handleStartEdit}
-                                        key={record.id}
-                                        openSongListRecordId={openSongListRecordId}
-                                        record={record}
-                                        setOpenSongListRecordId={setOpenSongListRecordId}
-                                    />
-                                );
-                            })}
-                        </ul>
-                    )}
-                </main>
-            </div>
-        </div>
+                        return (
+                            <RecordToolRow
+                                artists={artists}
+                                artistNames={artistNames}
+                                deletingRecordId={deletingRecordId}
+                                handleDeleteRecord={handleDeleteRecord}
+                                handleStartEdit={handleStartEdit}
+                                key={record.id}
+                                openSongListRecordId={openSongListRecordId}
+                                record={record}
+                                setOpenSongListRecordId={setOpenSongListRecordId}
+                            />
+                        );
+                    })}
+                </ul>
+            )}
+        </AdminPageLayout>
     );
 };

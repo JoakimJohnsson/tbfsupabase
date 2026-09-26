@@ -1,5 +1,6 @@
 import { type SubmitEvent } from "react";
 import { useTranslation } from "react-i18next";
+import { ToolButtonGroup } from "../../../components/buttons";
 
 import type { SongWithArtists } from "../../../types";
 
@@ -65,7 +66,7 @@ export const RecordSongsEdit = ({
                         />
                     </div>
                 </div>
-                <div className="d-flex gap-2">
+                <ToolButtonGroup>
                     <button
                         className="btn btn-primary"
                         disabled={isSavingEdit}
@@ -80,7 +81,7 @@ export const RecordSongsEdit = ({
                     >
                         {t("common.cancel")}
                     </button>
-                </div>
+                </ToolButtonGroup>
             </form>
         </li>
     );

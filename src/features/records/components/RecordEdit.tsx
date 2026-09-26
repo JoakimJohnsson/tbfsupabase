@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import type { Artist, RecordWithArtists } from "../../../types";
 import { Dispatch, SetStateAction, type SubmitEvent } from "react";
+import { ToolButtonGroup } from "../../../components/buttons";
 import { FormInput, FormSelect, FormTextArea } from "../../../components/form";
 import { RECORD_FORMATS, RECORD_TYPES } from "../constants";
 
@@ -138,7 +139,7 @@ export const RecordEdit = ({
                     </div>
                 </fieldset>
 
-                <div className="d-flex gap-2 pb-3">
+                <ToolButtonGroup className="pb-3">
                     <button className="btn btn-primary" disabled={isSubmittingEdit} type="submit">
                         {isSubmittingEdit
                             ? t("features.admin.record.edit.submitting")
@@ -152,7 +153,7 @@ export const RecordEdit = ({
                     >
                         {t("common.cancel")}
                     </button>
-                </div>
+                </ToolButtonGroup>
             </form>
         </li>
     );
