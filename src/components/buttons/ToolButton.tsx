@@ -11,6 +11,7 @@ type ToolButtonBaseProps = {
     iconPosition?: "start" | "end";
     size?: "sm" | "lg";
     variant?: ToolButtonVariant;
+    disabled?: boolean;
 };
 
 type ToolButtonWithTextProps = ToolButtonBaseProps & {
@@ -73,7 +74,7 @@ const renderContent = ({
     iconPosition?: "start" | "end";
     text?: string;
 }) => {
-    const iconMargin = iconPosition === "start" ? "me-0 me-md-2" : "ms-0 ms-md-2";
+    const iconMargin = iconPosition === "start" ? "me-0 me-md-2 me-lg-0 me-xl-2" : "ms-0 ms-md-2 ms-lg-0 ms-xl-2";
 
     const iconNode = (
         <span aria-hidden="true" className={buildClassName(iconMargin, iconClassName)}>
@@ -109,7 +110,7 @@ const sharedClassName = ({
 };
 
 export const ToolButton = (props: ToolButtonProps) => {
-    const { icon, className, iconClassName, iconPosition, size, text, variant } = props;
+    const { icon, className, iconClassName, iconPosition, size, text, variant, disabled } = props;
 
     const commonContent = renderContent({
         icon,
@@ -148,7 +149,7 @@ export const ToolButton = (props: ToolButtonProps) => {
     const { onClick, type = "button" } = props;
 
     return (
-        <button aria-label={accessibleLabel} className={classNames} onClick={onClick} type={type}>
+        <button aria-label={accessibleLabel} className={classNames} onClick={onClick} type={type} disabled={disabled}>
             {commonContent}
         </button>
     );

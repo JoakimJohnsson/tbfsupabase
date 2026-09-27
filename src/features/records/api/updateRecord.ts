@@ -9,6 +9,7 @@ export const updateRecord = async ({
     format,
     type,
     year,
+    cover_path,
 }: UpdateRecordInput) => {
     // 1. Update record fields
     const { data: record, error: recordError } = await supabase
@@ -19,6 +20,7 @@ export const updateRecord = async ({
             format: format || null,
             type: type || null,
             year: year ?? null,
+            ...(cover_path !== undefined ? { cover_path } : {}),
         })
         .eq("id", id)
         .select()
@@ -29,10 +31,7 @@ export const updateRecord = async ({
     }
 
     // 2. Remove existing artist relations for this record
-    const { error: deleteError } = await supabase
-        .from("record_artists")
-        .delete()
-        .eq("record_id", id);
+    const { error: deleteError } = await supabase.from("record_artists").delete().eq("record_id", id);
 
     if (deleteError) {
         throw deleteError;
@@ -46,9 +45,7 @@ export const updateRecord = async ({
             is_primary: index === 0,
         }));
 
-        const { error: insertError } = await supabase
-            .from("record_artists")
-            .insert(recordArtists);
+        const { error: insertError } = await supabase.from("record_artists").insert(recordArtists);
 
         if (insertError) {
             throw insertError;
