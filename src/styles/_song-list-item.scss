@@ -1,0 +1,17 @@
+.tbf-song-list-item {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding-left: 0.5rem;
+
+    &__title {
+        font-weight: 600;
+    }
+
+    &__meta {
+        color: var(--bs-secondary-color);
+        font-size: 0.875rem;
+    }
+}
+

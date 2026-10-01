@@ -1,0 +1,96 @@
+.tbf-artist-list-item {
+    $avatar-size: 42px;
+    $card-media-height: 180px;
+    $description-max-width: 450px;
+    min-width: 0;
+
+    &--row {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    &--card {
+        overflow: hidden;
+    }
+
+    &__media {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        background-color: var(--bs-secondary-bg);
+        color: var(--bs-secondary-color);
+    }
+
+    &--row &__media {
+        width: $avatar-size;
+        height: $avatar-size;
+        flex: 0 0 $avatar-size;
+        border: 1px solid var(--bs-border-color);
+        border-radius: 50%;
+    }
+
+    &--card &__media {
+        width: 100%;
+        height: $card-media-height;
+    }
+
+    &__image {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    &__initial {
+        font-weight: 700;
+        line-height: 1;
+    }
+
+    &--row &__initial {
+        font-size: 0.875rem;
+    }
+
+    &--card &__initial {
+        font-size: 2.5rem;
+    }
+
+    &__body {
+        min-width: 0;
+    }
+
+    &__name {
+        position: relative;
+        z-index: 1;
+        display: inline-block;
+        font-weight: 700;
+        color: inherit;
+        text-decoration: none;
+
+        &:hover,
+        &:focus {
+            text-decoration: underline;
+        }
+    }
+
+    &__description {
+        margin: 0;
+        color: var(--bs-secondary-color);
+        font-size: 0.875rem;
+    }
+
+    &__description--row {
+        max-width: $description-max-width;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    &__description--card {
+        margin-top: 0.25rem;
+    }
+}
+
+
