@@ -1,7 +1,7 @@
 import { type SubmitEvent, useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "react-router";
 import { useTranslation } from "react-i18next";
-import Feedback from "../../../components/feedback";
+import { Feedback } from "../../../components/feedback";
 import { AdminPageLayout, EmptyStateCard, SearchToolbar } from "../../../components/layout";
 import { SimpleSpinner } from "../../../components/spinners";
 import { getArtists } from "../../artists/api/getArtists";
@@ -336,7 +336,7 @@ export const AdminRecordsPage = () => {
     const handleDeleteRecord = async (record: RecordWithArtists) => {
         const recordName = record.name;
         const confirmed = window.confirm(
-            t("features.admin.artist.deleteRecord.confirm", {
+            t("features.admin.records.deleteRecord.confirm", {
                 name: recordName,
             }),
         );
@@ -353,14 +353,14 @@ export const AdminRecordsPage = () => {
             await deleteRecord(record.id, record.cover_path);
             setRecords((current) => current.filter((r) => r.id !== record.id));
             setRecordActionSuccess(
-                t("features.admin.artist.deleteRecord.success.deleteSuccess", {
+                t("features.admin.records.deleteRecord.success.deleteSuccess", {
                     name: recordName,
                 }),
             );
         } catch (err) {
             console.error(err);
             setRecordActionError(
-                t("features.admin.artist.deleteRecord.error.deleteError", {
+                t("features.admin.records.deleteRecord.error.deleteError", {
                     name: recordName,
                 }),
             );

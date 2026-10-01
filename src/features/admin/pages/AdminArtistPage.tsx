@@ -1,6 +1,6 @@
 import { Link, useNavigate, useParams } from "react-router";
 import { useTranslation } from "react-i18next";
-import Feedback from "../../../components/feedback";
+import { Feedback } from "../../../components/feedback";
 import { SimpleSpinner } from "../../../components/spinners";
 import { useArtist } from "../../artists/hooks/useArtist";
 import { useEffect, useState } from "react";

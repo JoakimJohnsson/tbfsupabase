@@ -6,7 +6,7 @@ import { getArtists } from "../../artists/api/getArtists";
 import { ArtistListItem } from "../../artists/components";
 import { isAbortError } from "../../../lib/asyncHelpers/withAbortSignal";
 import { ToolButton } from "../../../components/buttons";
-import Feedback from "../../../components/feedback";
+import { Feedback } from "../../../components/feedback";
 import { FormInput, FormTextArea, ImageUploader } from "../../../components/form";
 import { AdminPageLayout, EmptyStateCard, FormCard, ListRowItem, SearchToolbar } from "../../../components/layout";
 import { SimpleSpinner } from "../../../components/spinners";

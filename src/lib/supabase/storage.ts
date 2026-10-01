@@ -9,7 +9,8 @@ export const uploadImage = async (file: File, folder: ImageFolder, customFileNam
     const baseName = customFileName
         ? customFileName.replace(/[^a-z0-9_-]/gi, "-").toLowerCase()
         : `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
-    const filePath = `${folder}/${baseName}.${fileExt}`;
+    const timestamp = Date.now();
+    const filePath = `${folder}/${baseName}-${timestamp}.${fileExt}`;
 
     const { error: uploadError } = await supabase.storage.from(IMAGES_BUCKET).upload(filePath, file, {
         upsert: true,

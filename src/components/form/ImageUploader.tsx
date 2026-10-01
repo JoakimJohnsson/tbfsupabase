@@ -1,4 +1,4 @@
-import { ChangeEvent, useRef } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faImage, faTrashCan, faUpload } from "@fortawesome/pro-solid-svg-icons";
 import { useTranslation } from "react-i18next";
@@ -25,6 +25,21 @@ export const ImageUploader = ({
 }: ImageUploaderProps) => {
     const { t } = useTranslation();
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const [previewUrl, setPreviewUrl] = useState<string | null>(currentImageUrl ?? null);
+
+    useEffect(() => {
+        if (!selectedFile) {
+            setPreviewUrl(currentImageUrl ?? null);
+            return;
+        }
+
+        const objectUrl = URL.createObjectURL(selectedFile);
+        setPreviewUrl(objectUrl);
+
+        return () => {
+            URL.revokeObjectURL(objectUrl);
+        };
+    }, [selectedFile, currentImageUrl]);
 
     const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0] || null;
@@ -40,8 +55,6 @@ export const ImageUploader = ({
             onRemoveCurrent();
         }
     };
-
-    const previewUrl = selectedFile ? URL.createObjectURL(selectedFile) : currentImageUrl;
 
     return (
         <div className="tbf-image-uploader mb-3">

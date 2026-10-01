@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { getArtists } from "../api/getArtists";
 import { ArtistListItem } from "../components";
 import { isAbortError } from "../../../lib/asyncHelpers/withAbortSignal";
-import Feedback from "../../../components/feedback";
+import { Feedback } from "../../../components/feedback";
 import { SimpleSpinner } from "../../../components/spinners";
 import type { Artist, SimpleMessage } from "../../../types";
 
@@ -54,9 +54,7 @@ export const ArtistsPage = () => {
     }, [loadError, loadWarning]);
 
     if (loading) {
-        return (
-            <SimpleSpinner message={t("features.artists.message.loading")} />
-        );
+        return <SimpleSpinner message={t("features.artists.message.loading")} />;
     }
 
     if (error) {

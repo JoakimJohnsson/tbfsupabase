@@ -109,7 +109,7 @@ export const RecordCreate = ({
                 <ImageUploader
                     disabled={isSubmitting}
                     id="record-cover-upload"
-                    label={t("forms.coverImage", "Cover image")}
+                    label={t("forms.coverImage")}
                     onFileSelect={onCoverFileSelect}
                     selectedFile={coverFile}
                 />

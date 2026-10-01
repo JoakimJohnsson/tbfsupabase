@@ -5,7 +5,6 @@ export const en = {
         edit: "Edit",
         loading: "Loading...",
         logout: "Log out",
-        open: "Open",
         close: "Close",
         save: "Save",
     },
@@ -55,16 +54,6 @@ export const en = {
                     recordsEmpty: "No records found...",
                 },
                 recordsTitle: "Records",
-                deleteRecord: {
-                    confirm: "Are you sure you want to delete {{name}}?",
-                    deleting: "Deleting record...",
-                    error: {
-                        deleteError: "Could not delete record {{name}}.",
-                    },
-                    success: {
-                        deleteSuccess: "The record {{name}} was deleted.",
-                    },
-                },
             },
             artists: {
                 lead: "Here, you can administer the artists.",
@@ -118,6 +107,16 @@ export const en = {
                     empty: "No records found...",
                     loading: "Loading records...",
                     noArtists: "Various Artists / Compilation",
+                },
+                deleteRecord: {
+                    confirm: "Are you sure you want to delete {{name}}?",
+                    deleting: "Deleting record...",
+                    error: {
+                        deleteError: "Could not delete record {{name}}.",
+                    },
+                    success: {
+                        deleteSuccess: "The record {{name}} was deleted.",
+                    },
                 },
             },
             songs: {

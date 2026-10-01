@@ -1,6 +1,6 @@
 import { useLocation, useNavigate, useParams } from "react-router";
 import { useTranslation } from "react-i18next";
-import Feedback from "../../../components/feedback";
+import { Feedback } from "../../../components/feedback";
 import { SimpleSpinner } from "../../../components/spinners";
 import { useArtist } from "../hooks/useArtist";
 import { useArtistRecords } from "../../records/hooks/useArtistRecords";
@@ -47,25 +47,13 @@ export const ArtistPage = () => {
             {/* Left column: Artist info */}
             <aside className="col-12 col-lg-4 col-xl-3">
                 <div className="card shadow-sm border-0 bg-body-tertiary">
-                    {artist.image_path && (
-                        <img
-                            alt={artist.name}
-                            className="card-img-top"
-                            src={artist.image_path}
-                        />
-                    )}
+                    {artist.image_path && <img alt={artist.name} className="card-img-top" src={artist.image_path} />}
                     <div className="card-body">
-                        <h1 className="h3 card-title fw-bold mb-3">
-                            {artist.name}
-                        </h1>
+                        <h1 className="h3 card-title fw-bold mb-3">{artist.name}</h1>
                         {artist.description ? (
-                            <p className="card-text text-secondary">
-                                {artist.description}
-                            </p>
+                            <p className="card-text text-secondary">{artist.description}</p>
                         ) : (
-                            <p className="text-muted small fst-italic">
-                                {t("features.artist.message.noBiography")}
-                            </p>
+                            <p className="text-muted small fst-italic">{t("features.artist.message.noBiography")}</p>
                         )}
                     </div>
                 </div>
@@ -73,25 +61,15 @@ export const ArtistPage = () => {
 
             {/* Right column: Artist records */}
             <main className="col-12 col-lg-8 col-xl-9">
-                <h2 className="h4 fw-bold mb-3">
-                    {t("features.artist.recordsTitle")}
-                </h2>
+                <h2 className="h4 fw-bold mb-3">{t("features.artist.recordsTitle")}</h2>
 
                 {!user ? (
                     // Not logged in users are prompted to log in
                     <div className="card border p-4 text-center bg-body-tertiary">
                         <div className="card-body">
-                            <h3 className="h5 fw-bold mb-2">
-                                {t("features.artist.loginPrompt.title")}
-                            </h3>
-                            <p className="text-muted mb-4">
-                                {t("features.artist.loginPrompt.description")}
-                            </p>
-                            <button
-                                className="btn btn-primary"
-                                onClick={handlePromptLogin}
-                                type="button"
-                            >
+                            <h3 className="h5 fw-bold mb-2">{t("features.artist.loginPrompt.title")}</h3>
+                            <p className="text-muted mb-4">{t("features.artist.loginPrompt.description")}</p>
+                            <button className="btn btn-primary" onClick={handlePromptLogin} type="button">
                                 {t("features.artist.loginPrompt.submit")}
                             </button>
                         </div>
@@ -99,22 +77,15 @@ export const ArtistPage = () => {
                 ) : (
                     // Logged in users can see records
                     <>
-                        {recordsLoadError && (
-                            <Feedback errors={[recordsLoadError]} />
-                        )}
+                        {recordsLoadError && <Feedback errors={[recordsLoadError]} />}
                         {recordsLoading ? (
                             <SimpleSpinner />
                         ) : records.length === 0 ? (
-                            <p className="text-muted">
-                                {t("features.artist.message.recordsEmpty")}
-                            </p>
+                            <p className="text-muted">{t("features.artist.message.recordsEmpty")}</p>
                         ) : (
                             <div className="d-flex flex-column gap-3">
                                 {records.map((record) => (
-                                    <div
-                                        className="card shadow-sm border"
-                                        key={record.id}
-                                    >
+                                    <div className="card shadow-sm border" key={record.id}>
                                         <div className="card-body">
                                             <div className="d-flex justify-content-between align-items-start gap-2 mb-2">
                                                 <h3 className="h5 card-title fw-semibold mb-0">
@@ -127,16 +98,11 @@ export const ArtistPage = () => {
                                                 </h3>
 
                                                 {/* Format and Type badges */}
-                                                <RecordBadges
-                                                    format={record.format}
-                                                    type={record.type}
-                                                />
+                                                <RecordBadges format={record.format} type={record.type} />
                                             </div>
 
                                             {record.description && (
-                                                <p className="card-text text-muted small mb-0">
-                                                    {record.description}
-                                                </p>
+                                                <p className="card-text text-muted small mb-0">{record.description}</p>
                                             )}
                                         </div>
                                     </div>

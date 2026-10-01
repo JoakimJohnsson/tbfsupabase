@@ -30,7 +30,7 @@ export const RecordToolRow = ({
 }: RecordRowProps) => {
     const { t } = useTranslation();
     const deleteRecordText =
-        deletingRecordId === record.id ? t("features.admin.artist.deleteRecord.deleting") : t("common.delete");
+        deletingRecordId === record.id ? t("features.admin.records.deleteRecord.deleting") : t("common.delete");
 
     return (
         <>
