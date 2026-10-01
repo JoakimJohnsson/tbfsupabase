@@ -2,7 +2,7 @@ import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faImage, faTrashCan, faUpload } from "@fortawesome/pro-solid-svg-icons";
 import { useTranslation } from "react-i18next";
-import { ToolButton } from "../buttons";
+import { ToolButton } from "../buttons/ToolButton";
 
 interface ImageUploaderProps {
     id: string;

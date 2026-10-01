@@ -1,11 +1,11 @@
 import { useLocation, useNavigate, useParams } from "react-router";
 import { useTranslation } from "react-i18next";
-import { Feedback } from "../../../components/feedback";
-import { SimpleSpinner } from "../../../components/spinners";
+import { Feedback } from "../../../components/feedback/Feedback";
+import { SimpleSpinner } from "../../../components/spinners/SimpleSpinner";
 import { useArtist } from "../hooks/useArtist";
 import { useArtistRecords } from "../../records/hooks/useArtistRecords";
 import { useAuth } from "../../auth/hooks/useAuth";
-import { RecordBadges } from "../../records/components";
+import { RecordBadges } from "../../records/components/RecordBadges";
 
 export const ArtistPage = () => {
     const { t } = useTranslation();

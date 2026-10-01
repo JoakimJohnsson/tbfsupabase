@@ -1,6 +1,6 @@
 import { Navigate, Outlet, useLocation } from "react-router";
 import { useAuth } from "../../features/auth/hooks/useAuth";
-import { SimpleSpinner } from "../spinners";
+import { SimpleSpinner } from "../spinners/SimpleSpinner";
 
 export const AuthenticatedLayout = () => {
     const { user, isLoading } = useAuth();

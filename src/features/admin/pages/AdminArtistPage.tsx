@@ -1,7 +1,7 @@
 import { Link, useNavigate, useParams } from "react-router";
 import { useTranslation } from "react-i18next";
-import { Feedback } from "../../../components/feedback";
-import { SimpleSpinner } from "../../../components/spinners";
+import { Feedback } from "../../../components/feedback/Feedback";
+import { SimpleSpinner } from "../../../components/spinners/SimpleSpinner";
 import { useArtist } from "../../artists/hooks/useArtist";
 import { useEffect, useState } from "react";
 import { updateArtist } from "../../artists/api/updateArtist";
@@ -9,11 +9,13 @@ import type { SubmitEvent } from "react";
 import type { SimpleMessage } from "../../../types";
 import { deleteArtist } from "../../artists/api/deleteArtist";
 import { useArtistRecords } from "../../records/hooks/useArtistRecords";
-import { ToolButton } from "../../../components/buttons";
-import { ListRowItem } from "../../../components/layout";
+import { ToolButton } from "../../../components/buttons/ToolButton";
+import { ListRowItem } from "../../../components/layout/ListRowItem";
 import { faPenToSquare } from "@fortawesome/pro-solid-svg-icons";
-import { FormInput, FormTextArea, ImageUploader } from "../../../components/form";
-import { RecordBadges } from "../../records/components";
+import { FormInput } from "../../../components/form/FormInput";
+import { FormTextArea } from "../../../components/form/FormTextArea";
+import { ImageUploader } from "../../../components/form/ImageUploader";
+import { RecordBadges } from "../../records/components/RecordBadges";
 import { deleteImageFromStorage, uploadImage } from "../../../lib/supabase/storage";
 
 export const AdminArtistPage = () => {

@@ -36,6 +36,25 @@ export default [
             "react/react-in-jsx-scope": "off", // React 17+ does not need React in scope
             "react/jsx-uses-react": "error",
             "react/jsx-uses-vars": "error",
+            "no-restricted-imports": [
+                "error",
+                {
+                    patterns: [
+                        {
+                            group: [
+                                "**/components/buttons/index",
+                                "**/components/form/index",
+                                "**/components/layout/index",
+                                "**/components/feedback/index",
+                                "**/components/spinners/index",
+                                "**/features/artists/components/index",
+                                "**/features/records/components/index",
+                            ],
+                            message: "Importera direkt från den konkreta filen i stället för via barrel-filer.",
+                        },
+                    ],
+                },
+            ],
             "no-unused-vars": "off",
             "@typescript-eslint/no-unused-vars": [
                 "warn",

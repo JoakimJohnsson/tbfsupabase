@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { faPenToSquare, faTrashCan } from "@fortawesome/pro-solid-svg-icons";
-import { ToolButton } from "../../../components/buttons";
-import { ListRowItem } from "../../../components/layout";
+import { ToolButton } from "../../../components/buttons/ToolButton";
+import { ListRowItem } from "../../../components/layout/ListRowItem";
 import type { SongWithArtists } from "../../../types";
 import { SongListItem } from "./SongListItem";
 

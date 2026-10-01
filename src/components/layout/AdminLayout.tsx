@@ -1,6 +1,6 @@
 import { Navigate, Outlet } from "react-router";
 import { useAuth } from "../../features/auth/hooks/useAuth";
-import { SimpleSpinner } from "../spinners";
+import { SimpleSpinner } from "../spinners/SimpleSpinner";
 
 export const AdminLayout = () => {
     const { user, profile, isLoading } = useAuth();

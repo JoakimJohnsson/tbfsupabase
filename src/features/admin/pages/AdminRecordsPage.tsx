@@ -1,16 +1,20 @@
 import { type SubmitEvent, useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "react-router";
 import { useTranslation } from "react-i18next";
-import { Feedback } from "../../../components/feedback";
-import { AdminPageLayout, EmptyStateCard, SearchToolbar } from "../../../components/layout";
-import { SimpleSpinner } from "../../../components/spinners";
+import { Feedback } from "../../../components/feedback/Feedback";
+import { AdminPageLayout } from "../../../components/layout/AdminPageLayout";
+import { EmptyStateCard } from "../../../components/layout/EmptyStateCard";
+import { SearchToolbar } from "../../../components/layout/SearchToolbar";
+import { SimpleSpinner } from "../../../components/spinners/SimpleSpinner";
 import { getArtists } from "../../artists/api/getArtists";
 import { createRecord } from "../../records/api/createRecord";
 import { deleteRecord } from "../../records/api/deleteRecord";
 import { getRecords } from "../../records/api/getRecords";
 import { updateRecord } from "../../records/api/updateRecord";
 import { isAbortError } from "../../../lib/asyncHelpers/withAbortSignal";
-import { RecordCreate, RecordEdit, RecordToolRow } from "../../records/components";
+import { RecordCreate } from "../../records/components/RecordCreate";
+import { RecordEdit } from "../../records/components/RecordEdit";
+import { RecordToolRow } from "../../records/components/RecordToolRow";
 import type { Artist, RecordWithArtists, SimpleMessage } from "../../../types";
 import { deleteImageFromStorage, uploadImage } from "../../../lib/supabase/storage";
 

@@ -1,8 +1,11 @@
 import { type Dispatch, type SetStateAction, type SubmitEvent } from "react";
 import { useTranslation } from "react-i18next";
 import { faPlus } from "@fortawesome/pro-solid-svg-icons";
-import { FormInput, FormSelect, FormTextArea, ImageUploader } from "../../../components/form";
-import { FormCard } from "../../../components/layout";
+import { FormInput } from "../../../components/form/FormInput";
+import { FormSelect } from "../../../components/form/FormSelect";
+import { FormTextArea } from "../../../components/form/FormTextArea";
+import { ImageUploader } from "../../../components/form/ImageUploader";
+import { FormCard } from "../../../components/layout/FormCard";
 import { RECORD_FORMATS, RECORD_TYPES } from "../constants";
 import type { Artist } from "../../../types";
 

@@ -1,2 +1,0 @@
-export { ArtistListItem } from "./ArtistListItem";
-

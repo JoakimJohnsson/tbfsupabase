@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { getArtists } from "../api/getArtists";
-import { ArtistListItem } from "../components";
+import { ArtistListItem } from "../components/ArtistListItem";
 import { isAbortError } from "../../../lib/asyncHelpers/withAbortSignal";
-import { Feedback } from "../../../components/feedback";
-import { SimpleSpinner } from "../../../components/spinners";
+import { Feedback } from "../../../components/feedback/Feedback";
+import { SimpleSpinner } from "../../../components/spinners/SimpleSpinner";
 import type { Artist, SimpleMessage } from "../../../types";
 
 export const ArtistsPage = () => {

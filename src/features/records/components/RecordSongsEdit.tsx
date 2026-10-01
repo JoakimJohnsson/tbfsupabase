@@ -1,7 +1,8 @@
 import { type SubmitEvent } from "react";
 import { useTranslation } from "react-i18next";
 import { faFloppyDisk, faXmark } from "@fortawesome/pro-solid-svg-icons";
-import { ToolButton, ToolButtonGroup } from "../../../components/buttons";
+import { ToolButton } from "../../../components/buttons/ToolButton";
+import { ToolButtonGroup } from "../../../components/buttons/ToolButtonGroup";
 
 import type { SongWithArtists } from "../../../types";
 

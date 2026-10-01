@@ -1,8 +1,11 @@
 import { useTranslation } from "react-i18next";
 import type { Artist, RecordWithArtists } from "../../../types";
 import { Dispatch, SetStateAction, type SubmitEvent } from "react";
-import { ToolButtonGroup } from "../../../components/buttons";
-import { FormInput, FormSelect, FormTextArea, ImageUploader } from "../../../components/form";
+import { ToolButtonGroup } from "../../../components/buttons/ToolButtonGroup";
+import { FormInput } from "../../../components/form/FormInput";
+import { FormSelect } from "../../../components/form/FormSelect";
+import { FormTextArea } from "../../../components/form/FormTextArea";
+import { ImageUploader } from "../../../components/form/ImageUploader";
 import { RECORD_FORMATS, RECORD_TYPES } from "../constants";
 
 interface RecordEditProps {
