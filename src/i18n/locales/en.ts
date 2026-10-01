@@ -186,6 +186,8 @@ export const en = {
         description: "Description",
         email: "E-mail",
         format: "Format",
+        imagePreviewAlt: "Image preview",
+        imageUploadHelp: "Max 5 MB (JPG, PNG, WebP)",
         selectFormatPlaceholder: "-- Select format --",
         formats: {
             cassette: "Cassette",
@@ -200,6 +202,10 @@ export const en = {
         trackNumber: "Track #",
         type: "Type",
         selectTypePlaceholder: "-- Select type --",
+        coverImage: "Cover image",
+        artistImage: "Artist image",
+        uploadImage: "Upload image",
+        changeImage: "Change image",
         types: {
             album: "Album",
             compilation: "Compilation",

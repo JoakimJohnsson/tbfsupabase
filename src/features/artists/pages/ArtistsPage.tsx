@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router";
 import { useTranslation } from "react-i18next";
 import { getArtists } from "../api/getArtists";
+import { ArtistListItem } from "../components";
 import { isAbortError } from "../../../lib/asyncHelpers/withAbortSignal";
 import Feedback from "../../../components/feedback";
 import { SimpleSpinner } from "../../../components/spinners";
@@ -72,39 +72,7 @@ export const ArtistsPage = () => {
                 <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
                     {artists.map((artist) => (
                         <div className="col" key={artist.id}>
-                            <div className="card h-100 shadow-sm border-0 bg-body-tertiary">
-                                {artist.image_path ? (
-                                    <img
-                                        alt={artist.name}
-                                        className="card-img-top object-fit-cover"
-                                        src={artist.image_path}
-                                        style={{ height: "180px" }}
-                                    />
-                                ) : (
-                                    <div
-                                        className="d-flex align-items-center justify-content-center bg-secondary-subtle text-muted"
-                                        style={{ height: "180px" }}
-                                    >
-                                        <span className="fs-1 fw-bold">
-                                            {artist.name
-                                                .charAt(0)
-                                                .toUpperCase()}
-                                        </span>
-                                    </div>
-                                )}
-                                <div className="card-body d-flex flex-column">
-                                    <Link to={`/artists/${artist.slug}`}>
-                                        <h2 className="h5 card-title fw-bold">
-                                            {artist.name}
-                                        </h2>
-                                    </Link>
-                                    {artist.description && (
-                                        <p className="card-text text-secondary small text-truncate">
-                                            {artist.description}
-                                        </p>
-                                    )}
-                                </div>
-                            </div>
+                            <ArtistListItem artist={artist} to={`/artists/${artist.slug}`} variant="card" />
                         </div>
                     ))}
                 </div>

@@ -5,7 +5,7 @@ import { ToolButton } from "../../../components/buttons";
 import { ListRowItem } from "../../../components/layout";
 import type { Artist, RecordWithArtists } from "../../../types";
 import { RecordSongsManager } from "./RecordSongsManager";
-import { RecordBadges } from "./RecordBadges";
+import { RecordListItem } from "./RecordListItem";
 
 interface RecordRowProps {
     record: RecordWithArtists;
@@ -64,17 +64,10 @@ export const RecordToolRow = ({
                     </>
                 }
             >
-                <div>
-                    <div className="d-flex align-items-center flex-wrap gap-2">
-                        <strong>{record.name}</strong>
-                        {record.year && <span className="text-muted">({record.year})</span>}
-                        <RecordBadges format={record.format} type={record.type} />
-                    </div>
-
-                    <div className="text-muted small mt-1">
-                        {artistNames || t("features.admin.records.message.noArtists")}
-                    </div>
-                </div>
+                <RecordListItem
+                    artistNames={artistNames || t("features.admin.records.message.noArtists")}
+                    record={record}
+                />
             </ListRowItem>
             {openSongListRecordId === record.id && (
                 <RecordSongsManager

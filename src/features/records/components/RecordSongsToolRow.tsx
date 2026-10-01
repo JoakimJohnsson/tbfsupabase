@@ -3,6 +3,7 @@ import { faPenToSquare, faTrashCan } from "@fortawesome/pro-solid-svg-icons";
 import { ToolButton } from "../../../components/buttons";
 import { ListRowItem } from "../../../components/layout";
 import type { SongWithArtists } from "../../../types";
+import { SongListItem } from "./SongListItem";
 
 interface RecordSongsToolRowProps {
     song: SongWithArtists;
@@ -42,10 +43,7 @@ export const RecordSongsToolRow = ({
                 </>
             }
         >
-            <div className="ps-2">
-                <span className="fw-semibold">{song.name}</span>
-                {artistNames && <span className="text-muted small ms-2">({artistNames})</span>}
-            </div>
+            <SongListItem artistNames={artistNames} song={song} />
         </ListRowItem>
     );
 };

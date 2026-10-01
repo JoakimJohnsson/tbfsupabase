@@ -5,7 +5,7 @@ import { SimpleSpinner } from "../../../components/spinners";
 import { useArtist } from "../hooks/useArtist";
 import { useArtistRecords } from "../../records/hooks/useArtistRecords";
 import { useAuth } from "../../auth/hooks/useAuth";
-import { RecordBadges } from "../../records/components/RecordBadges";
+import { RecordBadges } from "../../records/components";
 
 export const ArtistPage = () => {
     const { t } = useTranslation();

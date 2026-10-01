@@ -13,6 +13,7 @@ export const createRecord = async (input: CreateRecordInput) => {
             format: recordData.format || null,
             type: recordData.type || null,
             year: recordData.year ?? null,
+            cover_path: recordData.cover_path || null,
         })
         .select()
         .single();
@@ -29,9 +30,7 @@ export const createRecord = async (input: CreateRecordInput) => {
             is_primary: index === 0,
         }));
 
-        const { error: linkError } = await supabase
-            .from("record_artists")
-            .insert(recordArtists);
+        const { error: linkError } = await supabase.from("record_artists").insert(recordArtists);
 
         if (linkError) {
             throw linkError;

@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import type { Artist, RecordWithArtists } from "../../../types";
 import { Dispatch, SetStateAction, type SubmitEvent } from "react";
 import { ToolButtonGroup } from "../../../components/buttons";
-import { FormInput, FormSelect, FormTextArea } from "../../../components/form";
+import { FormInput, FormSelect, FormTextArea, ImageUploader } from "../../../components/form";
 import { RECORD_FORMATS, RECORD_TYPES } from "../constants";
 
 interface RecordEditProps {
@@ -21,6 +21,10 @@ interface RecordEditProps {
     artists: Artist[];
     editArtistIds: string[];
     handleEditArtistCheckboxChange: (artistId: string) => void;
+    editCoverFile: File | null;
+    onEditCoverFileSelect: (file: File | null) => void;
+    currentCoverUrl: string | null;
+    onRemoveCurrentCover: () => void;
     isSubmittingEdit: boolean;
     handleCancelEdit: () => void;
 }
@@ -41,6 +45,10 @@ export const RecordEdit = ({
     artists,
     editArtistIds,
     handleEditArtistCheckboxChange,
+    editCoverFile,
+    onEditCoverFileSelect,
+    currentCoverUrl,
+    onRemoveCurrentCover,
     isSubmittingEdit,
     handleCancelEdit,
 }: RecordEditProps) => {
@@ -104,6 +112,16 @@ export const RecordEdit = ({
                         />
                     </div>
                 </div>
+
+                <ImageUploader
+                    currentImageUrl={currentCoverUrl}
+                    disabled={isSubmittingEdit}
+                    id={`edit-cover-${record.id}`}
+                    label={t("forms.coverImage", "Cover image")}
+                    onFileSelect={onEditCoverFileSelect}
+                    onRemoveCurrent={onRemoveCurrentCover}
+                    selectedFile={editCoverFile}
+                />
 
                 <FormTextArea
                     id={`description-${record.id}`}
