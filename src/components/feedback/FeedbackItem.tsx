@@ -12,7 +12,7 @@ interface FeedbackItemProps {
     onDismiss: (id: string) => void;
 }
 
-const AUTO_DISMISS_SECONDS = 5;
+const AUTO_DISMISS_SECONDS = 5; // Must be same as animation-duration in _feedback.scss
 
 export const FeedbackItem = ({ item, onDismiss }: FeedbackItemProps) => {
     const isAssertive = item.type === "danger";
@@ -75,7 +75,7 @@ export const FeedbackItem = ({ item, onDismiss }: FeedbackItemProps) => {
     return (
         <div
             aria-live={isAssertive ? "assertive" : "polite"}
-            className={`alert alert-${item.type} alert-dismissible fade show position-relative overflow-hidden`}
+            className={`tbf-feedback-item alert alert-${item.type} alert-dismissible fade show`}
             onBlur={resumeTimer}
             onFocus={pauseTimer}
             onMouseEnter={pauseTimer}
@@ -85,13 +85,7 @@ export const FeedbackItem = ({ item, onDismiss }: FeedbackItemProps) => {
             {item.text}
 
             {/* Visual countdown progress bar (hidden for users who prefer reduced motion) */}
-            {isAutoDismissible && (
-                <span
-                    aria-hidden="true"
-                    className="alert-progress-bar"
-                    style={{ animationDuration: `${AUTO_DISMISS_SECONDS}s` }}
-                />
-            )}
+            {isAutoDismissible && <span aria-hidden="true" className="alert-progress-bar" />}
 
             <button
                 aria-label={t("common.close")}
