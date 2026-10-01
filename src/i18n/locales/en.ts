@@ -205,6 +205,7 @@ export const en = {
         artistImage: "Artist image",
         uploadImage: "Upload image",
         changeImage: "Change image",
+        trackNumberPlaceholder: "#",
         types: {
             album: "Album",
             compilation: "Compilation",

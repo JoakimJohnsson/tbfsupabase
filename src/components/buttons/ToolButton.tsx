@@ -25,7 +25,7 @@ type ToolButtonIconOnlyProps = ToolButtonBaseProps & {
 };
 
 type ToolButtonButtonProps = {
-    onClick: () => void;
+    onClick?: () => void;
     type?: "button" | "submit" | "reset";
     href?: never;
     to?: never;

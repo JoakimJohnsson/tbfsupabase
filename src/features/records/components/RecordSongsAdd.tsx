@@ -26,10 +26,7 @@ export const RecordSongsAdd = ({
         <form onSubmit={handleCreateSong}>
             <div className="row g-2">
                 <div className="col-2">
-                    <label
-                        className="visually-hidden"
-                        htmlFor={`track-number-${recordId}`}
-                    >
+                    <label className="visually-hidden" htmlFor={`track-number-${recordId}`}>
                         {t("forms.trackNumber")}
                     </label>
                     <input
@@ -37,16 +34,13 @@ export const RecordSongsAdd = ({
                         id={`track-number-${recordId}`}
                         name="track-number"
                         onChange={(e) => setTrackNumber(e.target.value)}
-                        placeholder="#"
+                        placeholder={t("forms.trackNumberPlaceholder")}
                         type="number"
                         value={trackNumber}
                     />
                 </div>
                 <div className="col">
-                    <label
-                        className="visually-hidden"
-                        htmlFor={`name-${recordId}`}
-                    >
+                    <label className="visually-hidden" htmlFor={`name-${recordId}`}>
                         {t("forms.name")}
                     </label>
                     <input
@@ -60,14 +54,8 @@ export const RecordSongsAdd = ({
                     />
                 </div>
                 <div className="col-auto">
-                    <button
-                        className="btn btn-primary"
-                        disabled={isSubmitting}
-                        type="submit"
-                    >
-                        {isSubmitting
-                            ? t("features.admin.songs.submitting")
-                            : t("features.admin.songs.addSong")}
+                    <button className="btn btn-primary" disabled={isSubmitting} type="submit">
+                        {isSubmitting ? t("features.admin.songs.submitting") : t("features.admin.songs.addSong")}
                     </button>
                 </div>
             </div>
