@@ -1,19 +1,22 @@
 import { type SubmitEvent, useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "react-router";
 import { useTranslation } from "react-i18next";
-import Feedback from "../../../components/feedback";
-import { AdminPageLayout, EmptyStateCard, SearchToolbar } from "../../../components/layout";
-import { SimpleSpinner } from "../../../components/spinners";
+import { Feedback } from "../../../components/feedback/Feedback";
+import { AdminPageLayout } from "../../../components/layout/AdminPageLayout";
+import { EmptyStateCard } from "../../../components/layout/EmptyStateCard";
+import { SearchToolbar } from "../../../components/layout/SearchToolbar";
+import { SimpleSpinner } from "../../../components/spinners/SimpleSpinner";
 import { getArtists } from "../../artists/api/getArtists";
 import { createRecord } from "../../records/api/createRecord";
 import { deleteRecord } from "../../records/api/deleteRecord";
 import { getRecords } from "../../records/api/getRecords";
 import { updateRecord } from "../../records/api/updateRecord";
 import { isAbortError } from "../../../lib/asyncHelpers/withAbortSignal";
+import { RecordCreate } from "../../records/components/RecordCreate";
 import { RecordEdit } from "../../records/components/RecordEdit";
 import { RecordToolRow } from "../../records/components/RecordToolRow";
-import { RecordCreate } from "../../records/components/RecordCreate";
 import type { Artist, RecordWithArtists, SimpleMessage } from "../../../types";
+import { deleteImageFromStorage, uploadImage } from "../../../lib/supabase/storage";
 
 const sortRecordsList = (recordsList: RecordWithArtists[]): RecordWithArtists[] => {
     return [...recordsList].sort((a, b) => {
@@ -43,6 +46,7 @@ export const AdminRecordsPage = () => {
     const [format, setFormat] = useState("");
     const [type, setType] = useState("");
     const [description, setDescription] = useState("");
+    const [coverFile, setCoverFile] = useState<File | null>(null);
     const [selectedArtistIds, setSelectedArtistIds] = useState<string[]>([]);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitError, setSubmitError] = useState<SimpleMessage>(null);
@@ -56,6 +60,9 @@ export const AdminRecordsPage = () => {
     const [editType, setEditType] = useState("");
     const [editDescription, setEditDescription] = useState("");
     const [editArtistIds, setEditArtistIds] = useState<string[]>([]);
+    const [editCoverFile, setEditCoverFile] = useState<File | null>(null);
+    const [currentCoverUrl, setCurrentCoverUrl] = useState<string | null>(null);
+    const [originalCoverPath, setOriginalCoverPath] = useState<string | null>(null);
     const [isSubmittingEdit, setIsSubmittingEdit] = useState(false);
     const [recordActionError, setRecordActionError] = useState<SimpleMessage>(null);
     const [recordActionSuccess, setRecordActionSuccess] = useState<SimpleMessage>(null);
@@ -169,6 +176,12 @@ export const AdminRecordsPage = () => {
                 parsedYear = numericYear;
             }
 
+            let coverPath: string | undefined;
+
+            if (coverFile) {
+                coverPath = await uploadImage(coverFile, "records", trimmedName);
+            }
+
             const created = await createRecord({
                 artist_ids: selectedArtistIds,
                 name: trimmedName,
@@ -176,6 +189,7 @@ export const AdminRecordsPage = () => {
                 format: format.trim() || undefined,
                 type: type.trim() || undefined,
                 year: parsedYear,
+                cover_path: coverPath,
             });
 
             const newRecordWithArtists: RecordWithArtists = {
@@ -189,6 +203,7 @@ export const AdminRecordsPage = () => {
             setFormat("");
             setType("");
             setDescription("");
+            setCoverFile(null);
             setSelectedArtistIds([]);
             setSubmitSuccess(t("features.admin.record.create.success.createSuccess"));
         } catch (err) {
@@ -209,6 +224,9 @@ export const AdminRecordsPage = () => {
         setEditType(record.type ?? "");
         setEditDescription(record.description ?? "");
         setEditArtistIds(record.record_artists.map((ra) => ra.artist_id));
+        setCurrentCoverUrl(record.cover_path ?? null);
+        setEditCoverFile(null);
+        setOriginalCoverPath(record.cover_path ?? null);
     };
 
     const handleCancelEdit = () => {
@@ -219,6 +237,9 @@ export const AdminRecordsPage = () => {
         setEditType("");
         setEditDescription("");
         setEditArtistIds([]);
+        setCurrentCoverUrl(null);
+        setOriginalCoverPath(null);
+        setEditCoverFile(null);
     };
 
     useEffect(() => {
@@ -271,6 +292,21 @@ export const AdminRecordsPage = () => {
                 parsedYear = numericYear;
             }
 
+            let coverPath: string | null | undefined = currentCoverUrl;
+            const previousCoverPath = originalCoverPath;
+
+            if (editCoverFile) {
+                if (previousCoverPath) {
+                    await deleteImageFromStorage(previousCoverPath);
+                }
+                coverPath = await uploadImage(editCoverFile, "records", trimmedName);
+            } else if (currentCoverUrl === null) {
+                if (previousCoverPath) {
+                    await deleteImageFromStorage(previousCoverPath);
+                }
+                coverPath = null;
+            }
+
             const updated = await updateRecord({
                 id: editingRecordId,
                 artist_ids: editArtistIds,
@@ -279,6 +315,7 @@ export const AdminRecordsPage = () => {
                 format: editFormat.trim() || undefined,
                 type: editType.trim() || undefined,
                 year: parsedYear,
+                cover_path: coverPath,
             });
 
             const updatedRecordWithArtists: RecordWithArtists = {
@@ -303,7 +340,7 @@ export const AdminRecordsPage = () => {
     const handleDeleteRecord = async (record: RecordWithArtists) => {
         const recordName = record.name;
         const confirmed = window.confirm(
-            t("features.admin.artist.deleteRecord.confirm", {
+            t("features.admin.records.deleteRecord.confirm", {
                 name: recordName,
             }),
         );
@@ -317,17 +354,17 @@ export const AdminRecordsPage = () => {
         setDeletingRecordId(record.id);
 
         try {
-            await deleteRecord(record.id);
+            await deleteRecord(record.id, record.cover_path);
             setRecords((current) => current.filter((r) => r.id !== record.id));
             setRecordActionSuccess(
-                t("features.admin.artist.deleteRecord.success.deleteSuccess", {
+                t("features.admin.records.deleteRecord.success.deleteSuccess", {
                     name: recordName,
                 }),
             );
         } catch (err) {
             console.error(err);
             setRecordActionError(
-                t("features.admin.artist.deleteRecord.error.deleteError", {
+                t("features.admin.records.deleteRecord.error.deleteError", {
                     name: recordName,
                 }),
             );
@@ -348,15 +385,17 @@ export const AdminRecordsPage = () => {
         <AdminPageLayout
             lead={t("features.admin.records.lead")}
             sidebar={
-                <div className="sticky-top" style={{ top: "1rem" }}>
+                <div className="sticky-top">
                     <RecordCreate
                         artists={artists}
+                        coverFile={coverFile}
                         description={description}
                         format={format}
                         handleArtistCheckboxChange={handleArtistCheckboxChange}
                         handleCreateRecord={handleCreateRecord}
                         isSubmitting={isSubmitting}
                         name={name}
+                        onCoverFileSelect={setCoverFile}
                         selectedArtistIds={selectedArtistIds}
                         setDescription={setDescription}
                         setFormat={setFormat}
@@ -402,7 +441,9 @@ export const AdminRecordsPage = () => {
                             return (
                                 <RecordEdit
                                     artists={artists}
+                                    currentCoverUrl={currentCoverUrl}
                                     editArtistIds={editArtistIds}
+                                    editCoverFile={editCoverFile}
                                     editDescription={editDescription}
                                     editFormat={editFormat}
                                     editName={editName}
@@ -413,6 +454,8 @@ export const AdminRecordsPage = () => {
                                     handleSaveEdit={handleSaveEdit}
                                     isSubmittingEdit={isSubmittingEdit}
                                     key={record.id}
+                                    onEditCoverFileSelect={setEditCoverFile}
+                                    onRemoveCurrentCover={() => setCurrentCoverUrl(null)}
                                     record={record}
                                     setEditDescription={setEditDescription}
                                     setEditFormat={setEditFormat}

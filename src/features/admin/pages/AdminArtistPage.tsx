@@ -1,7 +1,7 @@
 import { Link, useNavigate, useParams } from "react-router";
 import { useTranslation } from "react-i18next";
-import Feedback from "../../../components/feedback";
-import { SimpleSpinner } from "../../../components/spinners";
+import { Feedback } from "../../../components/feedback/Feedback";
+import { SimpleSpinner } from "../../../components/spinners/SimpleSpinner";
 import { useArtist } from "../../artists/hooks/useArtist";
 import { useEffect, useState } from "react";
 import { updateArtist } from "../../artists/api/updateArtist";
@@ -9,27 +9,27 @@ import type { SubmitEvent } from "react";
 import type { SimpleMessage } from "../../../types";
 import { deleteArtist } from "../../artists/api/deleteArtist";
 import { useArtistRecords } from "../../records/hooks/useArtistRecords";
-import { ToolButton } from "../../../components/buttons";
-import { ListRowItem } from "../../../components/layout";
+import { ToolButton } from "../../../components/buttons/ToolButton";
+import { ListRowItem } from "../../../components/layout/ListRowItem";
 import { faPenToSquare } from "@fortawesome/pro-solid-svg-icons";
-import { FormInput, FormTextArea } from "../../../components/form";
+import { FormInput } from "../../../components/form/FormInput";
+import { FormTextArea } from "../../../components/form/FormTextArea";
+import { ImageUploader } from "../../../components/form/ImageUploader";
 import { RecordBadges } from "../../records/components/RecordBadges";
+import { deleteImageFromStorage, uploadImage } from "../../../lib/supabase/storage";
 
 export const AdminArtistPage = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
 
+    const [artistImageFile, setArtistImageFile] = useState<File | null>(null);
+    const [currentArtistImageUrl, setCurrentArtistImageUrl] = useState<string | null>(null);
+
     const loadErrorMessage = t("features.admin.artist.error.loadError");
     const editErrorMessage = t("features.admin.artist.edit.error.editError");
-    const editSuccessMessage = t(
-        "features.admin.artist.edit.success.editSuccess",
-    );
-    const deleteErrorMessage = t(
-        "features.admin.artist.delete.error.deleteError",
-    );
-    const recordsLoadErrorMessage = t(
-        "features.admin.artist.error.loadRecordsError",
-    );
+    const editSuccessMessage = t("features.admin.artist.edit.success.editSuccess");
+    const deleteErrorMessage = t("features.admin.artist.delete.error.deleteError");
+    const recordsLoadErrorMessage = t("features.admin.artist.error.loadRecordsError");
 
     const { artistSlug } = useParams();
     const { artist, loadError, loading, setArtist } = useArtist({
@@ -58,6 +58,8 @@ export const AdminArtistPage = () => {
 
         setName(artist.name);
         setDescription(artist.description ?? "");
+        setCurrentArtistImageUrl(artist.image_path ?? null);
+        setArtistImageFile(null);
     }, [artist]);
 
     const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
@@ -72,10 +74,25 @@ export const AdminArtistPage = () => {
         setIsSubmitting(true);
 
         try {
+            let imagePath: string | null | undefined = currentArtistImageUrl;
+
+            if (artistImageFile) {
+                if (artist.image_path) {
+                    await deleteImageFromStorage(artist.image_path);
+                }
+                imagePath = await uploadImage(artistImageFile, "artists", name.trim());
+            } else if (currentArtistImageUrl === null) {
+                if (artist.image_path) {
+                    await deleteImageFromStorage(artist.image_path);
+                }
+                imagePath = null;
+            }
+
             const updatedArtist = await updateArtist({
                 id: artist.id,
                 name: name.trim(),
                 description: description.trim(),
+                image_path: imagePath,
             });
 
             setEditSuccess(editSuccessMessage);
@@ -107,7 +124,7 @@ export const AdminArtistPage = () => {
         setIsDeleting(true);
 
         try {
-            await deleteArtist(artist.id);
+            await deleteArtist(artist.id, artist.image_path);
             navigate("/admin/artists", {
                 replace: true,
             });
@@ -123,27 +140,18 @@ export const AdminArtistPage = () => {
     }
 
     if (loading) {
-        return (
-            <SimpleSpinner
-                message={t("features.admin.artist.message.loading")}
-            />
-        );
+        return <SimpleSpinner message={t("features.admin.artist.message.loading")} />;
     }
 
     if (!artist) {
-        return (
-            <Feedback warnings={[t("features.admin.artist.message.empty")]} />
-        );
+        return <Feedback warnings={[t("features.admin.artist.message.empty")]} />;
     }
 
     return (
         <>
             <h1>{artist.name}</h1>
 
-            <Feedback
-                errors={[editError, deleteError]}
-                successes={[editSuccess]}
-            />
+            <Feedback errors={[editError, deleteError]} successes={[editSuccess]} />
 
             {artist.description && <p>{artist.description}</p>}
 
@@ -169,11 +177,17 @@ export const AdminArtistPage = () => {
                     value={description}
                 />
 
-                <button
-                    className="btn btn-primary"
+                <ImageUploader
+                    currentImageUrl={currentArtistImageUrl}
                     disabled={isSubmitting}
-                    type="submit"
-                >
+                    id="artist-image"
+                    label={t("forms.artistImage")}
+                    onFileSelect={setArtistImageFile}
+                    onRemoveCurrent={() => setCurrentArtistImageUrl(null)}
+                    selectedFile={artistImageFile}
+                />
+
+                <button className="btn btn-primary" disabled={isSubmitting} type="submit">
                     {isSubmitting
                         ? t("features.admin.artist.edit.submitting")
                         : t("features.admin.artist.edit.submitEdit")}
@@ -181,9 +195,7 @@ export const AdminArtistPage = () => {
             </form>
 
             <div className="d-flex justify-content-between align-items-center mt-5 mb-3">
-                <h2 className="mb-0">
-                    {t("features.admin.artist.recordsTitle")}
-                </h2>
+                <h2 className="mb-0">{t("features.admin.artist.recordsTitle")}</h2>
                 <Link className="btn btn-outline-primary" to="/admin/records">
                     {t("navigation.adminRecords")}
                 </Link>
@@ -215,10 +227,7 @@ export const AdminArtistPage = () => {
                             <div className="d-flex align-items-center flex-wrap gap-2">
                                 <strong>{record.name}</strong>
                                 {record.year && ` (${record.year})`}
-                                <RecordBadges
-                                    format={record.format}
-                                    type={record.type}
-                                />
+                                <RecordBadges format={record.format} type={record.type} />
                             </div>
                         </ListRowItem>
                     ))}

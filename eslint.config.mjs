@@ -26,8 +26,8 @@ export default [
                 },
             },
             globals: {
-                ...globals.browser
-            }
+                ...globals.browser,
+            },
         },
         plugins: {
             react: eslintPluginReact,

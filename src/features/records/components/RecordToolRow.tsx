@@ -1,11 +1,11 @@
 import { type Dispatch, type SetStateAction } from "react";
 import { useTranslation } from "react-i18next";
 import { faMusic, faPenToSquare, faTrashCan } from "@fortawesome/pro-solid-svg-icons";
-import { ToolButton } from "../../../components/buttons";
-import { ListRowItem } from "../../../components/layout";
+import { ToolButton } from "../../../components/buttons/ToolButton";
+import { ListRowItem } from "../../../components/layout/ListRowItem";
 import type { Artist, RecordWithArtists } from "../../../types";
 import { RecordSongsManager } from "./RecordSongsManager";
-import { RecordBadges } from "./RecordBadges";
+import { RecordListItem } from "./RecordListItem";
 
 interface RecordRowProps {
     record: RecordWithArtists;
@@ -30,7 +30,7 @@ export const RecordToolRow = ({
 }: RecordRowProps) => {
     const { t } = useTranslation();
     const deleteRecordText =
-        deletingRecordId === record.id ? t("features.admin.artist.deleteRecord.deleting") : t("common.delete");
+        deletingRecordId === record.id ? t("features.admin.records.deleteRecord.deleting") : t("common.delete");
 
     return (
         <>
@@ -64,17 +64,10 @@ export const RecordToolRow = ({
                     </>
                 }
             >
-                <div>
-                    <div className="d-flex align-items-center flex-wrap gap-2">
-                        <strong>{record.name}</strong>
-                        {record.year && <span className="text-muted">({record.year})</span>}
-                        <RecordBadges format={record.format} type={record.type} />
-                    </div>
-
-                    <div className="text-muted small mt-1">
-                        {artistNames || t("features.admin.records.message.noArtists")}
-                    </div>
-                </div>
+                <RecordListItem
+                    artistNames={artistNames || t("features.admin.records.message.noArtists")}
+                    record={record}
+                />
             </ListRowItem>
             {openSongListRecordId === record.id && (
                 <RecordSongsManager

@@ -1,22 +1,30 @@
 import { type SubmitEvent, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { faPenToSquare, faPlus } from "@fortawesome/pro-solid-svg-icons";
-import { Link } from "react-router";
 import { createArtist } from "../../artists/api/createArtist";
 import { getArtists } from "../../artists/api/getArtists";
+import { ArtistListItem } from "../../artists/components/ArtistListItem";
 import { isAbortError } from "../../../lib/asyncHelpers/withAbortSignal";
-import { ToolButton } from "../../../components/buttons";
-import Feedback from "../../../components/feedback";
-import { FormInput, FormTextArea } from "../../../components/form";
-import { AdminPageLayout, EmptyStateCard, FormCard, ListRowItem, SearchToolbar } from "../../../components/layout";
-import { SimpleSpinner } from "../../../components/spinners";
+import { ToolButton } from "../../../components/buttons/ToolButton";
+import { Feedback } from "../../../components/feedback/Feedback";
+import { FormInput } from "../../../components/form/FormInput";
+import { FormTextArea } from "../../../components/form/FormTextArea";
+import { ImageUploader } from "../../../components/form/ImageUploader";
+import { AdminPageLayout } from "../../../components/layout/AdminPageLayout";
+import { EmptyStateCard } from "../../../components/layout/EmptyStateCard";
+import { FormCard } from "../../../components/layout/FormCard";
+import { ListRowItem } from "../../../components/layout/ListRowItem";
+import { SearchToolbar } from "../../../components/layout/SearchToolbar";
+import { SimpleSpinner } from "../../../components/spinners/SimpleSpinner";
 import type { Artist, SimpleMessage } from "../../../types";
+import { uploadImage } from "../../../lib/supabase/storage";
 
 export const AdminArtistsPage = () => {
     const { t } = useTranslation();
 
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
+    const [artistImageFile, setArtistImageFile] = useState<File | null>(null);
     const [searchTerm, setSearchTerm] = useState("");
     const [loadError, setLoadError] = useState<SimpleMessage>(null);
     const [submitError, setSubmitError] = useState<SimpleMessage>(null);
@@ -77,9 +85,16 @@ export const AdminArtistsPage = () => {
                 return;
             }
 
+            let imagePath: string | undefined;
+
+            if (artistImageFile) {
+                imagePath = await uploadImage(artistImageFile, "artists", trimmedName);
+            }
+
             const createdArtist = await createArtist({
                 name: trimmedName,
                 description,
+                image_path: imagePath,
             });
 
             setArtists((currentArtists) =>
@@ -88,6 +103,7 @@ export const AdminArtistsPage = () => {
 
             setName("");
             setDescription("");
+            setArtistImageFile(null);
             setSubmitSuccess(t("features.admin.artist.create.success.createSuccess"));
         } catch (err) {
             console.error(err);
@@ -130,6 +146,14 @@ export const AdminArtistsPage = () => {
                             value={description}
                         />
 
+                        <ImageUploader
+                            disabled={isSubmitting || loading}
+                            id="artist-image-create"
+                            label={t("forms.artistImage")}
+                            onFileSelect={setArtistImageFile}
+                            selectedFile={artistImageFile}
+                        />
+
                         <button className="btn btn-primary w-100" disabled={isSubmitting || loading} type="submit">
                             {isSubmitting
                                 ? t("features.admin.artist.create.submitting")
@@ -145,7 +169,9 @@ export const AdminArtistsPage = () => {
                 countText={
                     <>
                         {filteredArtists.length}{" "}
-                        {filteredArtists.length === 1 ? t("features.admin.artist.title") : t("features.admin.artists.title")}
+                        {filteredArtists.length === 1
+                            ? t("features.admin.artist.title")
+                            : t("features.admin.artists.title")}
                     </>
                 }
                 onSearchChange={setSearchTerm}
@@ -173,19 +199,7 @@ export const AdminArtistsPage = () => {
                             className="list-group-item-action p-3"
                             key={artist.id}
                         >
-                            <div>
-                                <Link
-                                    className="fw-bold text-decoration-none text-reset stretched-link"
-                                    to={`/admin/artists/${artist.slug}`}
-                                >
-                                    {artist.name}
-                                </Link>
-                                {artist.description && (
-                                    <p className="mb-0 text-muted small text-truncate" style={{ maxWidth: "450px" }}>
-                                        {artist.description}
-                                    </p>
-                                )}
-                            </div>
+                            <ArtistListItem artist={artist} to={`/admin/artists/${artist.slug}`} />
                         </ListRowItem>
                     ))}
                 </ul>

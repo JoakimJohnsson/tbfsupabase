@@ -1,8 +1,11 @@
 import { type Dispatch, type SetStateAction, type SubmitEvent } from "react";
 import { useTranslation } from "react-i18next";
 import { faPlus } from "@fortawesome/pro-solid-svg-icons";
-import { FormInput, FormSelect, FormTextArea } from "../../../components/form";
-import { FormCard } from "../../../components/layout";
+import { FormInput } from "../../../components/form/FormInput";
+import { FormSelect } from "../../../components/form/FormSelect";
+import { FormTextArea } from "../../../components/form/FormTextArea";
+import { ImageUploader } from "../../../components/form/ImageUploader";
+import { FormCard } from "../../../components/layout/FormCard";
 import { RECORD_FORMATS, RECORD_TYPES } from "../constants";
 import type { Artist } from "../../../types";
 
@@ -21,6 +24,8 @@ interface RecordCreateProps {
     artists: Artist[];
     selectedArtistIds: string[];
     handleArtistCheckboxChange: (artistId: string) => void;
+    coverFile: File | null;
+    onCoverFileSelect: (file: File | null) => void;
     isSubmitting: boolean;
 }
 
@@ -39,6 +44,8 @@ export const RecordCreate = ({
     artists,
     selectedArtistIds,
     handleArtistCheckboxChange,
+    coverFile,
+    onCoverFileSelect,
     isSubmitting,
 }: RecordCreateProps) => {
     const { t } = useTranslation();
@@ -101,6 +108,14 @@ export const RecordCreate = ({
                         />
                     </div>
                 </div>
+
+                <ImageUploader
+                    disabled={isSubmitting}
+                    id="record-cover-upload"
+                    label={t("forms.coverImage")}
+                    onFileSelect={onCoverFileSelect}
+                    selectedFile={coverFile}
+                />
 
                 <FormTextArea
                     id="description"

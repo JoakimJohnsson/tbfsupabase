@@ -1,3 +1,0 @@
-export { FormInput } from "./FormInput";
-export { FormTextArea } from "./FormTextArea";
-export { FormSelect } from "./FormSelect";

@@ -1,6 +1,8 @@
 import { type SubmitEvent } from "react";
 import { useTranslation } from "react-i18next";
-import { ToolButtonGroup } from "../../../components/buttons";
+import { faFloppyDisk, faXmark } from "@fortawesome/pro-solid-svg-icons";
+import { ToolButton } from "../../../components/buttons/ToolButton";
+import { ToolButtonGroup } from "../../../components/buttons/ToolButtonGroup";
 
 import type { SongWithArtists } from "../../../types";
 
@@ -32,10 +34,7 @@ export const RecordSongsEdit = ({
             <form onSubmit={handleSaveEdit}>
                 <div className="row g-2 mb-2">
                     <div className="col-2">
-                        <label
-                            className="visually-hidden"
-                            htmlFor={`track-number-${song.id}`}
-                        >
+                        <label className="visually-hidden" htmlFor={`track-number-${song.id}`}>
                             {t("forms.trackNumber")}
                         </label>
                         <input
@@ -43,16 +42,13 @@ export const RecordSongsEdit = ({
                             id={`track-number-${song.id}`}
                             name="track-number"
                             onChange={(e) => setEditTrackNumber(e.target.value)}
-                            placeholder="#"
+                            placeholder={t("forms.trackNumberPlaceholder")}
                             type="number"
                             value={editTrackNumber}
                         />
                     </div>
                     <div className="col">
-                        <label
-                            className="visually-hidden"
-                            htmlFor={`name-${song.id}`}
-                        >
+                        <label className="visually-hidden" htmlFor={`name-${song.id}`}>
                             {t("forms.name")}
                         </label>
                         <input
@@ -67,20 +63,19 @@ export const RecordSongsEdit = ({
                     </div>
                 </div>
                 <ToolButtonGroup>
-                    <button
-                        className="btn btn-primary"
+                    <ToolButton
                         disabled={isSavingEdit}
+                        icon={faFloppyDisk}
+                        text={t("common.save")}
                         type="submit"
-                    >
-                        {t("common.save")}
-                    </button>
-                    <button
-                        className="btn btn-secondary"
+                        variant="primary"
+                    />
+                    <ToolButton
+                        icon={faXmark}
                         onClick={() => setEditingSongId(null)}
-                        type="button"
-                    >
-                        {t("common.cancel")}
-                    </button>
+                        text={t("common.cancel")}
+                        variant="secondary"
+                    />
                 </ToolButtonGroup>
             </form>
         </li>

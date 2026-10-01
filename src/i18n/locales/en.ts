@@ -5,7 +5,6 @@ export const en = {
         edit: "Edit",
         loading: "Loading...",
         logout: "Log out",
-        open: "Open",
         close: "Close",
         save: "Save",
     },
@@ -55,16 +54,6 @@ export const en = {
                     recordsEmpty: "No records found...",
                 },
                 recordsTitle: "Records",
-                deleteRecord: {
-                    confirm: "Are you sure you want to delete {{name}}?",
-                    deleting: "Deleting record...",
-                    error: {
-                        deleteError: "Could not delete record {{name}}.",
-                    },
-                    success: {
-                        deleteSuccess: "The record {{name}} was deleted.",
-                    },
-                },
             },
             artists: {
                 lead: "Here, you can administer the artists.",
@@ -118,6 +107,16 @@ export const en = {
                     empty: "No records found...",
                     loading: "Loading records...",
                     noArtists: "Various Artists / Compilation",
+                },
+                deleteRecord: {
+                    confirm: "Are you sure you want to delete {{name}}?",
+                    deleting: "Deleting record...",
+                    error: {
+                        deleteError: "Could not delete record {{name}}.",
+                    },
+                    success: {
+                        deleteSuccess: "The record {{name}} was deleted.",
+                    },
                 },
             },
             songs: {
@@ -186,6 +185,8 @@ export const en = {
         description: "Description",
         email: "E-mail",
         format: "Format",
+        imagePreviewAlt: "Image preview",
+        imageUploadHelp: "Max 5 MB (JPG, PNG, WebP)",
         selectFormatPlaceholder: "-- Select format --",
         formats: {
             cassette: "Cassette",
@@ -200,6 +201,11 @@ export const en = {
         trackNumber: "Track #",
         type: "Type",
         selectTypePlaceholder: "-- Select type --",
+        coverImage: "Cover image",
+        artistImage: "Artist image",
+        uploadImage: "Upload image",
+        changeImage: "Change image",
+        trackNumberPlaceholder: "#",
         types: {
             album: "Album",
             compilation: "Compilation",

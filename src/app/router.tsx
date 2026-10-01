@@ -1,5 +1,7 @@
 import { createBrowserRouter } from "react-router";
-import { AdminLayout, AuthenticatedLayout, SiteLayout } from "../components/layout";
+import { AdminLayout } from "../components/layout/AdminLayout";
+import { AuthenticatedLayout } from "../components/layout/AuthenticatedLayout";
+import { SiteLayout } from "../components/layout/SiteLayout";
 import { AdminArtistsPage } from "../features/admin/pages/AdminArtistsPage";
 import { AdminPage } from "../features/admin/pages/AdminPage";
 import { ArtistPage } from "../features/artists/pages/ArtistPage";

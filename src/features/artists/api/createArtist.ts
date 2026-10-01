@@ -2,10 +2,7 @@ import { supabase } from "../../../lib/supabase/client";
 import { CreateArtistInput } from "../../../types";
 import { createArtistSlug } from "../createArtistSlug";
 
-export const createArtist = async ({
-    name,
-    description,
-}: CreateArtistInput) => {
+export const createArtist = async ({ name, description, image_path }: CreateArtistInput) => {
     const slug = createArtistSlug(name);
 
     if (!slug) {
@@ -18,6 +15,7 @@ export const createArtist = async ({
             name,
             slug,
             description: description || null,
+            image_path: image_path || null,
         })
         .select()
         .single();

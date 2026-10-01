@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { ToolButtonGroup } from "../buttons";
+import { ToolButtonGroup } from "../buttons/ToolButtonGroup";
 interface ListRowItemProps {
     children: ReactNode;
     actions?: ReactNode;

@@ -3,8 +3,8 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router";
 import { signIn } from "../api/signIn";
-import Feedback from "../../../components/feedback";
-import { FormInput } from "../../../components/form";
+import { Feedback } from "../../../components/feedback/Feedback";
+import { FormInput } from "../../../components/form/FormInput";
 
 export const LoginPage = () => {
     const { t } = useTranslation();
@@ -12,9 +12,7 @@ export const LoginPage = () => {
     const location = useLocation();
 
     const from = location.state?.from;
-    const redirectTo = from
-        ? `${from.pathname}${from.search}${from.hash}`
-        : "/";
+    const redirectTo = from ? `${from.pathname}${from.search}${from.hash}` : "/";
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -67,14 +65,8 @@ export const LoginPage = () => {
                     value={password}
                 />
 
-                <button
-                    className="btn btn-primary"
-                    disabled={isSubmitting}
-                    type="submit"
-                >
-                    {isSubmitting
-                        ? t("features.auth.login.submitting")
-                        : t("features.auth.login.submit")}
+                <button className="btn btn-primary" disabled={isSubmitting} type="submit">
+                    {isSubmitting ? t("features.auth.login.submitting") : t("features.auth.login.submit")}
                 </button>
             </form>
         </>

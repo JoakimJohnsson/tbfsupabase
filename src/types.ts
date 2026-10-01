@@ -5,8 +5,7 @@ import { RecordFormat, RecordType } from "./features/records/constants";
 // Models
 export type Artist = Database["public"]["Tables"]["artists"]["Row"];
 export type Record = Database["public"]["Tables"]["records"]["Row"];
-export type RecordArtist =
-    Database["public"]["Tables"]["record_artists"]["Row"];
+export type RecordArtist = Database["public"]["Tables"]["record_artists"]["Row"];
 export type Profile = Database["public"]["Tables"]["profiles"]["Row"];
 export type Song = Database["public"]["Tables"]["songs"]["Row"];
 export type SongArtist = Database["public"]["Tables"]["song_artists"]["Row"];
@@ -42,12 +41,14 @@ export type SongWithArtists = Song & {
 export type CreateArtistInput = {
     name: string;
     description?: string;
+    image_path?: string;
 };
 
 export type UpdateArtistInput = {
     id: string;
     name: string;
     description?: string;
+    image_path?: string | null;
 };
 
 export type CreateRecordInput = {
@@ -57,6 +58,7 @@ export type CreateRecordInput = {
     format?: RecordFormat | string;
     type?: RecordType | string;
     year?: number;
+    cover_path?: string;
 };
 
 export type UpdateRecordInput = {
@@ -67,6 +69,7 @@ export type UpdateRecordInput = {
     format?: RecordFormat | string;
     type?: RecordType | string;
     year?: number;
+    cover_path?: string | null;
 };
 
 export type CreateSongInput = {
