@@ -7,7 +7,7 @@ export const updateArtist = async ({ id, name, description, image_path }: Update
         .update({
             name,
             description: description || null,
-            ...(image_path !== undefined ? { image_path } : {}),
+            ...(image_path !== undefined ? { image_path: image_path ?? null } : {}),
         })
         .eq("id", id)
         .select()

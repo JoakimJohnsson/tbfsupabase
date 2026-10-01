@@ -20,7 +20,7 @@ export const updateRecord = async ({
             format: format || null,
             type: type || null,
             year: year ?? null,
-            ...(cover_path !== undefined ? { cover_path } : {}),
+            ...(cover_path !== undefined ? { cover_path: cover_path ?? null } : {}),
         })
         .eq("id", id)
         .select()

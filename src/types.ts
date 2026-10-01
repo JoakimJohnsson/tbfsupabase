@@ -48,7 +48,7 @@ export type UpdateArtistInput = {
     id: string;
     name: string;
     description?: string;
-    image_path?: string;
+    image_path?: string | null;
 };
 
 export type CreateRecordInput = {
@@ -69,7 +69,7 @@ export type UpdateRecordInput = {
     format?: RecordFormat | string;
     type?: RecordType | string;
     year?: number;
-    cover_path?: string;
+    cover_path?: string | null;
 };
 
 export type CreateSongInput = {

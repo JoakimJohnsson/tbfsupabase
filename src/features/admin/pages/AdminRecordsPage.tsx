@@ -12,7 +12,7 @@ import { updateRecord } from "../../records/api/updateRecord";
 import { isAbortError } from "../../../lib/asyncHelpers/withAbortSignal";
 import { RecordCreate, RecordEdit, RecordToolRow } from "../../records/components";
 import type { Artist, RecordWithArtists, SimpleMessage } from "../../../types";
-import { uploadImage } from "../../../lib/supabase/storage";
+import { deleteImageFromStorage, uploadImage } from "../../../lib/supabase/storage";
 
 const sortRecordsList = (recordsList: RecordWithArtists[]): RecordWithArtists[] => {
     return [...recordsList].sort((a, b) => {
@@ -58,6 +58,7 @@ export const AdminRecordsPage = () => {
     const [editArtistIds, setEditArtistIds] = useState<string[]>([]);
     const [editCoverFile, setEditCoverFile] = useState<File | null>(null);
     const [currentCoverUrl, setCurrentCoverUrl] = useState<string | null>(null);
+    const [originalCoverPath, setOriginalCoverPath] = useState<string | null>(null);
     const [isSubmittingEdit, setIsSubmittingEdit] = useState(false);
     const [recordActionError, setRecordActionError] = useState<SimpleMessage>(null);
     const [recordActionSuccess, setRecordActionSuccess] = useState<SimpleMessage>(null);
@@ -221,6 +222,7 @@ export const AdminRecordsPage = () => {
         setEditArtistIds(record.record_artists.map((ra) => ra.artist_id));
         setCurrentCoverUrl(record.cover_path ?? null);
         setEditCoverFile(null);
+        setOriginalCoverPath(record.cover_path ?? null);
     };
 
     const handleCancelEdit = () => {
@@ -232,6 +234,7 @@ export const AdminRecordsPage = () => {
         setEditDescription("");
         setEditArtistIds([]);
         setCurrentCoverUrl(null);
+        setOriginalCoverPath(null);
         setEditCoverFile(null);
     };
 
@@ -285,10 +288,19 @@ export const AdminRecordsPage = () => {
                 parsedYear = numericYear;
             }
 
-            let coverPath = currentCoverUrl ?? undefined;
+            let coverPath: string | null | undefined = currentCoverUrl;
+            const previousCoverPath = originalCoverPath;
 
             if (editCoverFile) {
+                if (previousCoverPath) {
+                    await deleteImageFromStorage(previousCoverPath);
+                }
                 coverPath = await uploadImage(editCoverFile, "records", trimmedName);
+            } else if (currentCoverUrl === null) {
+                if (previousCoverPath) {
+                    await deleteImageFromStorage(previousCoverPath);
+                }
+                coverPath = null;
             }
 
             const updated = await updateRecord({
@@ -338,7 +350,7 @@ export const AdminRecordsPage = () => {
         setDeletingRecordId(record.id);
 
         try {
-            await deleteRecord(record.id);
+            await deleteRecord(record.id, record.cover_path);
             setRecords((current) => current.filter((r) => r.id !== record.id));
             setRecordActionSuccess(
                 t("features.admin.artist.deleteRecord.success.deleteSuccess", {

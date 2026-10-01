@@ -23,3 +23,37 @@ export const uploadImage = async (file: File, folder: ImageFolder, customFileNam
 
     return data.publicUrl;
 };
+
+export const deleteImageFromStorage = async (imageUrl?: string | null): Promise<void> => {
+    if (!imageUrl) {
+        return;
+    }
+
+    let filePath = imageUrl;
+
+    try {
+        const parsedUrl = new URL(imageUrl);
+        const storageMatch = parsedUrl.pathname.match(/\/storage\/v1\/object\/public\/images\/(.+)$/);
+
+        if (storageMatch?.[1]) {
+            filePath = decodeURIComponent(storageMatch[1]);
+        }
+    } catch {
+        // A raw storage path is also valid.
+    }
+
+    const normalizedPath = filePath
+        .replace(/^\/+/, "")
+        .replace(/^images\//, "")
+        .trim();
+
+    if (!normalizedPath) {
+        return;
+    }
+
+    const { error } = await supabase.storage.from(IMAGES_BUCKET).remove([normalizedPath]);
+
+    if (error) {
+        throw error;
+    }
+};

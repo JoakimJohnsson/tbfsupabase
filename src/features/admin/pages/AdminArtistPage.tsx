@@ -14,7 +14,7 @@ import { ListRowItem } from "../../../components/layout";
 import { faPenToSquare } from "@fortawesome/pro-solid-svg-icons";
 import { FormInput, FormTextArea, ImageUploader } from "../../../components/form";
 import { RecordBadges } from "../../records/components";
-import { uploadImage } from "../../../lib/supabase/storage";
+import { deleteImageFromStorage, uploadImage } from "../../../lib/supabase/storage";
 
 export const AdminArtistPage = () => {
     const { t } = useTranslation();
@@ -72,10 +72,18 @@ export const AdminArtistPage = () => {
         setIsSubmitting(true);
 
         try {
-            let imagePath = currentArtistImageUrl ?? undefined;
+            let imagePath: string | null | undefined = currentArtistImageUrl;
 
             if (artistImageFile) {
+                if (artist.image_path) {
+                    await deleteImageFromStorage(artist.image_path);
+                }
                 imagePath = await uploadImage(artistImageFile, "artists", name.trim());
+            } else if (currentArtistImageUrl === null) {
+                if (artist.image_path) {
+                    await deleteImageFromStorage(artist.image_path);
+                }
+                imagePath = null;
             }
 
             const updatedArtist = await updateArtist({
@@ -114,7 +122,7 @@ export const AdminArtistPage = () => {
         setIsDeleting(true);
 
         try {
-            await deleteArtist(artist.id);
+            await deleteArtist(artist.id, artist.image_path);
             navigate("/admin/artists", {
                 replace: true,
             });
