@@ -88,10 +88,23 @@ export type UpdateSongInput = {
     track_number?: number;
 };
 
+// Form
+export type SelectOption = {
+    label: string;
+    value: string;
+};
+
 // Context values
 export type AuthContextValue = {
     session: Session | null;
     user: User | null;
     profile: Profile | null;
     isLoading: boolean;
+};
+
+// Feedback
+export type AlertItem = {
+    id: string;
+    text: string;
+    type: "danger" | "warning" | "success";
 };

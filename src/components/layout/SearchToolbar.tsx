@@ -2,7 +2,7 @@ import { faSearch } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type { ReactNode } from "react";
 
-interface SearchToolbarProps {
+interface ISearchToolbar {
     title: ReactNode;
     countText: ReactNode;
     searchValue: string;
@@ -18,7 +18,7 @@ export const SearchToolbar = ({
     onSearchChange,
     searchPlaceholder,
     showSearch = true,
-}: SearchToolbarProps) => {
+}: ISearchToolbar) => {
     return (
         <div className="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
             <h2 className="h4 fw-bold mb-0">{title}</h2>
@@ -43,4 +43,3 @@ export const SearchToolbar = ({
         </div>
     );
 };
-

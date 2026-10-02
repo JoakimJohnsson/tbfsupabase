@@ -1,6 +1,6 @@
 import type { ChangeEvent } from "react";
 
-interface FormTextAreaProps {
+interface IFormTextArea {
     id: string;
     label: string;
     value: string;
@@ -26,7 +26,7 @@ export const FormTextArea = ({
     required = false,
     rows = 3,
     textAreaClassName = "form-control",
-}: FormTextAreaProps) => {
+}: IFormTextArea) => {
     const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
         onChange(event.target.value);
     };

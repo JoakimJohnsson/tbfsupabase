@@ -1,11 +1,13 @@
 import type { ReactNode } from "react";
-interface AdminPageLayoutProps {
+
+interface IAdminPageLayoutProps {
     title: string;
     lead?: string;
     sidebar: ReactNode;
     children: ReactNode;
 }
-export const AdminPageLayout = ({ title, lead, sidebar, children }: AdminPageLayoutProps) => {
+
+export const AdminPageLayout = ({ title, lead, sidebar, children }: IAdminPageLayoutProps) => {
     return (
         <div className="container-fluid">
             <div className="mb-4">

@@ -3,7 +3,7 @@ import { useSearchParams } from "react-router";
 import { useTranslation } from "react-i18next";
 import { Feedback } from "../../../components/feedback/Feedback";
 import { AdminPageLayout } from "../../../components/layout/AdminPageLayout";
-import { EmptyStateCard } from "../../../components/layout/EmptyStateCard";
+import { EmptyStateCard } from "../../../components/cards/EmptyStateCard";
 import { SearchToolbar } from "../../../components/layout/SearchToolbar";
 import { SimpleSpinner } from "../../../components/spinners/SimpleSpinner";
 import { getArtists } from "../../artists/api/getArtists";

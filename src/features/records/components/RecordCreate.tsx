@@ -5,7 +5,7 @@ import { FormInput } from "../../../components/form/FormInput";
 import { FormSelect } from "../../../components/form/FormSelect";
 import { FormTextArea } from "../../../components/form/FormTextArea";
 import { ImageUploader } from "../../../components/form/ImageUploader";
-import { FormCard } from "../../../components/layout/FormCard";
+import { FormCard } from "../../../components/cards/FormCard";
 import { RECORD_FORMATS, RECORD_TYPES } from "../constants";
 import type { Artist } from "../../../types";
 

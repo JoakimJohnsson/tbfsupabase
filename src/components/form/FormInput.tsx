@@ -1,6 +1,6 @@
 import type { ChangeEvent, HTMLInputTypeAttribute } from "react";
 
-interface FormInputProps {
+interface IFormInput {
     id: string;
     label: string;
     value: string;
@@ -30,7 +30,7 @@ export const FormInput = ({
     placeholder,
     required = false,
     type = "text",
-}: FormInputProps) => {
+}: IFormInput) => {
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
         onChange(event.target.value);
     };

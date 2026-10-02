@@ -4,7 +4,7 @@ import { faImage, faTrashCan, faUpload } from "@fortawesome/pro-solid-svg-icons"
 import { useTranslation } from "react-i18next";
 import { ToolButton } from "../buttons/ToolButton";
 
-interface ImageUploaderProps {
+interface IImageUploader {
     id: string;
     label: string;
     currentImageUrl?: string | null;
@@ -22,7 +22,7 @@ export const ImageUploader = ({
     selectedFile,
     onRemoveCurrent,
     disabled = false,
-}: ImageUploaderProps) => {
+}: IImageUploader) => {
     const { t } = useTranslation();
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>(currentImageUrl ?? null);
