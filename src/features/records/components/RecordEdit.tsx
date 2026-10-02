@@ -8,7 +8,7 @@ import { FormTextArea } from "../../../components/form/FormTextArea";
 import { ImageUploader } from "../../../components/form/ImageUploader";
 import { RECORD_FORMATS, RECORD_TYPES } from "../constants";
 
-interface RecordEditProps {
+interface IRecordEdit {
     record: RecordWithArtists;
     handleSaveEdit: (event: SubmitEvent<HTMLFormElement>) => Promise<void>;
     setEditName: Dispatch<SetStateAction<string>>;
@@ -54,7 +54,7 @@ export const RecordEdit = ({
     onRemoveCurrentCover,
     isSubmittingEdit,
     handleCancelEdit,
-}: RecordEditProps) => {
+}: IRecordEdit) => {
     const { t } = useTranslation();
 
     const formatOptions = RECORD_FORMATS.map((formatId) => ({

@@ -5,19 +5,14 @@ import { ListRowItem } from "../../../components/layout/ListRowItem";
 import type { SongWithArtists } from "../../../types";
 import { SongListItem } from "./SongListItem";
 
-interface RecordSongsToolRowProps {
+interface IRecordSongsToolRow {
     song: SongWithArtists;
     artistNames: string;
     handleStartEdit: (song: SongWithArtists) => void;
     handleDeleteSong: (song: SongWithArtists) => void;
 }
 
-export const RecordSongsToolRow = ({
-    song,
-    artistNames,
-    handleStartEdit,
-    handleDeleteSong,
-}: RecordSongsToolRowProps) => {
+export const RecordSongsToolRow = ({ song, artistNames, handleStartEdit, handleDeleteSong }: IRecordSongsToolRow) => {
     const { t } = useTranslation();
 
     return (

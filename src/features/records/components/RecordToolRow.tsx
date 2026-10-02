@@ -7,7 +7,7 @@ import type { Artist, RecordWithArtists } from "../../../types";
 import { RecordSongsManager } from "./RecordSongsManager";
 import { RecordListItem } from "./RecordListItem";
 
-interface RecordRowProps {
+interface IRecordToolRow {
     record: RecordWithArtists;
     artistNames: string;
     handleStartEdit: (record: RecordWithArtists) => void;
@@ -27,7 +27,7 @@ export const RecordToolRow = ({
     setOpenSongListRecordId,
     openSongListRecordId,
     artists,
-}: RecordRowProps) => {
+}: IRecordToolRow) => {
     const { t } = useTranslation();
     const deleteRecordText =
         deletingRecordId === record.id ? t("features.admin.records.deleteRecord.deleting") : t("common.delete");

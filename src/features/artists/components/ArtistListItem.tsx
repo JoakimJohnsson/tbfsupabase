@@ -1,7 +1,7 @@
 import { Link } from "react-router";
 import type { Artist } from "../../../types";
 
-interface ArtistListItemProps {
+interface IArtistListItem {
     artist: Artist;
     to?: string;
     variant?: "row" | "card";
@@ -11,7 +11,7 @@ const buildClassName = (...classNames: Array<string | false | undefined>): strin
     return classNames.filter(Boolean).join(" ");
 };
 
-export const ArtistListItem = ({ artist, to, variant = "row" }: ArtistListItemProps) => {
+export const ArtistListItem = ({ artist, to, variant = "row" }: IArtistListItem) => {
     const initial = artist.name.charAt(0).toUpperCase();
     const isCard = variant === "card";
 
@@ -19,7 +19,9 @@ export const ArtistListItem = ({ artist, to, variant = "row" }: ArtistListItemPr
         <div
             className={buildClassName(
                 "tbf-artist-list-item",
-                isCard ? "tbf-artist-list-item--card card h-100 shadow-sm border-0 bg-body-tertiary" : "tbf-artist-list-item--row",
+                isCard
+                    ? "tbf-artist-list-item--card card h-100 shadow-sm border-0 bg-body-tertiary"
+                    : "tbf-artist-list-item--row",
             )}
         >
             <div className="tbf-artist-list-item__media">
@@ -30,20 +32,9 @@ export const ArtistListItem = ({ artist, to, variant = "row" }: ArtistListItemPr
                 )}
             </div>
 
-            <div
-                className={buildClassName(
-                    "tbf-artist-list-item__body",
-                    isCard && "card-body d-flex flex-column",
-                )}
-            >
+            <div className={buildClassName("tbf-artist-list-item__body", isCard && "card-body d-flex flex-column")}>
                 {to ? (
-                    <Link
-                        className={buildClassName(
-                            "tbf-artist-list-item__name",
-                            !isCard && "stretched-link",
-                        )}
-                        to={to}
-                    >
+                    <Link className={buildClassName("tbf-artist-list-item__name", !isCard && "stretched-link")} to={to}>
                         {artist.name}
                     </Link>
                 ) : (
@@ -66,5 +57,3 @@ export const ArtistListItem = ({ artist, to, variant = "row" }: ArtistListItemPr
         </div>
     );
 };
-
-

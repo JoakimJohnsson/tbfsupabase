@@ -3,12 +3,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type { RecordWithArtists } from "../../../types";
 import { RecordBadges } from "./RecordBadges";
 
-interface RecordListItemProps {
+interface IRecordListItem {
     record: RecordWithArtists;
     artistNames: string;
 }
 
-export const RecordListItem = ({ record, artistNames }: RecordListItemProps) => {
+export const RecordListItem = ({ record, artistNames }: IRecordListItem) => {
     return (
         <div className="tbf-record-list-item">
             <div className="tbf-record-list-item__media">

@@ -9,7 +9,7 @@ import { FormCard } from "../../../components/cards/FormCard";
 import { RECORD_FORMATS, RECORD_TYPES } from "../constants";
 import type { Artist } from "../../../types";
 
-interface RecordCreateProps {
+interface IRecordCreate {
     handleCreateRecord: (event: SubmitEvent<HTMLFormElement>) => Promise<void>;
     setName: Dispatch<SetStateAction<string>>;
     name: string;
@@ -47,7 +47,7 @@ export const RecordCreate = ({
     coverFile,
     onCoverFileSelect,
     isSubmitting,
-}: RecordCreateProps) => {
+}: IRecordCreate) => {
     const { t } = useTranslation();
 
     const formatOptions = RECORD_FORMATS.map((formatId) => ({

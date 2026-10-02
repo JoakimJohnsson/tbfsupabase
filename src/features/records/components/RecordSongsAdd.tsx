@@ -1,7 +1,7 @@
 import { type SubmitEvent } from "react";
 import { useTranslation } from "react-i18next";
 
-interface RecordSongsAddProps {
+interface IRecordSongsAdd {
     handleCreateSong: (event: SubmitEvent<HTMLFormElement>) => Promise<void>;
     recordId: string;
     setTrackNumber: (value: string) => void;
@@ -19,7 +19,7 @@ export const RecordSongsAdd = ({
     setSongName,
     songName,
     isSubmitting,
-}: RecordSongsAddProps) => {
+}: IRecordSongsAdd) => {
     const { t } = useTranslation();
 
     return (

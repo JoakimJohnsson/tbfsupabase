@@ -12,7 +12,7 @@ import { RecordSongsEdit } from "./RecordSongsEdit";
 import { RecordSongsToolRow } from "./RecordSongsToolRow";
 import { RecordSongsAdd } from "./RecordSongsAdd";
 
-interface RecordSongsManagerProps {
+interface IRecordSongsManager {
     availableArtists: Artist[];
     defaultArtistIds?: string[];
     recordId: string;
@@ -28,7 +28,7 @@ const sortSongs = (list: SongWithArtists[]) => {
     });
 };
 
-export const RecordSongsManager = ({ availableArtists, defaultArtistIds = [], recordId }: RecordSongsManagerProps) => {
+export const RecordSongsManager = ({ availableArtists, defaultArtistIds = [], recordId }: IRecordSongsManager) => {
     const { t } = useTranslation();
 
     const [songs, setSongs] = useState<SongWithArtists[]>([]);

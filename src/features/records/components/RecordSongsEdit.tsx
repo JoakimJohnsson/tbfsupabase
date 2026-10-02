@@ -6,7 +6,7 @@ import { ToolButtonGroup } from "../../../components/buttons/ToolButtonGroup";
 
 import type { SongWithArtists } from "../../../types";
 
-interface RecordSongsEditProps {
+interface IRecordSongsEdit {
     song: SongWithArtists;
     handleSaveEdit: (event: SubmitEvent<HTMLFormElement>) => Promise<void>;
     setEditTrackNumber: (value: string) => void;
@@ -26,7 +26,7 @@ export const RecordSongsEdit = ({
     editSongName,
     isSavingEdit,
     setEditingSongId,
-}: RecordSongsEditProps) => {
+}: IRecordSongsEdit) => {
     const { t } = useTranslation();
 
     return (
