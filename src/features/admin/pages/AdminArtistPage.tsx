@@ -10,7 +10,7 @@ import type { SimpleMessage } from "../../../types";
 import { deleteArtist } from "../../artists/api/deleteArtist";
 import { useArtistRecords } from "../../records/hooks/useArtistRecords";
 import { ToolButton } from "../../../components/buttons/ToolButton";
-import { ListRowItem } from "../../../components/layout/ListRowItem";
+import { ListRowItem } from "../../../components/lists/ListRowItem";
 import { faPenToSquare } from "@fortawesome/pro-solid-svg-icons";
 import { FormInput } from "../../../components/form/FormInput";
 import { FormTextArea } from "../../../components/form/FormTextArea";

@@ -2,7 +2,7 @@ import { type Dispatch, type SetStateAction } from "react";
 import { useTranslation } from "react-i18next";
 import { faMusic, faPenToSquare, faTrashCan } from "@fortawesome/pro-solid-svg-icons";
 import { ToolButton } from "../../../components/buttons/ToolButton";
-import { ListRowItem } from "../../../components/layout/ListRowItem";
+import { ListRowItem } from "../../../components/lists/ListRowItem";
 import type { Artist, RecordWithArtists } from "../../../types";
 import { RecordSongsManager } from "./RecordSongsManager";
 import { RecordListItem } from "./RecordListItem";
