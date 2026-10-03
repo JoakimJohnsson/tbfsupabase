@@ -1,29 +1,33 @@
+import { useEffect, useState } from "react";
+import type { SubmitEvent } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 import { useTranslation } from "react-i18next";
-import { Feedback } from "../../../components/feedback/Feedback";
-import { SimpleSpinner } from "../../../components/spinners/SimpleSpinner";
+import { faPenToSquare, faTrashCan, faUserPen } from "@fortawesome/pro-solid-svg-icons";
 import { useArtist } from "../../artists/hooks/useArtist";
-import { useEffect, useState } from "react";
 import { updateArtist } from "../../artists/api/updateArtist";
-import type { SubmitEvent } from "react";
-import type { SimpleMessage } from "../../../types";
 import { deleteArtist } from "../../artists/api/deleteArtist";
 import { useArtistRecords } from "../../records/hooks/useArtistRecords";
+import { deleteImageFromStorage, uploadImage } from "../../../lib/supabase/storage";
+import { Feedback } from "../../../components/feedback/Feedback";
+import { SimpleSpinner } from "../../../components/spinners/SimpleSpinner";
 import { ToolButton } from "../../../components/buttons/ToolButton";
 import { ListRowItem } from "../../../components/lists/ListRowItem";
-import { faPenToSquare } from "@fortawesome/pro-solid-svg-icons";
 import { FormInput } from "../../../components/form/FormInput";
 import { FormTextArea } from "../../../components/form/FormTextArea";
 import { ImageUploader } from "../../../components/form/ImageUploader";
+import { AdminPageLayout } from "../../../components/layout/AdminPageLayout";
+import { FormCard } from "../../../components/cards/FormCard";
+import { EmptyStateCard } from "../../../components/cards/EmptyStateCard";
 import { RecordBadges } from "../../records/components/RecordBadges";
-import { deleteImageFromStorage, uploadImage } from "../../../lib/supabase/storage";
+import { getPersons } from "../../persons/api/getPersons";
+import { ArtistMembersManager } from "../../artists/components/ArtistMembersManager";
+import { isAbortError } from "../../../lib/asyncHelpers/withAbortSignal";
+import type { Person, SimpleMessage } from "../../../types";
 
 export const AdminArtistPage = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
-
-    const [artistImageFile, setArtistImageFile] = useState<File | null>(null);
-    const [currentArtistImageUrl, setCurrentArtistImageUrl] = useState<string | null>(null);
+    const { artistSlug } = useParams();
 
     const loadErrorMessage = t("features.admin.artist.error.loadError");
     const editErrorMessage = t("features.admin.artist.edit.error.editError");
@@ -31,7 +35,6 @@ export const AdminArtistPage = () => {
     const deleteErrorMessage = t("features.admin.artist.delete.error.deleteError");
     const recordsLoadErrorMessage = t("features.admin.artist.error.loadRecordsError");
 
-    const { artistSlug } = useParams();
     const { artist, loadError, loading, setArtist } = useArtist({
         artistSlug,
         loadErrorMessage,
@@ -41,16 +44,53 @@ export const AdminArtistPage = () => {
         recordsLoadErrorMessage,
     });
 
-    // Artist edit state
+    const [availablePersons, setAvailablePersons] = useState<Person[]>([]);
+
+    // Form state
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
-    const [editError, setEditError] = useState<SimpleMessage | null>(null);
+    const [artistImageFile, setArtistImageFile] = useState<File | null>(null);
+    const [currentArtistImageUrl, setCurrentArtistImageUrl] = useState<string | null>(null);
+
+    // Feedback & submission state
+    const [editError, setEditError] = useState<SimpleMessage>(null);
+    const [editSuccess, setEditSuccess] = useState<SimpleMessage>(null);
+    const [deleteError, setDeleteError] = useState<SimpleMessage>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [editSuccess, setEditSuccess] = useState<SimpleMessage | null>(null);
-    const [deleteError, setDeleteError] = useState<SimpleMessage | null>(null);
     const [isDeleting, setIsDeleting] = useState(false);
 
-    // Initialize edit fields
+    // Load available persons for member assignment
+    useEffect(() => {
+        const controller = new AbortController();
+
+        const loadPersons = async () => {
+            try {
+                const data = await getPersons(controller.signal);
+                setAvailablePersons(data);
+            } catch (err) {
+                if (!isAbortError(err)) {
+                    console.error("Failed to load persons:", err);
+                }
+            }
+        };
+
+        void loadPersons();
+
+        return () => {
+            controller.abort();
+        };
+    }, []);
+
+    const refreshPersons = async () => {
+        try {
+            const data = await getPersons();
+            setAvailablePersons(data);
+        } catch (err) {
+            console.error("Failed to refresh persons:", err);
+        }
+    };
+
+    // Initialize edit fields when artist loads
     useEffect(() => {
         if (!artist) {
             return;
@@ -135,12 +175,12 @@ export const AdminArtistPage = () => {
         }
     };
 
-    if (loadError) {
-        return <Feedback errors={[loadError]} />;
-    }
-
     if (loading) {
         return <SimpleSpinner message={t("features.admin.artist.message.loading")} />;
+    }
+
+    if (loadError) {
+        return <Feedback errors={[loadError]} />;
     }
 
     if (!artist) {
@@ -148,69 +188,102 @@ export const AdminArtistPage = () => {
     }
 
     return (
-        <>
-            <h1>{artist.name}</h1>
+        <AdminPageLayout
+            lead={artist.name}
+            sidebar={
+                <div className="sticky-top" style={{ top: "1rem" }}>
+                    <FormCard icon={faUserPen} title={t("features.admin.artist.edit.title")}>
+                        <form onSubmit={handleSubmit}>
+                            <FormInput
+                                id="name"
+                                label={t("forms.name")}
+                                name="name"
+                                onChange={setName}
+                                required
+                                type="text"
+                                value={name}
+                            />
 
-            <Feedback errors={[editError, deleteError]} successes={[editSuccess]} />
+                            <FormTextArea
+                                id="description"
+                                label={t("forms.description")}
+                                name="description"
+                                onChange={setDescription}
+                                rows={4}
+                                value={description}
+                            />
 
-            {artist.description && <p>{artist.description}</p>}
+                            <ImageUploader
+                                currentImageUrl={currentArtistImageUrl}
+                                disabled={isSubmitting}
+                                id="artist-image"
+                                label={t("forms.artistImage")}
+                                onFileSelect={setArtistImageFile}
+                                onRemoveCurrent={() => setCurrentArtistImageUrl(null)}
+                                selectedFile={artistImageFile}
+                            />
 
-            <h2>{t("features.admin.artist.edit.title")}</h2>
+                            <div className="d-flex flex-column gap-2 mt-4">
+                                <button className="btn btn-primary w-100" disabled={isSubmitting} type="submit">
+                                    {isSubmitting
+                                        ? t("features.admin.artist.edit.submitting")
+                                        : t("features.admin.artist.edit.submitEdit")}
+                                </button>
 
-            <form onSubmit={handleSubmit}>
-                <FormInput
-                    id="name"
-                    label={t("forms.name")}
-                    name="name"
-                    onChange={setName}
-                    required
-                    type="text"
-                    value={name}
-                />
+                                <hr aria-hidden="true" className="my-2" />
 
-                <FormTextArea
-                    id="description"
-                    label={t("forms.description")}
-                    name="description"
-                    onChange={setDescription}
-                    rows={5}
-                    value={description}
-                />
+                                <ToolButton
+                                    className="w-100 justify-content-center"
+                                    disabled={isDeleting || isSubmitting}
+                                    icon={faTrashCan}
+                                    onClick={() => {
+                                        void handleDelete();
+                                    }}
+                                    text={
+                                        isDeleting
+                                            ? t("features.admin.artist.delete.deleting")
+                                            : t("features.admin.artist.delete.submitDelete")
+                                    }
+                                    variant="outline-danger"
+                                />
+                            </div>
+                        </form>
+                    </FormCard>
+                </div>
+            }
+            title={t("features.admin.artist.title")}
+        >
+            <Feedback errors={[editError, deleteError, recordsLoadError]} successes={[editSuccess]} />
 
-                <ImageUploader
-                    currentImageUrl={currentArtistImageUrl}
-                    disabled={isSubmitting}
-                    id="artist-image"
-                    label={t("forms.artistImage")}
-                    onFileSelect={setArtistImageFile}
-                    onRemoveCurrent={() => setCurrentArtistImageUrl(null)}
-                    selectedFile={artistImageFile}
-                />
+            {/* Band Members Section */}
+            <ArtistMembersManager
+                artistId={artist.id}
+                availablePersons={availablePersons}
+                onPersonsUpdated={refreshPersons}
+            />
 
-                <button className="btn btn-primary" disabled={isSubmitting} type="submit">
-                    {isSubmitting
-                        ? t("features.admin.artist.edit.submitting")
-                        : t("features.admin.artist.edit.submitEdit")}
-                </button>
-            </form>
+            {/* Discography Header */}
+            <div className="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                <div>
+                    <h2 className="h4 fw-bold mb-0">{t("features.admin.artist.recordsTitle")}</h2>
+                    <span className="text-secondary small">
+                        {records.length}{" "}
+                        {records.length === 1 ? t("features.admin.record.title") : t("features.admin.records.title")}
+                    </span>
+                </div>
 
-            <div className="d-flex justify-content-between align-items-center mt-5 mb-3">
-                <h2 className="mb-0">{t("features.admin.artist.recordsTitle")}</h2>
-                <Link className="btn btn-outline-primary" to="/admin/records">
+                <Link className="btn btn-outline-primary btn-sm" to="/admin/records">
                     {t("navigation.adminRecords")}
                 </Link>
             </div>
 
-            {recordsLoadError && <Feedback errors={[recordsLoadError]} />}
-
-            {recordsLoading && <SimpleSpinner />}
-
-            {!recordsLoading && !recordsLoadError && records.length === 0 && (
-                <p>{t("features.admin.artist.message.recordsEmpty")}</p>
-            )}
-
-            {records.length > 0 && (
-                <ul className="list-group mb-4">
+            {/* Records List */}
+            {recordsLoading ? (
+                <SimpleSpinner />
+            ) : records.length === 0 ? (
+                <EmptyStateCard message={t("features.admin.artist.message.recordsEmpty")} />
+            ) : (
+                <ul className="list-group shadow-sm">
                     {records.map((record) => (
                         <ListRowItem
                             actions={
@@ -226,28 +299,13 @@ export const AdminArtistPage = () => {
                         >
                             <div className="d-flex align-items-center flex-wrap gap-2">
                                 <strong>{record.name}</strong>
-                                {record.year && ` (${record.year})`}
+                                {record.year && <span className="text-secondary">({record.year})</span>}
                                 <RecordBadges format={record.format} type={record.type} />
                             </div>
                         </ListRowItem>
                     ))}
                 </ul>
             )}
-
-            <h2>{t("features.admin.artist.delete.title")}</h2>
-
-            <button
-                className="btn btn-danger"
-                disabled={isDeleting || isSubmitting}
-                onClick={() => {
-                    void handleDelete();
-                }}
-                type="button"
-            >
-                {isDeleting
-                    ? t("features.admin.artist.delete.deleting")
-                    : t("features.admin.artist.delete.submitDelete")}
-            </button>
-        </>
+        </AdminPageLayout>
     );
 };
