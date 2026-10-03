@@ -392,7 +392,7 @@ export const ArtistMembersManager = ({ artistId, availablePersons, onPersonsUpda
                 {/* Toggle Quick Person Creation */}
                 <div>
                     <button
-                        className="btn btn-link btn-sm text-decoration-none px-0"
+                        className="btn btn-secondary btn-sm text-decoration-none"
                         onClick={() => {
                             setShowNewPersonForm((prev) => !prev);
                             handleCancelEditPerson();

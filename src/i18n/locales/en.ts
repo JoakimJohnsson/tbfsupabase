@@ -77,7 +77,7 @@ export const en = {
                 removeConfirm: "Are you sure you want to remove {{name}} from this artist?",
                 removeSuccess: "Member removed from artist.",
                 removeError: "Could not remove member.",
-                createNewPrompt: "+ Create new musician",
+                createNewPrompt: "Create new musician",
                 createPersonTitle: "Add musician to archive",
                 createAndAdd: "Create & add as member",
                 createAndAddSuccess: "Musician created and added to artist.",
