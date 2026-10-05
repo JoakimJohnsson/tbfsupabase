@@ -1,6 +1,6 @@
 import { useRef, type ChangeEvent, type SubmitEvent } from "react";
 import { useTranslation } from "react-i18next";
-import { faFloppyDisk, faTrashCan, faUpload, faXmark } from "@fortawesome/pro-solid-svg-icons";
+import { faFileAudio, faFloppyDisk, faTrashCan, faUpload, faXmark } from "@fortawesome/pro-solid-svg-icons";
 import { ToolButton } from "../../../components/buttons/ToolButton";
 import { ToolButtonGroup } from "../../../components/buttons/ToolButtonGroup";
 import type { SongWithArtists } from "../../../types";
@@ -81,7 +81,7 @@ export const RecordSongsEdit = ({
                     <div className="col-12 col-sm-5 d-flex align-items-center gap-2">
                         <ToolButton
                             disabled={isSavingEdit}
-                            icon={faUpload}
+                            icon={editAudioFile || song.audio_path ? faFileAudio : faUpload}
                             onClick={() => fileInputRef.current?.click()}
                             size="sm"
                             text={
