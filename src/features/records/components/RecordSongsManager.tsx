@@ -7,6 +7,7 @@ import { createSong } from "../../songs/api/createSong";
 import { updateSong } from "../../songs/api/updateSong";
 import { deleteSong } from "../../songs/api/deleteSong";
 import { isAbortError } from "../../../lib/asyncHelpers/withAbortSignal";
+import { uploadAudio, deleteAudioFromStorage } from "../../../lib/supabase/storage";
 import type { Artist, SimpleMessage, SongWithArtists } from "../../../types";
 import { RecordSongsEdit } from "./RecordSongsEdit";
 import { RecordSongsToolRow } from "./RecordSongsToolRow";
@@ -46,6 +47,7 @@ export const RecordSongsManager = ({ availableArtists, defaultArtistIds = [], re
     const [songName, setSongName] = useState("");
     const [trackNumber, setTrackNumber] = useState("");
     const [selectedArtistIds, setSelectedArtistIds] = useState<string[]>(defaultArtistIds);
+    const [audioFile, setAudioFile] = useState<File | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     // Edit form state
@@ -53,6 +55,7 @@ export const RecordSongsManager = ({ availableArtists, defaultArtistIds = [], re
     const [editSongName, setEditSongName] = useState("");
     const [editTrackNumber, setEditTrackNumber] = useState("");
     const [editArtistIds, setEditArtistIds] = useState<string[]>([]);
+    const [editAudioFile, setEditAudioFile] = useState<File | null>(null);
     const [isSavingEdit, setIsSavingEdit] = useState(false);
 
     useEffect(() => {
@@ -130,11 +133,18 @@ export const RecordSongsManager = ({ availableArtists, defaultArtistIds = [], re
         setActionFeedback({ error: null, success: null });
 
         try {
+            let audioPath = "";
+
+            if (audioFile) {
+                audioPath = await uploadAudio(audioFile, recordId, trimmed);
+            }
+
             const newSong = await createSong({
                 record_id: recordId,
                 name: trimmed,
                 track_number: parsedTrack,
                 artist_ids: selectedArtistIds,
+                audio_path: audioPath,
             });
 
             const withArtists: SongWithArtists = {
@@ -145,6 +155,7 @@ export const RecordSongsManager = ({ availableArtists, defaultArtistIds = [], re
             setSongs((cur) => sortSongs([...cur, withArtists]));
             setSongName("");
             setTrackNumber("");
+            setAudioFile(null);
             setSelectedArtistIds(defaultArtistIds);
             setActionFeedback({
                 error: null,
@@ -166,6 +177,7 @@ export const RecordSongsManager = ({ availableArtists, defaultArtistIds = [], re
         setEditSongName(song.name);
         setEditTrackNumber(song.track_number !== null ? String(song.track_number) : "");
         setEditArtistIds(song.song_artists.map((sa) => sa.artist_id));
+        setEditAudioFile(null);
         setActionFeedback({ error: null, success: null });
     };
 
@@ -198,11 +210,22 @@ export const RecordSongsManager = ({ availableArtists, defaultArtistIds = [], re
         setIsSavingEdit(true);
 
         try {
+            const currentSong = songs.find((s) => s.id === editingSongId);
+            let audioPath = currentSong?.audio_path;
+
+            if (editAudioFile) {
+                if (currentSong?.audio_path) {
+                    await deleteAudioFromStorage(currentSong.audio_path);
+                }
+                audioPath = await uploadAudio(editAudioFile, recordId, trimmed);
+            }
+
             const updated = await updateSong({
                 id: editingSongId,
                 name: trimmed,
                 track_number: parsedTrack,
                 artist_ids: editArtistIds,
+                audio_path: audioPath,
             });
 
             const withArtists: SongWithArtists = {
@@ -212,6 +235,7 @@ export const RecordSongsManager = ({ availableArtists, defaultArtistIds = [], re
 
             setSongs((cur) => sortSongs(cur.map((s) => (s.id === updated.id ? withArtists : s))));
             setEditingSongId(null);
+            setEditAudioFile(null);
             setActionFeedback({
                 error: null,
                 success: t("features.admin.songs.editSuccess"),
@@ -233,6 +257,9 @@ export const RecordSongsManager = ({ availableArtists, defaultArtistIds = [], re
         }
 
         try {
+            if (song.audio_path) {
+                await deleteAudioFromStorage(song.audio_path);
+            }
             await deleteSong(song.id);
             setSongs((cur) => cur.filter((s) => s.id !== song.id));
             setActionFeedback({
@@ -271,26 +298,28 @@ export const RecordSongsManager = ({ availableArtists, defaultArtistIds = [], re
                         if (isEditing) {
                             return (
                                 <RecordSongsEdit
-                                    key={song.id}
-                                    song={song}
-                                    handleSaveEdit={handleSaveEdit}
-                                    setEditTrackNumber={setEditTrackNumber}
-                                    editTrackNumber={editTrackNumber}
-                                    setEditSongName={setEditSongName}
+                                    editAudioFile={editAudioFile}
                                     editSongName={editSongName}
+                                    editTrackNumber={editTrackNumber}
+                                    handleSaveEdit={handleSaveEdit}
                                     isSavingEdit={isSavingEdit}
+                                    key={song.id}
+                                    onEditAudioFileSelect={setEditAudioFile}
+                                    setEditSongName={setEditSongName}
+                                    setEditTrackNumber={setEditTrackNumber}
                                     setEditingSongId={setEditingSongId}
+                                    song={song}
                                 />
                             );
                         }
 
                         return (
                             <RecordSongsToolRow
+                                artistNames={artistNames}
+                                handleDeleteSong={handleDeleteSong}
+                                handleStartEdit={handleStartEdit}
                                 key={song.id}
                                 song={song}
-                                artistNames={artistNames}
-                                handleStartEdit={handleStartEdit}
-                                handleDeleteSong={handleDeleteSong}
                             />
                         );
                     })}
@@ -298,13 +327,15 @@ export const RecordSongsManager = ({ availableArtists, defaultArtistIds = [], re
             )}
 
             <RecordSongsAdd
+                audioFile={audioFile}
                 handleCreateSong={handleCreateSong}
+                isSubmitting={isSubmitting}
+                onAudioFileSelect={setAudioFile}
                 recordId={recordId}
-                songName={songName}
                 setSongName={setSongName}
                 setTrackNumber={setTrackNumber}
+                songName={songName}
                 trackNumber={trackNumber}
-                isSubmitting={isSubmitting}
             />
         </div>
     );
