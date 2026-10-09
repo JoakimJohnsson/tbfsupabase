@@ -20,10 +20,16 @@ import { deleteImageFromStorage, uploadImage } from "../../../lib/supabase/stora
 
 const sortRecordsList = (recordsList: RecordWithArtists[]): RecordWithArtists[] => {
     return [...recordsList].sort((a, b) => {
-        if (a.year === null && b.year === null) return a.name.localeCompare(b.name);
-        if (a.year === null) return 1;
-        if (b.year === null) return -1;
-        if (b.year !== a.year) return b.year - a.year;
+        const aArtistName =
+            a.record_artists.find((ra) => ra.is_primary)?.artists?.name ?? a.record_artists[0]?.artists?.name ?? "";
+
+        const bArtistName =
+            b.record_artists.find((ra) => ra.is_primary)?.artists?.name ?? b.record_artists[0]?.artists?.name ?? "";
+
+        const artistCompare = aArtistName.localeCompare(bArtistName);
+
+        if (artistCompare !== 0) return artistCompare;
+
         return a.name.localeCompare(b.name);
     });
 };
@@ -106,15 +112,18 @@ export const AdminRecordsPage = () => {
 
     const filteredRecords = useMemo(() => {
         const query = searchTerm.trim().toLowerCase();
-        if (!query) return records;
 
-        return records.filter((rec) => {
-            const matchesRecordName = rec.name.toLowerCase().includes(query);
-            const matchesArtist = rec.record_artists.some((ra) => ra.artists?.name.toLowerCase().includes(query));
-            const matchesYear = rec.year ? String(rec.year).includes(query) : false;
+        const list = !query
+            ? records
+            : records.filter((rec) => {
+                  const matchesRecordName = rec.name.toLowerCase().includes(query);
+                  const matchesArtist = rec.record_artists.some((ra) => ra.artists?.name.toLowerCase().includes(query));
+                  const matchesYear = rec.year ? String(rec.year).includes(query) : false;
 
-            return matchesRecordName || matchesArtist || matchesYear;
-        });
+                  return matchesRecordName || matchesArtist || matchesYear;
+              });
+
+        return sortRecordsList(list);
     }, [records, searchTerm]);
 
     const handleArtistCheckboxChange = (artistId: string) => {

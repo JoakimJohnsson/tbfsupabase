@@ -287,7 +287,7 @@ export const RecordSongsManager = ({ availableArtists, defaultArtistIds = [], re
             {songs.length === 0 ? (
                 <p className="text-muted small">{t("features.admin.songs.noSongs")}</p>
             ) : (
-                <ol className="list-group list-group-numbered mb-3">
+                <ol className="list-group mb-3">
                     {songs.map((song) => {
                         const isEditing = editingSongId === song.id;
                         const artistNames = song.song_artists

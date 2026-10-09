@@ -27,8 +27,14 @@ export type ArtistMemberRelation = ArtistMember & {
     persons: Person | null;
 };
 
+export type RecordSongSummary = {
+    id: string;
+    audio_path: string | null;
+};
+
 export type RecordWithArtists = Record & {
     record_artists: RecordArtistRelation[];
+    songs?: RecordSongSummary[];
 };
 
 export type SongArtistRelation = SongArtist & {
