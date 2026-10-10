@@ -30,9 +30,13 @@ export const RecordBadges = ({ format, type, className = "" }: IRecordBadges) =>
             )}
 
             {type && (
-                <span className="badge text-bg-light border text-secondary d-inline-flex align-items-center gap-1">
+                <span className="badge bg-body-secondary text-body border d-inline-flex align-items-center gap-1">
                     {typeIcon && <FontAwesomeIcon icon={typeIcon} />}
-                    <span>{hasType ? t(`forms.types.${type as RecordType}`) : type}</span>
+                    <span>
+                        {t(`forms.types.${type as RecordType}`, {
+                            defaultValue: type,
+                        })}
+                    </span>
                 </span>
             )}
         </div>
