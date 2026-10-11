@@ -133,7 +133,7 @@ export const RecordCreate = ({
                     <legend className="form-label col-form-label pt-0">
                         {t("features.admin.record.create.artistsLabel")}
                     </legend>
-                    <div className="border rounded p-2 form-scroll-box bg-body">
+                    <div className="form-scroll-box">
                         {artists.length === 0 ? (
                             <span className="text-muted small">{t("features.artists.message.empty")}</span>
                         ) : (

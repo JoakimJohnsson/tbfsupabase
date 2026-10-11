@@ -3,9 +3,12 @@ import { useTranslation } from "react-i18next";
 import { faFileAudio, faFloppyDisk, faTrashCan, faUpload, faXmark } from "@fortawesome/pro-solid-svg-icons";
 import { ToolButton } from "../../../components/buttons/ToolButton";
 import { ToolButtonGroup } from "../../../components/buttons/ToolButtonGroup";
-import type { SongWithArtists } from "../../../types";
+import type { Artist, SongWithArtists } from "../../../types";
 
 interface IRecordSongsEdit {
+    availableArtists: Artist[];
+    editArtistIds: string[];
+    onArtistChange: (artistId: string) => void;
     song: SongWithArtists;
     handleSaveEdit: (event: SubmitEvent<HTMLFormElement>) => Promise<void>;
     setEditTrackNumber: (value: string) => void;
@@ -19,6 +22,9 @@ interface IRecordSongsEdit {
 }
 
 export const RecordSongsEdit = ({
+    availableArtists,
+    editArtistIds,
+    onArtistChange,
     song,
     handleSaveEdit,
     setEditTrackNumber,
@@ -49,7 +55,8 @@ export const RecordSongsEdit = ({
         <li className="list-group-item">
             <form onSubmit={handleSaveEdit}>
                 <div className="row g-2 mb-2 align-items-center">
-                    <div className="col-12 col-sm-2">
+                    {/* Track Number */}
+                    <div className="col-12 col-sm-2 col-md-1">
                         <label className="visually-hidden" htmlFor={`track-number-${song.id}`}>
                             {t("forms.trackNumber")}
                         </label>
@@ -63,7 +70,9 @@ export const RecordSongsEdit = ({
                             value={editTrackNumber}
                         />
                     </div>
-                    <div className="col-12 col-sm-5">
+
+                    {/* Song Title */}
+                    <div className="col-12 col-sm-5 col-md-3">
                         <label className="visually-hidden" htmlFor={`name-${song.id}`}>
                             {t("forms.name")}
                         </label>
@@ -78,7 +87,31 @@ export const RecordSongsEdit = ({
                         />
                     </div>
 
-                    <div className="col-12 col-sm-5 d-flex align-items-center gap-2">
+                    {/* Performing Artist Selector */}
+                    <div className="col-12 col-sm-5 col-md-3">
+                        <label className="visually-hidden" htmlFor={`edit-artist-${song.id}`}>
+                            {t("forms.artist", { defaultValue: "Artist" })}
+                        </label>
+                        <select
+                            className="form-select"
+                            id={`edit-artist-${song.id}`}
+                            name="artist"
+                            onChange={(e) => onArtistChange(e.target.value)}
+                            value={editArtistIds[0] ?? ""}
+                        >
+                            <option value="">
+                                {t("forms.selectArtistPlaceholder", { defaultValue: "-- Select artist --" })}
+                            </option>
+                            {availableArtists.map((artist) => (
+                                <option key={artist.id} value={artist.id}>
+                                    {artist.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+                    {/* Audio Upload */}
+                    <div className="col-12 col-sm-6 col-md-3 d-flex align-items-center gap-2">
                         <ToolButton
                             disabled={isSavingEdit}
                             icon={editAudioFile || song.audio_path ? faFileAudio : faUpload}

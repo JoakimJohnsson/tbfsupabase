@@ -298,12 +298,15 @@ export const RecordSongsManager = ({ availableArtists, defaultArtistIds = [], re
                         if (isEditing) {
                             return (
                                 <RecordSongsEdit
+                                    availableArtists={availableArtists}
+                                    editArtistIds={editArtistIds}
                                     editAudioFile={editAudioFile}
                                     editSongName={editSongName}
                                     editTrackNumber={editTrackNumber}
                                     handleSaveEdit={handleSaveEdit}
                                     isSavingEdit={isSavingEdit}
                                     key={song.id}
+                                    onArtistChange={(artistId) => setEditArtistIds(artistId ? [artistId] : [])}
                                     onEditAudioFileSelect={setEditAudioFile}
                                     setEditSongName={setEditSongName}
                                     setEditTrackNumber={setEditTrackNumber}
@@ -328,10 +331,13 @@ export const RecordSongsManager = ({ availableArtists, defaultArtistIds = [], re
 
             <RecordSongsAdd
                 audioFile={audioFile}
+                availableArtists={availableArtists}
                 handleCreateSong={handleCreateSong}
                 isSubmitting={isSubmitting}
+                onArtistChange={(artistId) => setSelectedArtistIds(artistId ? [artistId] : [])}
                 onAudioFileSelect={setAudioFile}
                 recordId={recordId}
+                selectedArtistIds={selectedArtistIds}
                 setSongName={setSongName}
                 setTrackNumber={setTrackNumber}
                 songName={songName}

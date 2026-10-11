@@ -2,8 +2,12 @@ import { useRef, type ChangeEvent, type SubmitEvent } from "react";
 import { useTranslation } from "react-i18next";
 import { faFileAudio, faTrashCan, faUpload } from "@fortawesome/pro-solid-svg-icons";
 import { ToolButton } from "../../../components/buttons/ToolButton";
+import type { Artist } from "../../../types";
 
 interface IRecordSongsAdd {
+    availableArtists: Artist[];
+    selectedArtistIds: string[];
+    onArtistChange: (artistId: string) => void;
     handleCreateSong: (event: SubmitEvent<HTMLFormElement>) => Promise<void>;
     recordId: string;
     setTrackNumber: (value: string) => void;
@@ -16,6 +20,9 @@ interface IRecordSongsAdd {
 }
 
 export const RecordSongsAdd = ({
+    availableArtists,
+    selectedArtistIds,
+    onArtistChange,
     handleCreateSong,
     recordId,
     setTrackNumber,
@@ -44,6 +51,7 @@ export const RecordSongsAdd = ({
     return (
         <form onSubmit={handleCreateSong}>
             <div className="row g-2 align-items-center">
+                {/* Track Number */}
                 <div className="col-12 col-sm-2 col-md-1">
                     <label className="visually-hidden" htmlFor={`track-number-${recordId}`}>
                         {t("forms.trackNumber")}
@@ -59,7 +67,8 @@ export const RecordSongsAdd = ({
                     />
                 </div>
 
-                <div className="col-12 col-sm-5 col-md-4">
+                {/* Song Title */}
+                <div className="col-12 col-sm-5 col-md-3">
                     <label className="visually-hidden" htmlFor={`name-${recordId}`}>
                         {t("forms.name")}
                     </label>
@@ -75,7 +84,31 @@ export const RecordSongsAdd = ({
                     />
                 </div>
 
-                <div className="col-12 col-sm-5 col-md-4 d-flex align-items-center gap-2">
+                {/* Performing Artist Selector */}
+                <div className="col-12 col-sm-5 col-md-3">
+                    <label className="visually-hidden" htmlFor={`artist-${recordId}`}>
+                        {t("forms.artist")}
+                    </label>
+                    <select
+                        className="form-select"
+                        id={`artist-${recordId}`}
+                        name="artist"
+                        onChange={(e) => onArtistChange(e.target.value)}
+                        value={selectedArtistIds[0] ?? ""}
+                    >
+                        <option value="">
+                            {t("forms.selectArtistPlaceholder", { defaultValue: "-- Select artist --" })}
+                        </option>
+                        {availableArtists.map((artist) => (
+                            <option key={artist.id} value={artist.id}>
+                                {artist.name}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+
+                {/* Audio Upload */}
+                <div className="col-12 col-sm-6 col-md-3 d-flex align-items-center gap-2">
                     <ToolButton
                         disabled={isSubmitting}
                         icon={audioFile ? faFileAudio : faUpload}
@@ -107,6 +140,7 @@ export const RecordSongsAdd = ({
                     />
                 </div>
 
+                {/* Submit */}
                 <div className="col-12 col-md-auto ms-auto">
                     <button className="btn btn-primary btn-sm w-100" disabled={isSubmitting} type="submit">
                         {isSubmitting ? t("features.admin.songs.submitting") : t("features.admin.songs.addSong")}

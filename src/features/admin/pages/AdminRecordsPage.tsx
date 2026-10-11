@@ -74,7 +74,6 @@ export const AdminRecordsPage = () => {
     const [recordActionSuccess, setRecordActionSuccess] = useState<SimpleMessage>(null);
 
     const [deletingRecordId, setDeletingRecordId] = useState<string | null>(null);
-    const [openSongListRecordId, setOpenSongListRecordId] = useState<string | null>(null);
 
     useEffect(() => {
         setLoading(true);
@@ -477,15 +476,12 @@ export const AdminRecordsPage = () => {
 
                         return (
                             <RecordToolRow
-                                artists={artists}
                                 artistNames={artistNames}
                                 deletingRecordId={deletingRecordId}
                                 handleDeleteRecord={handleDeleteRecord}
                                 handleStartEdit={handleStartEdit}
                                 key={record.id}
-                                openSongListRecordId={openSongListRecordId}
                                 record={record}
-                                setOpenSongListRecordId={setOpenSongListRecordId}
                             />
                         );
                     })}
