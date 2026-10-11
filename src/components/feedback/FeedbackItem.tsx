@@ -1,20 +1,15 @@
 import { useEffect, useRef } from "react";
 import { t } from "i18next";
+import { AlertItem } from "../../types";
 
-export interface AlertItem {
-    id: string;
-    text: string;
-    type: "danger" | "warning" | "success";
-}
-
-interface FeedbackItemProps {
+interface IFeedbackItem {
     item: AlertItem;
     onDismiss: (id: string) => void;
 }
 
 const AUTO_DISMISS_SECONDS = 5; // Must be same as animation-duration in _feedback.scss
 
-export const FeedbackItem = ({ item, onDismiss }: FeedbackItemProps) => {
+export const FeedbackItem = ({ item, onDismiss }: IFeedbackItem) => {
     const isAssertive = item.type === "danger";
     const isAutoDismissible = item.type !== "danger" && AUTO_DISMISS_SECONDS > 0;
 

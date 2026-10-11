@@ -1,12 +1,12 @@
 import { useTranslation } from "react-i18next";
 
-interface SimpleSpinnerProps {
+interface ISimpleSpinner {
     className?: string;
     message?: string;
     variant?: "spinner-border" | "spinner-grow";
 }
 
-export const SimpleSpinner = ({ className, message, variant = "spinner-grow" }: SimpleSpinnerProps) => {
+export const SimpleSpinner = ({ className, message, variant = "spinner-grow" }: ISimpleSpinner) => {
     const { t } = useTranslation();
     const defaultMessage = t("common.loading");
     const trimmedMessage = message?.trim();

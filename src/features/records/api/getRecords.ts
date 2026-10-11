@@ -2,9 +2,7 @@ import { supabase } from "../../../lib/supabase/client";
 import { withAbortSignal } from "../../../lib/asyncHelpers/withAbortSignal";
 import type { RecordWithArtists } from "../../../types";
 
-export const getRecords = async (
-    signal?: AbortSignal,
-): Promise<RecordWithArtists[]> => {
+export const getRecords = async (signal?: AbortSignal): Promise<RecordWithArtists[]> => {
     const query = supabase
         .from("records")
         .select(
@@ -18,6 +16,10 @@ export const getRecords = async (
                     name,
                     slug
                 )
+            ),
+            songs (
+                id,
+                audio_path
             )
         `,
         )

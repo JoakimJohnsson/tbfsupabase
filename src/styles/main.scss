@@ -1,6 +1,8 @@
+@import "variables"; // Custom Sass variable overloads - must be loaded before Bootstrap
 @import "bootstrap/scss/bootstrap";
+@import "theme-tokens"; // Runtime theme & accessibility variables - must be loaded after Bootstrap
 
-// Custom styles
+// Custom components
 @import "artist-list-item";
 @import "buttons";
 @import "feedback";

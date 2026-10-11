@@ -6,10 +6,14 @@ export const en = {
         loading: "Loading...",
         logout: "Log out",
         close: "Close",
+        remove: "Remove",
         save: "Save",
     },
     features: {
         admin: {
+            ariaLabels: {
+                sidebar: "Administrator sidebar",
+            },
             artist: {
                 title: "Artist",
                 create: {
@@ -62,6 +66,30 @@ export const en = {
                 list: {
                     title: "List of artists",
                 },
+            },
+            members: {
+                title: "Band members",
+                member: "member",
+                members: "members",
+                noMembers: "No members associated with this artist yet.",
+                selectPerson: "-- Select musician --",
+                allAssigned: "All musicians are already members",
+                addMember: "Add member",
+                addSuccess: "Member added to artist.",
+                addError: "Could not add member.",
+                removeConfirm: "Are you sure you want to remove {{name}} from this artist?",
+                removeSuccess: "Member removed from artist.",
+                removeError: "Could not remove member.",
+                createNewPrompt: "Create new musician",
+                createPersonTitle: "Add musician to archive",
+                createAndAdd: "Create & add as member",
+                createAndAddSuccess: "Musician created and added to artist.",
+                createError: "Could not create musician.",
+                invalidNameError: "Both first and last name are required.",
+                loadError: "Could not load band members.",
+                editPersonTitle: "Edit musician",
+                editSuccess: "Musician updated.",
+                editError: "Could not update musician.",
             },
             record: {
                 title: "Record",
@@ -131,6 +159,8 @@ export const en = {
                 editError: "Could not update song.",
                 editSuccess: "Song updated.",
                 deleteConfirm: "Are you sure you want to delete {{name}}?",
+                audioRequired: "An audio file is required for this track.",
+                uploadError: "Could not upload audio file.",
                 deleteError: "Could not delete song.",
                 deleteSuccess: "Song deleted.",
                 invalidNameError: "The song title is required.",
@@ -184,6 +214,13 @@ export const en = {
     forms: {
         description: "Description",
         email: "E-mail",
+        firstName: "First name",
+        personImage: "Person portrait",
+        lastName: "Last name",
+        audioFile: "MP3 audio",
+        changeAudio: "Change MP3",
+        uploadAudio: "Upload MP3",
+        audioUploadHelp: "Max 50 MB (MP3, OGG, WAV, M4A)",
         format: "Format",
         imagePreviewAlt: "Image preview",
         imageUploadHelp: "Max 5 MB (JPG, PNG, WebP)",

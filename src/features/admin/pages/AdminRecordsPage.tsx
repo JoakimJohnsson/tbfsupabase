@@ -3,8 +3,8 @@ import { useSearchParams } from "react-router";
 import { useTranslation } from "react-i18next";
 import { Feedback } from "../../../components/feedback/Feedback";
 import { AdminPageLayout } from "../../../components/layout/AdminPageLayout";
-import { EmptyStateCard } from "../../../components/layout/EmptyStateCard";
-import { SearchToolbar } from "../../../components/layout/SearchToolbar";
+import { EmptyStateCard } from "../../../components/cards/EmptyStateCard";
+import { SearchToolbar } from "../../../components/search/SearchToolbar";
 import { SimpleSpinner } from "../../../components/spinners/SimpleSpinner";
 import { getArtists } from "../../artists/api/getArtists";
 import { createRecord } from "../../records/api/createRecord";
@@ -20,10 +20,16 @@ import { deleteImageFromStorage, uploadImage } from "../../../lib/supabase/stora
 
 const sortRecordsList = (recordsList: RecordWithArtists[]): RecordWithArtists[] => {
     return [...recordsList].sort((a, b) => {
-        if (a.year === null && b.year === null) return a.name.localeCompare(b.name);
-        if (a.year === null) return 1;
-        if (b.year === null) return -1;
-        if (b.year !== a.year) return b.year - a.year;
+        const aArtistName =
+            a.record_artists.find((ra) => ra.is_primary)?.artists?.name ?? a.record_artists[0]?.artists?.name ?? "";
+
+        const bArtistName =
+            b.record_artists.find((ra) => ra.is_primary)?.artists?.name ?? b.record_artists[0]?.artists?.name ?? "";
+
+        const artistCompare = aArtistName.localeCompare(bArtistName);
+
+        if (artistCompare !== 0) return artistCompare;
+
         return a.name.localeCompare(b.name);
     });
 };
@@ -68,7 +74,6 @@ export const AdminRecordsPage = () => {
     const [recordActionSuccess, setRecordActionSuccess] = useState<SimpleMessage>(null);
 
     const [deletingRecordId, setDeletingRecordId] = useState<string | null>(null);
-    const [openSongListRecordId, setOpenSongListRecordId] = useState<string | null>(null);
 
     useEffect(() => {
         setLoading(true);
@@ -106,15 +111,18 @@ export const AdminRecordsPage = () => {
 
     const filteredRecords = useMemo(() => {
         const query = searchTerm.trim().toLowerCase();
-        if (!query) return records;
 
-        return records.filter((rec) => {
-            const matchesRecordName = rec.name.toLowerCase().includes(query);
-            const matchesArtist = rec.record_artists.some((ra) => ra.artists?.name.toLowerCase().includes(query));
-            const matchesYear = rec.year ? String(rec.year).includes(query) : false;
+        const list = !query
+            ? records
+            : records.filter((rec) => {
+                  const matchesRecordName = rec.name.toLowerCase().includes(query);
+                  const matchesArtist = rec.record_artists.some((ra) => ra.artists?.name.toLowerCase().includes(query));
+                  const matchesYear = rec.year ? String(rec.year).includes(query) : false;
 
-            return matchesRecordName || matchesArtist || matchesYear;
-        });
+                  return matchesRecordName || matchesArtist || matchesYear;
+              });
+
+        return sortRecordsList(list);
     }, [records, searchTerm]);
 
     const handleArtistCheckboxChange = (artistId: string) => {
@@ -468,15 +476,12 @@ export const AdminRecordsPage = () => {
 
                         return (
                             <RecordToolRow
-                                artists={artists}
                                 artistNames={artistNames}
                                 deletingRecordId={deletingRecordId}
                                 handleDeleteRecord={handleDeleteRecord}
                                 handleStartEdit={handleStartEdit}
                                 key={record.id}
-                                openSongListRecordId={openSongListRecordId}
                                 record={record}
-                                setOpenSongListRecordId={setOpenSongListRecordId}
                             />
                         );
                     })}

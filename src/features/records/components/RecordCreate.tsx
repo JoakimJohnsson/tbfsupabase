@@ -5,11 +5,11 @@ import { FormInput } from "../../../components/form/FormInput";
 import { FormSelect } from "../../../components/form/FormSelect";
 import { FormTextArea } from "../../../components/form/FormTextArea";
 import { ImageUploader } from "../../../components/form/ImageUploader";
-import { FormCard } from "../../../components/layout/FormCard";
+import { FormCard } from "../../../components/cards/FormCard";
 import { RECORD_FORMATS, RECORD_TYPES } from "../constants";
 import type { Artist } from "../../../types";
 
-interface RecordCreateProps {
+interface IRecordCreate {
     handleCreateRecord: (event: SubmitEvent<HTMLFormElement>) => Promise<void>;
     setName: Dispatch<SetStateAction<string>>;
     name: string;
@@ -47,7 +47,7 @@ export const RecordCreate = ({
     coverFile,
     onCoverFileSelect,
     isSubmitting,
-}: RecordCreateProps) => {
+}: IRecordCreate) => {
     const { t } = useTranslation();
 
     const formatOptions = RECORD_FORMATS.map((formatId) => ({
@@ -133,7 +133,7 @@ export const RecordCreate = ({
                     <legend className="form-label col-form-label pt-0">
                         {t("features.admin.record.create.artistsLabel")}
                     </legend>
-                    <div className="border rounded p-2 form-scroll-box bg-body">
+                    <div className="form-scroll-box">
                         {artists.length === 0 ? (
                             <span className="text-muted small">{t("features.artists.message.empty")}</span>
                         ) : (

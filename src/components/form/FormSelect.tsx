@@ -1,11 +1,7 @@
 import type { ChangeEvent } from "react";
+import { SelectOption } from "../../types";
 
-export interface SelectOption {
-    label: string;
-    value: string;
-}
-
-interface FormSelectProps {
+interface IFormSelect {
     id: string;
     label: string;
     options: SelectOption[];
@@ -33,7 +29,7 @@ export const FormSelect = ({
     placeholder,
     required = false,
     selectClassName = "form-select",
-}: FormSelectProps) => {
+}: IFormSelect) => {
     const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
         onChange(event.target.value);
     };

@@ -7,8 +7,9 @@ import { FormSelect } from "../../../components/form/FormSelect";
 import { FormTextArea } from "../../../components/form/FormTextArea";
 import { ImageUploader } from "../../../components/form/ImageUploader";
 import { RECORD_FORMATS, RECORD_TYPES } from "../constants";
+import { RecordSongsManager } from "./RecordSongsManager";
 
-interface RecordEditProps {
+interface IRecordEdit {
     record: RecordWithArtists;
     handleSaveEdit: (event: SubmitEvent<HTMLFormElement>) => Promise<void>;
     setEditName: Dispatch<SetStateAction<string>>;
@@ -54,7 +55,7 @@ export const RecordEdit = ({
     onRemoveCurrentCover,
     isSubmittingEdit,
     handleCancelEdit,
-}: RecordEditProps) => {
+}: IRecordEdit) => {
     const { t } = useTranslation();
 
     const formatOptions = RECORD_FORMATS.map((formatId) => ({
@@ -68,7 +69,7 @@ export const RecordEdit = ({
     }));
 
     return (
-        <li className="list-group-item">
+        <li className="list-group-item bg-body-secondary">
             <form onSubmit={handleSaveEdit}>
                 <FormInput
                     id={`name-${record.id}`}
@@ -139,7 +140,7 @@ export const RecordEdit = ({
                     <legend className="form-label col-form-label pt-0">
                         {t("features.admin.record.create.artistsLabel")}
                     </legend>
-                    <div className="border rounded p-2 form-scroll-box">
+                    <div className="form-scroll-box">
                         {artists.map((artist) => (
                             <div className="form-check" key={artist.id}>
                                 <input
@@ -176,6 +177,12 @@ export const RecordEdit = ({
                     </button>
                 </ToolButtonGroup>
             </form>
+
+            <RecordSongsManager
+                availableArtists={artists}
+                defaultArtistIds={record.record_artists.map((ra) => ra.artist_id)}
+                recordId={record.id}
+            />
         </li>
     );
 };

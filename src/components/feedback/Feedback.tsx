@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { getMapKeyFromString } from "../../lib/helpers/stringHelpers";
-import type { SimpleMessageList } from "../../types";
-import { FeedbackItem, type AlertItem } from "./FeedbackItem";
+import type { SimpleMessageList, AlertItem } from "../../types";
+import { FeedbackItem } from "./FeedbackItem";
 
-interface FeedbackProps {
+interface IFeedback {
     errors?: SimpleMessageList;
     successes?: SimpleMessageList;
     warnings?: SimpleMessageList;
@@ -25,7 +25,7 @@ const toMessages = (messages?: SimpleMessageList): string[] => {
     }, []);
 };
 
-export const Feedback = ({ errors, successes, warnings }: FeedbackProps) => {
+export const Feedback = ({ errors, successes, warnings }: IFeedback) => {
     const [items, setItems] = useState<AlertItem[]>([]);
 
     // Normalize incoming props to primitive string representations to prevent re-render loops ( [] !== [] )

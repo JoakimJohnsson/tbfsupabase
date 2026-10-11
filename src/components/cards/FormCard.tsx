@@ -2,13 +2,13 @@ import type { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type { ReactNode } from "react";
 
-interface FormCardProps {
+interface IFormCard {
     title: string;
     icon?: IconDefinition;
     children: ReactNode;
 }
 
-export const FormCard = ({ title, icon, children }: FormCardProps) => {
+export const FormCard = ({ title, icon, children }: IFormCard) => {
     return (
         <div className="card shadow-sm border-0 bg-body-tertiary">
             <div className="card-body">

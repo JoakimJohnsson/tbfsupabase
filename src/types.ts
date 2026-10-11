@@ -6,6 +6,8 @@ import { RecordFormat, RecordType } from "./features/records/constants";
 export type Artist = Database["public"]["Tables"]["artists"]["Row"];
 export type Record = Database["public"]["Tables"]["records"]["Row"];
 export type RecordArtist = Database["public"]["Tables"]["record_artists"]["Row"];
+export type Person = Database["public"]["Tables"]["persons"]["Row"];
+export type ArtistMember = Database["public"]["Tables"]["artist_members"]["Row"];
 export type Profile = Database["public"]["Tables"]["profiles"]["Row"];
 export type Song = Database["public"]["Tables"]["songs"]["Row"];
 export type SongArtist = Database["public"]["Tables"]["song_artists"]["Row"];
@@ -21,8 +23,18 @@ export type RecordArtistRelation = RecordArtist & {
     } | null;
 };
 
+export type ArtistMemberRelation = ArtistMember & {
+    persons: Person | null;
+};
+
+export type RecordSongSummary = {
+    id: string;
+    audio_path: string | null;
+};
+
 export type RecordWithArtists = Record & {
     record_artists: RecordArtistRelation[];
+    songs?: RecordSongSummary[];
 };
 
 export type SongArtistRelation = SongArtist & {
@@ -88,10 +100,36 @@ export type UpdateSongInput = {
     track_number?: number;
 };
 
+export type CreatePersonInput = {
+    first_name: string;
+    last_name: string;
+    image_path?: string;
+};
+
+export type UpdatePersonInput = {
+    id: string;
+    first_name: string;
+    last_name: string;
+    image_path?: string | null;
+};
+
+// Form
+export type SelectOption = {
+    label: string;
+    value: string;
+};
+
 // Context values
 export type AuthContextValue = {
     session: Session | null;
     user: User | null;
     profile: Profile | null;
     isLoading: boolean;
+};
+
+// Feedback
+export type AlertItem = {
+    id: string;
+    text: string;
+    type: "danger" | "warning" | "success";
 };
