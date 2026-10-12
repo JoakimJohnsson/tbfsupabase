@@ -2,6 +2,7 @@ import { type SubmitEvent, useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "react-router";
 import { useTranslation } from "react-i18next";
 import { Feedback } from "../../../components/feedback/Feedback";
+import { ConfirmModal } from "../../../components/feedback/ConfirmModal";
 import { AdminPageLayout } from "../../../components/layout/AdminPageLayout";
 import { EmptyStateCard } from "../../../components/cards/EmptyStateCard";
 import { SearchToolbar } from "../../../components/search/SearchToolbar";
@@ -74,6 +75,7 @@ export const AdminRecordsPage = () => {
     const [recordActionSuccess, setRecordActionSuccess] = useState<SimpleMessage>(null);
 
     const [deletingRecordId, setDeletingRecordId] = useState<string | null>(null);
+    const [recordToDelete, setRecordToDelete] = useState<RecordWithArtists | null>(null);
 
     useEffect(() => {
         setLoading(true);
@@ -347,15 +349,6 @@ export const AdminRecordsPage = () => {
 
     const handleDeleteRecord = async (record: RecordWithArtists) => {
         const recordName = record.name;
-        const confirmed = window.confirm(
-            t("features.admin.records.deleteRecord.confirm", {
-                name: recordName,
-            }),
-        );
-
-        if (!confirmed) {
-            return;
-        }
 
         setRecordActionError(null);
         setRecordActionSuccess(null);
@@ -378,6 +371,7 @@ export const AdminRecordsPage = () => {
             );
         } finally {
             setDeletingRecordId(null);
+            setRecordToDelete(null);
         }
     };
 
@@ -478,7 +472,7 @@ export const AdminRecordsPage = () => {
                             <RecordToolRow
                                 artistNames={artistNames}
                                 deletingRecordId={deletingRecordId}
-                                handleDeleteRecord={handleDeleteRecord}
+                                handleDeleteRecord={setRecordToDelete}
                                 handleStartEdit={handleStartEdit}
                                 key={record.id}
                                 record={record}
@@ -487,6 +481,16 @@ export const AdminRecordsPage = () => {
                     })}
                 </ul>
             )}
+            <ConfirmModal
+                isOpen={recordToDelete !== null}
+                title={t("common.delete")}
+                message={t("features.admin.records.deleteRecord.confirm", { name: recordToDelete?.name })}
+                isPending={deletingRecordId !== null}
+                onCancel={() => setRecordToDelete(null)}
+                onConfirm={() => {
+                    if (recordToDelete) void handleDeleteRecord(recordToDelete);
+                }}
+            />
         </AdminPageLayout>
     );
 };

@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Card } from "../../../components/cards/Card";
 import { CardBody } from "../../../components/cards/CardBody";
 import { Feedback } from "../../../components/feedback/Feedback";
+import { ConfirmModal } from "../../../components/feedback/ConfirmModal";
 import { SimpleSpinner } from "../../../components/spinners/SimpleSpinner";
 import { getRecordSongs } from "../../songs/api/getRecordSongs";
 import { createSong } from "../../songs/api/createSong";
@@ -35,6 +36,8 @@ export const RecordSongsManager = ({ availableArtists, defaultArtistIds = [], re
     const { t } = useTranslation();
 
     const [songs, setSongs] = useState<SongWithArtists[]>([]);
+    const [songToDelete, setSongToDelete] = useState<SongWithArtists | null>(null);
+    const [isDeletingSong, setIsDeletingSong] = useState(false);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<SimpleMessage>(null);
     const [actionFeedback, setActionFeedback] = useState<{
@@ -254,10 +257,7 @@ export const RecordSongsManager = ({ availableArtists, defaultArtistIds = [], re
     };
 
     const handleDeleteSong = async (song: SongWithArtists) => {
-        if (!window.confirm(t("features.admin.songs.deleteConfirm", { name: song.name }))) {
-            return;
-        }
-
+        setIsDeletingSong(true);
         try {
             if (song.audio_path) {
                 await deleteAudioFromStorage(song.audio_path);
@@ -274,6 +274,9 @@ export const RecordSongsManager = ({ availableArtists, defaultArtistIds = [], re
                 error: t("features.admin.songs.deleteError"),
                 success: null,
             });
+        } finally {
+            setIsDeletingSong(false);
+            setSongToDelete(null);
         }
     };
 
@@ -322,7 +325,7 @@ export const RecordSongsManager = ({ availableArtists, defaultArtistIds = [], re
                             return (
                                 <RecordSongsToolRow
                                     artistNames={artistNames}
-                                    handleDeleteSong={handleDeleteSong}
+                                    handleDeleteSong={setSongToDelete}
                                     handleStartEdit={handleStartEdit}
                                     key={song.id}
                                     song={song}
@@ -345,6 +348,16 @@ export const RecordSongsManager = ({ availableArtists, defaultArtistIds = [], re
                     setTrackNumber={setTrackNumber}
                     songName={songName}
                     trackNumber={trackNumber}
+                />
+                <ConfirmModal
+                    isOpen={songToDelete !== null}
+                    title={t("common.delete")}
+                    message={t("features.admin.songs.deleteConfirm", { name: songToDelete?.name })}
+                    isPending={isDeletingSong}
+                    onCancel={() => setSongToDelete(null)}
+                    onConfirm={() => {
+                        if (songToDelete) void handleDeleteSong(songToDelete);
+                    }}
                 />
             </CardBody>
         </Card>
