@@ -5,9 +5,11 @@ interface IFormInput {
     label: string;
     value: string;
     onChange: (value: string) => void;
+    ariaLabel?: string;
     autoComplete?: string;
     containerClassName?: string;
     disabled?: boolean;
+    hideLabel?: boolean;
     inputClassName?: string;
     labelClassName?: string;
     name?: string;
@@ -21,9 +23,11 @@ export const FormInput = ({
     label,
     value,
     onChange,
+    ariaLabel,
     autoComplete,
     containerClassName = "mb-3",
     disabled = false,
+    hideLabel = false,
     inputClassName = "form-control",
     labelClassName = "form-label",
     name,
@@ -35,12 +39,17 @@ export const FormInput = ({
         onChange(event.target.value);
     };
 
+    const resolvedLabelClassName = [labelClassName, hideLabel ? "visually-hidden" : undefined]
+        .filter(Boolean)
+        .join(" ");
+
     return (
         <div className={containerClassName}>
-            <label className={labelClassName} htmlFor={id}>
+            <label className={resolvedLabelClassName} htmlFor={id}>
                 {label}
             </label>
             <input
+                aria-label={ariaLabel}
                 autoComplete={autoComplete}
                 className={inputClassName}
                 disabled={disabled}

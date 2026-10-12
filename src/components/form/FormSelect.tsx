@@ -7,8 +7,10 @@ interface IFormSelect {
     options: SelectOption[];
     value: string;
     onChange: (value: string) => void;
+    ariaLabel?: string;
     containerClassName?: string;
     disabled?: boolean;
+    hideLabel?: boolean;
     labelClassName?: string;
     name?: string;
     placeholder?: string;
@@ -22,8 +24,10 @@ export const FormSelect = ({
     options,
     value,
     onChange,
+    ariaLabel,
     containerClassName = "mb-3",
     disabled = false,
+    hideLabel = false,
     labelClassName = "form-label",
     name,
     placeholder,
@@ -34,12 +38,17 @@ export const FormSelect = ({
         onChange(event.target.value);
     };
 
+    const resolvedLabelClassName = [labelClassName, hideLabel ? "visually-hidden" : undefined]
+        .filter(Boolean)
+        .join(" ");
+
     return (
         <div className={containerClassName}>
-            <label className={labelClassName} htmlFor={id}>
+            <label className={resolvedLabelClassName} htmlFor={id}>
                 {label}
             </label>
             <select
+                aria-label={ariaLabel}
                 className={selectClassName}
                 disabled={disabled}
                 id={id}

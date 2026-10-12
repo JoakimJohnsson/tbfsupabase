@@ -3,11 +3,13 @@ import type { Artist, RecordWithArtists } from "../../../types";
 import { Dispatch, SetStateAction, type SubmitEvent } from "react";
 import { ToolButtonGroup } from "../../../components/buttons/ToolButtonGroup";
 import { FormInput } from "../../../components/form/FormInput";
+import { FormNumberInput } from "../../../components/form/FormNumberInput";
 import { FormSelect } from "../../../components/form/FormSelect";
 import { FormTextArea } from "../../../components/form/FormTextArea";
 import { ImageUploader } from "../../../components/form/ImageUploader";
 import { RECORD_FORMATS, RECORD_TYPES } from "../constants";
 import { RecordSongsManager } from "./RecordSongsManager";
+import { ArtistSelectCheckboxes } from "../../artists/components/ArtistSelectCheckboxes";
 
 interface IRecordEdit {
     record: RecordWithArtists;
@@ -83,13 +85,12 @@ export const RecordEdit = ({
 
                 <div className="row">
                     <div className="col-12 col-md-4">
-                        <FormInput
+                        <FormNumberInput
                             id={`year-${record.id}`}
                             label={t("forms.year")}
                             name="year"
                             onChange={setEditYear}
                             placeholder={t("forms.yearPlaceholder")}
-                            type="number"
                             value={editYear}
                         />
                     </div>
@@ -136,30 +137,11 @@ export const RecordEdit = ({
                     value={editDescription}
                 />
 
-                <fieldset className="mb-3">
-                    <legend className="form-label col-form-label pt-0">
-                        {t("features.admin.record.create.artistsLabel")}
-                    </legend>
-                    <div className="form-scroll-box">
-                        {artists.map((artist) => (
-                            <div className="form-check" key={artist.id}>
-                                <input
-                                    checked={editArtistIds.includes(artist.id)}
-                                    className="form-check-input"
-                                    id={`artist-${record.id}-${artist.id}`}
-                                    name="artist-ids"
-                                    onChange={() => {
-                                        handleEditArtistCheckboxChange(artist.id);
-                                    }}
-                                    type="checkbox"
-                                />
-                                <label className="form-check-label" htmlFor={`artist-${record.id}-${artist.id}`}>
-                                    {artist.name}
-                                </label>
-                            </div>
-                        ))}
-                    </div>
-                </fieldset>
+                <ArtistSelectCheckboxes
+                    artists={artists}
+                    selectedArtistIds={editArtistIds}
+                    onToggleArtist={handleEditArtistCheckboxChange}
+                />
 
                 <ToolButtonGroup className="pb-3">
                     <button className="btn btn-primary" disabled={isSubmittingEdit} type="submit">
