@@ -9,6 +9,7 @@ import { deleteArtist } from "../../artists/api/deleteArtist";
 import { useArtistRecords } from "../../records/hooks/useArtistRecords";
 import { deleteImageFromStorage, uploadImage } from "../../../lib/supabase/storage";
 import { Feedback } from "../../../components/feedback/Feedback";
+import { ConfirmModal } from "../../../components/feedback/ConfirmModal";
 import { SimpleSpinner } from "../../../components/spinners/SimpleSpinner";
 import { ToolButton } from "../../../components/buttons/ToolButton";
 import { ListRowItem } from "../../../components/lists/ListRowItem";
@@ -58,6 +59,7 @@ export const AdminArtistPage = () => {
     const [deleteError, setDeleteError] = useState<SimpleMessage>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
     // Load available persons for member assignment
     useEffect(() => {
@@ -150,16 +152,6 @@ export const AdminArtistPage = () => {
             return;
         }
 
-        const confirmed = window.confirm(
-            t("features.admin.artist.delete.confirm", {
-                name: artist.name,
-            }),
-        );
-
-        if (!confirmed) {
-            return;
-        }
-
         setDeleteError(null);
         setIsDeleting(true);
 
@@ -171,7 +163,9 @@ export const AdminArtistPage = () => {
         } catch (err) {
             console.error(err);
             setDeleteError(deleteErrorMessage);
+        } finally {
             setIsDeleting(false);
+            setShowDeleteConfirm(false);
         }
     };
 
@@ -236,9 +230,7 @@ export const AdminArtistPage = () => {
                                     className="w-100 justify-content-center"
                                     disabled={isDeleting || isSubmitting}
                                     icon={faTrashCan}
-                                    onClick={() => {
-                                        void handleDelete();
-                                    }}
+                                    onClick={() => setShowDeleteConfirm(true)}
                                     text={
                                         isDeleting
                                             ? t("features.admin.artist.delete.deleting")
@@ -306,6 +298,14 @@ export const AdminArtistPage = () => {
                     ))}
                 </ul>
             )}
+            <ConfirmModal
+                isOpen={showDeleteConfirm}
+                title={t("features.admin.artist.delete.submitDelete")}
+                message={t("features.admin.artist.delete.confirm", { name: artist.name })}
+                isPending={isDeleting}
+                onCancel={() => setShowDeleteConfirm(false)}
+                onConfirm={() => void handleDelete()}
+            />
         </AdminPageLayout>
     );
 };

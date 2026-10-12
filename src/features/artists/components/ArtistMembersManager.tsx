@@ -11,8 +11,11 @@ import { createPerson } from "../../persons/api/createPerson";
 import { updatePerson } from "../../persons/api/updatePerson";
 import { uploadImage, deleteImageFromStorage } from "../../../lib/supabase/storage";
 import { ToolButton } from "../../../components/buttons/ToolButton";
+import { Card } from "../../../components/cards/Card";
+import { CardBody } from "../../../components/cards/CardBody";
 import { ListRowItem } from "../../../components/lists/ListRowItem";
 import { Feedback } from "../../../components/feedback/Feedback";
+import { ConfirmModal } from "../../../components/feedback/ConfirmModal";
 import { SimpleSpinner } from "../../../components/spinners/SimpleSpinner";
 import { ImageUploader } from "../../../components/form/ImageUploader";
 import { isAbortError } from "../../../lib/asyncHelpers/withAbortSignal";
@@ -27,6 +30,8 @@ export const ArtistMembersManager = ({ artistId, availablePersons, onPersonsUpda
     const { t } = useTranslation();
 
     const [members, setMembers] = useState<Person[]>([]);
+    const [memberToRemove, setMemberToRemove] = useState<Person | null>(null);
+    const [isRemovingMember, setIsRemovingMember] = useState(false);
     const [loading, setLoading] = useState(true);
     const [selectedPersonId, setSelectedPersonId] = useState("");
     const [isAdding, setIsAdding] = useState(false);
@@ -101,11 +106,9 @@ export const ArtistMembersManager = ({ artistId, availablePersons, onPersonsUpda
     };
 
     const handleRemoveMember = async (person: Person) => {
-        const fullName = `${person.first_name} ${person.last_name}`;
-        if (!window.confirm(t("features.admin.members.removeConfirm", { name: fullName }))) {
-            return;
-        }
-
+        setIsRemovingMember(true);
+        setFeedbackError(null);
+        setFeedbackSuccess(null);
         try {
             await removeArtistMember(artistId, person.id);
             setMembers((cur) => cur.filter((m) => m.id !== person.id));
@@ -113,6 +116,9 @@ export const ArtistMembersManager = ({ artistId, availablePersons, onPersonsUpda
         } catch (err) {
             console.error(err);
             setFeedbackError(t("features.admin.members.removeError"));
+        } finally {
+            setIsRemovingMember(false);
+            setMemberToRemove(null);
         }
     };
 
@@ -233,8 +239,8 @@ export const ArtistMembersManager = ({ artistId, availablePersons, onPersonsUpda
     };
 
     return (
-        <div className="card shadow-sm border-0 bg-body-tertiary mb-4">
-            <div className="card-body">
+        <Card className="mb-4">
+            <CardBody>
                 <div className="d-flex justify-content-between align-items-center mb-3">
                     <h2 className="h5 card-title fw-bold mb-0 d-flex align-items-center gap-2">
                         <FontAwesomeIcon className="text-primary" icon={faUserGroup} />
@@ -272,7 +278,7 @@ export const ArtistMembersManager = ({ artistId, availablePersons, onPersonsUpda
                                             ariaLabel={`${t("common.remove")} ${member.first_name} ${member.last_name}`}
                                             text={t("common.remove")}
                                             icon={faTrashCan}
-                                            onClick={() => void handleRemoveMember(member)}
+                                            onClick={() => setMemberToRemove(member)}
                                             size="sm"
                                             variant="outline-danger"
                                         />
@@ -442,7 +448,24 @@ export const ArtistMembersManager = ({ artistId, availablePersons, onPersonsUpda
                         </form>
                     )}
                 </div>
-            </div>
-        </div>
+                <ConfirmModal
+                    isOpen={memberToRemove !== null}
+                    title={t("common.remove")}
+                    message={
+                        memberToRemove
+                            ? t("features.admin.members.removeConfirm", {
+                                  name: `${memberToRemove.first_name} ${memberToRemove.last_name}`,
+                              })
+                            : ""
+                    }
+                    confirmText={t("common.remove")}
+                    isPending={isRemovingMember}
+                    onCancel={() => setMemberToRemove(null)}
+                    onConfirm={() => {
+                        if (memberToRemove) void handleRemoveMember(memberToRemove);
+                    }}
+                />
+            </CardBody>
+        </Card>
     );
 };

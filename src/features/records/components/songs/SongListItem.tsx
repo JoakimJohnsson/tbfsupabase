@@ -1,4 +1,4 @@
-import type { SongWithArtists } from "../../../types";
+import type { SongWithArtists } from "../../../../types";
 
 interface ISongListItem {
     song: SongWithArtists;

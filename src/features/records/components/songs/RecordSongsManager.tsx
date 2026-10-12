@@ -1,14 +1,17 @@
 import { type SubmitEvent, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Feedback } from "../../../components/feedback/Feedback";
-import { SimpleSpinner } from "../../../components/spinners/SimpleSpinner";
-import { getRecordSongs } from "../../songs/api/getRecordSongs";
-import { createSong } from "../../songs/api/createSong";
-import { updateSong } from "../../songs/api/updateSong";
-import { deleteSong } from "../../songs/api/deleteSong";
-import { isAbortError } from "../../../lib/asyncHelpers/withAbortSignal";
-import { uploadAudio, deleteAudioFromStorage } from "../../../lib/supabase/storage";
-import type { Artist, SimpleMessage, SongWithArtists } from "../../../types";
+import { Card } from "../../../../components/cards/Card";
+import { CardBody } from "../../../../components/cards/CardBody";
+import { Feedback } from "../../../../components/feedback/Feedback";
+import { ConfirmModal } from "../../../../components/feedback/ConfirmModal";
+import { SimpleSpinner } from "../../../../components/spinners/SimpleSpinner";
+import { getRecordSongs } from "../../../songs/api/getRecordSongs";
+import { createSong } from "../../../songs/api/createSong";
+import { updateSong } from "../../../songs/api/updateSong";
+import { deleteSong } from "../../../songs/api/deleteSong";
+import { isAbortError } from "../../../../lib/asyncHelpers/withAbortSignal";
+import { uploadAudio, deleteAudioFromStorage } from "../../../../lib/supabase/storage";
+import type { Artist, SimpleMessage, SongWithArtists } from "../../../../types";
 import { RecordSongsEdit } from "./RecordSongsEdit";
 import { RecordSongsToolRow } from "./RecordSongsToolRow";
 import { RecordSongsAdd } from "./RecordSongsAdd";
@@ -33,6 +36,8 @@ export const RecordSongsManager = ({ availableArtists, defaultArtistIds = [], re
     const { t } = useTranslation();
 
     const [songs, setSongs] = useState<SongWithArtists[]>([]);
+    const [songToDelete, setSongToDelete] = useState<SongWithArtists | null>(null);
+    const [isDeletingSong, setIsDeletingSong] = useState(false);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<SimpleMessage>(null);
     const [actionFeedback, setActionFeedback] = useState<{
@@ -252,10 +257,7 @@ export const RecordSongsManager = ({ availableArtists, defaultArtistIds = [], re
     };
 
     const handleDeleteSong = async (song: SongWithArtists) => {
-        if (!window.confirm(t("features.admin.songs.deleteConfirm", { name: song.name }))) {
-            return;
-        }
-
+        setIsDeletingSong(true);
         try {
             if (song.audio_path) {
                 await deleteAudioFromStorage(song.audio_path);
@@ -272,6 +274,9 @@ export const RecordSongsManager = ({ availableArtists, defaultArtistIds = [], re
                 error: t("features.admin.songs.deleteError"),
                 success: null,
             });
+        } finally {
+            setIsDeletingSong(false);
+            setSongToDelete(null);
         }
     };
 
@@ -279,70 +284,82 @@ export const RecordSongsManager = ({ availableArtists, defaultArtistIds = [], re
     if (error) return <Feedback errors={[error]} />;
 
     return (
-        <div className="my-3 p-3 bg-body-tertiary rounded border">
-            <h6 className="fw-bold mb-3">{t("features.admin.songs.title")}</h6>
+        <Card variant="outlined" background={"tertiary"} className="my-3">
+            <CardBody>
+                <h6 className="fw-bold mb-3">{t("features.admin.songs.title")}</h6>
 
-            <Feedback errors={[actionFeedback.error]} successes={[actionFeedback.success]} />
+                <Feedback errors={[actionFeedback.error]} successes={[actionFeedback.success]} />
 
-            {songs.length === 0 ? (
-                <p className="text-muted small">{t("features.admin.songs.noSongs")}</p>
-            ) : (
-                <ol className="list-group mb-3">
-                    {songs.map((song) => {
-                        const isEditing = editingSongId === song.id;
-                        const artistNames = song.song_artists
-                            .map((sa) => sa.artists?.name)
-                            .filter(Boolean)
-                            .join(", ");
+                {songs.length === 0 ? (
+                    <p className="text-muted small">{t("features.admin.songs.noSongs")}</p>
+                ) : (
+                    <ol className="list-group mb-3">
+                        {songs.map((song) => {
+                            const isEditing = editingSongId === song.id;
+                            const artistNames = song.song_artists
+                                .map((sa) => sa.artists?.name)
+                                .filter(Boolean)
+                                .join(", ");
 
-                        if (isEditing) {
+                            if (isEditing) {
+                                return (
+                                    <RecordSongsEdit
+                                        availableArtists={availableArtists}
+                                        editArtistIds={editArtistIds}
+                                        editAudioFile={editAudioFile}
+                                        editSongName={editSongName}
+                                        editTrackNumber={editTrackNumber}
+                                        handleSaveEdit={handleSaveEdit}
+                                        isSavingEdit={isSavingEdit}
+                                        key={song.id}
+                                        onArtistChange={(artistId) => setEditArtistIds(artistId ? [artistId] : [])}
+                                        onEditAudioFileSelect={setEditAudioFile}
+                                        setEditSongName={setEditSongName}
+                                        setEditTrackNumber={setEditTrackNumber}
+                                        setEditingSongId={setEditingSongId}
+                                        song={song}
+                                    />
+                                );
+                            }
+
                             return (
-                                <RecordSongsEdit
-                                    availableArtists={availableArtists}
-                                    editArtistIds={editArtistIds}
-                                    editAudioFile={editAudioFile}
-                                    editSongName={editSongName}
-                                    editTrackNumber={editTrackNumber}
-                                    handleSaveEdit={handleSaveEdit}
-                                    isSavingEdit={isSavingEdit}
+                                <RecordSongsToolRow
+                                    artistNames={artistNames}
+                                    handleDeleteSong={setSongToDelete}
+                                    handleStartEdit={handleStartEdit}
                                     key={song.id}
-                                    onArtistChange={(artistId) => setEditArtistIds(artistId ? [artistId] : [])}
-                                    onEditAudioFileSelect={setEditAudioFile}
-                                    setEditSongName={setEditSongName}
-                                    setEditTrackNumber={setEditTrackNumber}
-                                    setEditingSongId={setEditingSongId}
                                     song={song}
                                 />
                             );
-                        }
+                        })}
+                    </ol>
+                )}
 
-                        return (
-                            <RecordSongsToolRow
-                                artistNames={artistNames}
-                                handleDeleteSong={handleDeleteSong}
-                                handleStartEdit={handleStartEdit}
-                                key={song.id}
-                                song={song}
-                            />
-                        );
-                    })}
-                </ol>
-            )}
-
-            <RecordSongsAdd
-                audioFile={audioFile}
-                availableArtists={availableArtists}
-                handleCreateSong={handleCreateSong}
-                isSubmitting={isSubmitting}
-                onArtistChange={(artistId) => setSelectedArtistIds(artistId ? [artistId] : [])}
-                onAudioFileSelect={setAudioFile}
-                recordId={recordId}
-                selectedArtistIds={selectedArtistIds}
-                setSongName={setSongName}
-                setTrackNumber={setTrackNumber}
-                songName={songName}
-                trackNumber={trackNumber}
-            />
-        </div>
+                <RecordSongsAdd
+                    audioFile={audioFile}
+                    availableArtists={availableArtists}
+                    handleCreateSong={handleCreateSong}
+                    isSubmitting={isSubmitting}
+                    onArtistChange={(artistId) => setSelectedArtistIds(artistId ? [artistId] : [])}
+                    onAudioFileSelect={setAudioFile}
+                    recordId={recordId}
+                    selectedArtistIds={selectedArtistIds}
+                    setSongName={setSongName}
+                    setTrackNumber={setTrackNumber}
+                    songName={songName}
+                    trackNumber={trackNumber}
+                />
+                <ConfirmModal
+                    isOpen={songToDelete !== null}
+                    title={t("common.delete")}
+                    message={t("features.admin.songs.deleteConfirm", { name: songToDelete?.name })}
+                    isPending={isDeletingSong}
+                    onCancel={() => setSongToDelete(null)}
+                    onConfirm={() => {
+                        if (songToDelete) void handleDeleteSong(songToDelete);
+                    }}
+                />
+            </CardBody>
+        </Card>
     );
 };

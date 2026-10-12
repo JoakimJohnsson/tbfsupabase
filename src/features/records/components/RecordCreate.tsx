@@ -2,12 +2,14 @@ import { type Dispatch, type SetStateAction, type SubmitEvent } from "react";
 import { useTranslation } from "react-i18next";
 import { faPlus } from "@fortawesome/pro-solid-svg-icons";
 import { FormInput } from "../../../components/form/FormInput";
+import { FormNumberInput } from "../../../components/form/FormNumberInput";
 import { FormSelect } from "../../../components/form/FormSelect";
 import { FormTextArea } from "../../../components/form/FormTextArea";
 import { ImageUploader } from "../../../components/form/ImageUploader";
 import { FormCard } from "../../../components/cards/FormCard";
 import { RECORD_FORMATS, RECORD_TYPES } from "../constants";
 import type { Artist } from "../../../types";
+import { ArtistSelectCheckboxes } from "../../artists/components/ArtistSelectCheckboxes";
 
 interface IRecordCreate {
     handleCreateRecord: (event: SubmitEvent<HTMLFormElement>) => Promise<void>;
@@ -75,13 +77,12 @@ export const RecordCreate = ({
 
                 <div className="row g-2">
                     <div className="col-12 col-sm-6">
-                        <FormInput
+                        <FormNumberInput
                             id="year"
                             label={t("forms.year")}
                             name="year"
                             onChange={setYear}
                             placeholder={t("forms.yearPlaceholder")}
-                            type="number"
                             value={year}
                         />
                     </div>
@@ -126,42 +127,11 @@ export const RecordCreate = ({
                     value={description}
                 />
 
-                <fieldset
-                    aria-describedby={selectedArtistIds.length === 0 ? "artists-hint" : undefined}
-                    className="mb-3"
-                >
-                    <legend className="form-label col-form-label pt-0">
-                        {t("features.admin.record.create.artistsLabel")}
-                    </legend>
-                    <div className="form-scroll-box">
-                        {artists.length === 0 ? (
-                            <span className="text-muted small">{t("features.artists.message.empty")}</span>
-                        ) : (
-                            artists.map((artist) => (
-                                <div className="form-check" key={artist.id}>
-                                    <input
-                                        checked={selectedArtistIds.includes(artist.id)}
-                                        className="form-check-input"
-                                        id={`artist-${artist.id}`}
-                                        name="artist-ids"
-                                        onChange={() => {
-                                            handleArtistCheckboxChange(artist.id);
-                                        }}
-                                        type="checkbox"
-                                    />
-                                    <label className="form-check-label" htmlFor={`artist-${artist.id}`}>
-                                        {artist.name}
-                                    </label>
-                                </div>
-                            ))
-                        )}
-                    </div>
-                    {selectedArtistIds.length === 0 && (
-                        <div className="form-text" id="artists-hint">
-                            {t("features.admin.record.create.noArtistsHint")}
-                        </div>
-                    )}
-                </fieldset>
+                <ArtistSelectCheckboxes
+                    artists={artists}
+                    selectedArtistIds={selectedArtistIds}
+                    onToggleArtist={handleArtistCheckboxChange}
+                />
 
                 <button className="btn btn-primary w-100" disabled={isSubmitting} type="submit">
                     {isSubmitting

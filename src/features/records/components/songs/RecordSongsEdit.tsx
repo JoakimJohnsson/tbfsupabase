@@ -1,9 +1,12 @@
 import { useRef, type ChangeEvent, type SubmitEvent } from "react";
 import { useTranslation } from "react-i18next";
 import { faFileAudio, faFloppyDisk, faTrashCan, faUpload, faXmark } from "@fortawesome/pro-solid-svg-icons";
-import { ToolButton } from "../../../components/buttons/ToolButton";
-import { ToolButtonGroup } from "../../../components/buttons/ToolButtonGroup";
-import type { Artist, SongWithArtists } from "../../../types";
+import { FormInput } from "../../../../components/form/FormInput";
+import { FormNumberInput } from "../../../../components/form/FormNumberInput";
+import { FormSelect } from "../../../../components/form/FormSelect";
+import { ToolButton } from "../../../../components/buttons/ToolButton";
+import { ToolButtonGroup } from "../../../../components/buttons/ToolButtonGroup";
+import type { Artist, SongWithArtists } from "../../../../types";
 
 interface IRecordSongsEdit {
     availableArtists: Artist[];
@@ -39,6 +42,11 @@ export const RecordSongsEdit = ({
     const { t } = useTranslation();
     const fileInputRef = useRef<HTMLInputElement>(null);
 
+    const artistOptions = availableArtists.map((artist) => ({
+        label: artist.name,
+        value: artist.id,
+    }));
+
     const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0] || null;
         onEditAudioFileSelect(file);
@@ -57,57 +65,48 @@ export const RecordSongsEdit = ({
                 <div className="row g-2 mb-2 align-items-center">
                     {/* Track Number */}
                     <div className="col-12 col-sm-2 col-md-1">
-                        <label className="visually-hidden" htmlFor={`track-number-${song.id}`}>
-                            {t("forms.trackNumber")}
-                        </label>
-                        <input
-                            className="form-control"
+                        <FormNumberInput
+                            ariaLabel={t("forms.trackNumber")}
+                            containerClassName=""
+                            hideLabel
                             id={`track-number-${song.id}`}
+                            label={t("forms.trackNumber")}
                             name="track-number"
-                            onChange={(e) => setEditTrackNumber(e.target.value)}
+                            onChange={setEditTrackNumber}
                             placeholder={t("forms.trackNumberPlaceholder")}
-                            type="number"
                             value={editTrackNumber}
                         />
                     </div>
 
                     {/* Song Title */}
                     <div className="col-12 col-sm-5 col-md-3">
-                        <label className="visually-hidden" htmlFor={`name-${song.id}`}>
-                            {t("forms.name")}
-                        </label>
-                        <input
-                            className="form-control"
+                        <FormInput
+                            ariaLabel={t("forms.name")}
+                            containerClassName=""
+                            hideLabel
                             id={`name-${song.id}`}
+                            label={t("forms.name")}
                             name="name"
-                            onChange={(e) => setEditSongName(e.target.value)}
+                            onChange={setEditSongName}
                             required
-                            type="text"
                             value={editSongName}
                         />
                     </div>
 
                     {/* Performing Artist Selector */}
                     <div className="col-12 col-sm-5 col-md-3">
-                        <label className="visually-hidden" htmlFor={`edit-artist-${song.id}`}>
-                            {t("forms.artist", { defaultValue: "Artist" })}
-                        </label>
-                        <select
-                            className="form-select"
+                        <FormSelect
+                            ariaLabel={t("forms.artist", { defaultValue: "Artist" })}
+                            containerClassName=""
+                            hideLabel
                             id={`edit-artist-${song.id}`}
+                            label={t("forms.artist", { defaultValue: "Artist" })}
                             name="artist"
-                            onChange={(e) => onArtistChange(e.target.value)}
+                            onChange={onArtistChange}
+                            options={artistOptions}
+                            placeholder={t("forms.selectArtistPlaceholder", { defaultValue: "-- Select artist --" })}
                             value={editArtistIds[0] ?? ""}
-                        >
-                            <option value="">
-                                {t("forms.selectArtistPlaceholder", { defaultValue: "-- Select artist --" })}
-                            </option>
-                            {availableArtists.map((artist) => (
-                                <option key={artist.id} value={artist.id}>
-                                    {artist.name}
-                                </option>
-                            ))}
-                        </select>
+                        />
                     </div>
 
                     {/* Audio Upload */}
