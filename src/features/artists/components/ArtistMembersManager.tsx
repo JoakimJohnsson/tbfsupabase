@@ -11,6 +11,8 @@ import { createPerson } from "../../persons/api/createPerson";
 import { updatePerson } from "../../persons/api/updatePerson";
 import { uploadImage, deleteImageFromStorage } from "../../../lib/supabase/storage";
 import { ToolButton } from "../../../components/buttons/ToolButton";
+import { Card } from "../../../components/cards/Card";
+import { CardBody } from "../../../components/cards/CardBody";
 import { ListRowItem } from "../../../components/lists/ListRowItem";
 import { Feedback } from "../../../components/feedback/Feedback";
 import { SimpleSpinner } from "../../../components/spinners/SimpleSpinner";
@@ -233,8 +235,8 @@ export const ArtistMembersManager = ({ artistId, availablePersons, onPersonsUpda
     };
 
     return (
-        <div className="card shadow-sm border-0 bg-body-tertiary mb-4">
-            <div className="card-body">
+        <Card className="mb-4">
+            <CardBody>
                 <div className="d-flex justify-content-between align-items-center mb-3">
                     <h2 className="h5 card-title fw-bold mb-0 d-flex align-items-center gap-2">
                         <FontAwesomeIcon className="text-primary" icon={faUserGroup} />
@@ -442,7 +444,7 @@ export const ArtistMembersManager = ({ artistId, availablePersons, onPersonsUpda
                         </form>
                     )}
                 </div>
-            </div>
-        </div>
+            </CardBody>
+        </Card>
     );
 };

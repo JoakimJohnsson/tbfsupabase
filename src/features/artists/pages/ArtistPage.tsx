@@ -1,5 +1,7 @@
 import { useLocation, useNavigate, useParams } from "react-router";
 import { useTranslation } from "react-i18next";
+import { Card } from "../../../components/cards/Card";
+import { CardBody } from "../../../components/cards/CardBody";
 import { Feedback } from "../../../components/feedback/Feedback";
 import { SimpleSpinner } from "../../../components/spinners/SimpleSpinner";
 import { useArtist } from "../hooks/useArtist";
@@ -46,17 +48,17 @@ export const ArtistPage = () => {
         <div className="row g-4">
             {/* Left column: Artist info */}
             <aside className="col-12 col-lg-4 col-xl-3">
-                <div className="card shadow-sm border-0 bg-body-tertiary">
+                <Card>
                     {artist.image_path && <img alt={artist.name} className="card-img-top" src={artist.image_path} />}
-                    <div className="card-body">
+                    <CardBody>
                         <h1 className="h3 card-title fw-bold mb-3">{artist.name}</h1>
                         {artist.description ? (
                             <p className="card-text text-secondary">{artist.description}</p>
                         ) : (
                             <p className="text-muted small fst-italic">{t("features.artist.message.noBiography")}</p>
                         )}
-                    </div>
-                </div>
+                    </CardBody>
+                </Card>
             </aside>
 
             {/* Right column: Artist records */}
@@ -65,15 +67,15 @@ export const ArtistPage = () => {
 
                 {!user ? (
                     // Not logged in users are prompted to log in
-                    <div className="card border p-4 text-center bg-body-tertiary">
-                        <div className="card-body">
+                    <Card variant="outlined" background={"tertiary"} className="text-center">
+                        <CardBody padding="comfortable">
                             <h3 className="h5 fw-bold mb-2">{t("features.artist.loginPrompt.title")}</h3>
                             <p className="text-muted mb-4">{t("features.artist.loginPrompt.description")}</p>
                             <button className="btn btn-primary" onClick={handlePromptLogin} type="button">
                                 {t("features.artist.loginPrompt.submit")}
                             </button>
-                        </div>
-                    </div>
+                        </CardBody>
+                    </Card>
                 ) : (
                     // Logged in users can see records
                     <>
