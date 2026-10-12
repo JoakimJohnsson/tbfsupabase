@@ -451,9 +451,13 @@ export const ArtistMembersManager = ({ artistId, availablePersons, onPersonsUpda
                 <ConfirmModal
                     isOpen={memberToRemove !== null}
                     title={t("common.remove")}
-                    message={t("features.admin.members.removeConfirm", {
-                        name: memberToRemove ? `${memberToRemove.first_name} ${memberToRemove.last_name}` : "",
-                    })}
+                    message={
+                        memberToRemove
+                            ? t("features.admin.members.removeConfirm", {
+                                  name: `${memberToRemove.first_name} ${memberToRemove.last_name}`,
+                              })
+                            : ""
+                    }
                     confirmText={t("common.remove")}
                     isPending={isRemovingMember}
                     onCancel={() => setMemberToRemove(null)}
