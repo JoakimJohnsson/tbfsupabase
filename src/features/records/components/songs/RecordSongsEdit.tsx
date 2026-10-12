@@ -1,12 +1,12 @@
 import { useRef, type ChangeEvent, type SubmitEvent } from "react";
 import { useTranslation } from "react-i18next";
 import { faFileAudio, faFloppyDisk, faTrashCan, faUpload, faXmark } from "@fortawesome/pro-solid-svg-icons";
-import { FormInput } from "../../../components/form/FormInput";
-import { FormNumberInput } from "../../../components/form/FormNumberInput";
-import { FormSelect } from "../../../components/form/FormSelect";
-import { ToolButton } from "../../../components/buttons/ToolButton";
-import { ToolButtonGroup } from "../../../components/buttons/ToolButtonGroup";
-import type { Artist, SongWithArtists } from "../../../types";
+import { FormInput } from "../../../../components/form/FormInput";
+import { FormNumberInput } from "../../../../components/form/FormNumberInput";
+import { FormSelect } from "../../../../components/form/FormSelect";
+import { ToolButton } from "../../../../components/buttons/ToolButton";
+import { ToolButtonGroup } from "../../../../components/buttons/ToolButtonGroup";
+import type { Artist, SongWithArtists } from "../../../../types";
 
 interface IRecordSongsEdit {
     availableArtists: Artist[];

@@ -7,16 +7,15 @@ import { AdminPageLayout } from "../../../components/layout/AdminPageLayout";
 import { EmptyStateCard } from "../../../components/cards/EmptyStateCard";
 import { SearchToolbar } from "../../../components/search/SearchToolbar";
 import { SimpleSpinner } from "../../../components/spinners/SimpleSpinner";
-import { getArtists } from "../../artists/api/getArtists";
+import { useArtists } from "../../artists/hooks/useArtists";
 import { createRecord } from "../../records/api/createRecord";
 import { deleteRecord } from "../../records/api/deleteRecord";
-import { getRecords } from "../../records/api/getRecords";
+import { useRecords } from "../../records/hooks/useRecords";
 import { updateRecord } from "../../records/api/updateRecord";
-import { isAbortError } from "../../../lib/asyncHelpers/withAbortSignal";
 import { RecordCreate } from "../../records/components/RecordCreate";
 import { RecordEdit } from "../../records/components/RecordEdit";
 import { RecordToolRow } from "../../records/components/RecordToolRow";
-import type { Artist, RecordWithArtists, SimpleMessage } from "../../../types";
+import type { RecordWithArtists, SimpleMessage } from "../../../types";
 import { deleteImageFromStorage, uploadImage } from "../../../lib/supabase/storage";
 
 const sortRecordsList = (recordsList: RecordWithArtists[]): RecordWithArtists[] => {
@@ -41,10 +40,16 @@ export const AdminRecordsPage = () => {
     const requestedEditRecordId = searchParams.get("edit");
     const handledEditRecordIdRef = useRef<string | null>(null);
 
-    const [records, setRecords] = useState<RecordWithArtists[]>([]);
-    const [artists, setArtists] = useState<Artist[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [loadError, setLoadError] = useState<SimpleMessage>(null);
+    const loadErrorMessage = t("features.admin.records.error.loadError");
+    const {
+        records,
+        setRecords,
+        loading: recordsLoading,
+        loadError: recordsLoadError,
+    } = useRecords({ loadErrorMessage });
+    const { artists, loading: artistsLoading, loadError: artistsLoadError } = useArtists({ loadErrorMessage });
+    const loadError = recordsLoadError ?? artistsLoadError;
+    const loading = !loadError && (recordsLoading || artistsLoading);
     const [searchTerm, setSearchTerm] = useState("");
 
     // Create form state
@@ -76,40 +81,6 @@ export const AdminRecordsPage = () => {
 
     const [deletingRecordId, setDeletingRecordId] = useState<string | null>(null);
     const [recordToDelete, setRecordToDelete] = useState<RecordWithArtists | null>(null);
-
-    useEffect(() => {
-        setLoading(true);
-        setLoadError(null);
-
-        const controller = new AbortController();
-
-        const loadData = async () => {
-            try {
-                const [recordsData, artistsData] = await Promise.all([
-                    getRecords(controller.signal),
-                    getArtists(controller.signal),
-                ]);
-
-                setRecords(recordsData);
-                setArtists(artistsData);
-            } catch (error) {
-                if (!isAbortError(error)) {
-                    console.error(error);
-                    setLoadError(t("features.admin.records.error.loadError"));
-                }
-            } finally {
-                if (!controller.signal.aborted) {
-                    setLoading(false);
-                }
-            }
-        };
-
-        void loadData();
-
-        return () => {
-            controller.abort();
-        };
-    }, [t]);
 
     const filteredRecords = useMemo(() => {
         const query = searchTerm.trim().toLowerCase();
@@ -253,7 +224,7 @@ export const AdminRecordsPage = () => {
     };
 
     useEffect(() => {
-        if (loading || !requestedEditRecordId) {
+        if (loading || loadError || !requestedEditRecordId) {
             return;
         }
 
@@ -269,7 +240,7 @@ export const AdminRecordsPage = () => {
 
         handledEditRecordIdRef.current = requestedEditRecordId;
         handleStartEdit(recordToEdit);
-    }, [loading, records, requestedEditRecordId]);
+    }, [loading, loadError, records, requestedEditRecordId]);
 
     const handleSaveEdit = async (event: SubmitEvent<HTMLFormElement>) => {
         event.preventDefault();

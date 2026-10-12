@@ -8,7 +8,7 @@ import { FormSelect } from "../../../components/form/FormSelect";
 import { FormTextArea } from "../../../components/form/FormTextArea";
 import { ImageUploader } from "../../../components/form/ImageUploader";
 import { RECORD_FORMATS, RECORD_TYPES } from "../constants";
-import { RecordSongsManager } from "./RecordSongsManager";
+import { RecordSongsManager } from "./songs/RecordSongsManager";
 import { ArtistSelectCheckboxes } from "../../artists/components/ArtistSelectCheckboxes";
 
 interface IRecordEdit {

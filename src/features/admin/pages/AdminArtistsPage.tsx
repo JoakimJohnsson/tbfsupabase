@@ -1,10 +1,9 @@
-import { type SubmitEvent, useEffect, useMemo, useState } from "react";
+import { type SubmitEvent, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { faPenToSquare, faPlus } from "@fortawesome/pro-solid-svg-icons";
 import { createArtist } from "../../artists/api/createArtist";
-import { getArtists } from "../../artists/api/getArtists";
+import { useArtists } from "../../artists/hooks/useArtists";
 import { ArtistListItem } from "../../artists/components/ArtistListItem";
-import { isAbortError } from "../../../lib/asyncHelpers/withAbortSignal";
 import { ToolButton } from "../../../components/buttons/ToolButton";
 import { Feedback } from "../../../components/feedback/Feedback";
 import { FormInput } from "../../../components/form/FormInput";
@@ -16,7 +15,7 @@ import { FormCard } from "../../../components/cards/FormCard";
 import { ListRowItem } from "../../../components/lists/ListRowItem";
 import { SearchToolbar } from "../../../components/search/SearchToolbar";
 import { SimpleSpinner } from "../../../components/spinners/SimpleSpinner";
-import type { Artist, SimpleMessage } from "../../../types";
+import type { SimpleMessage } from "../../../types";
 import { uploadImage } from "../../../lib/supabase/storage";
 
 export const AdminArtistsPage = () => {
@@ -26,43 +25,12 @@ export const AdminArtistsPage = () => {
     const [description, setDescription] = useState("");
     const [artistImageFile, setArtistImageFile] = useState<File | null>(null);
     const [searchTerm, setSearchTerm] = useState("");
-    const [loadError, setLoadError] = useState<SimpleMessage>(null);
     const [submitError, setSubmitError] = useState<SimpleMessage>(null);
     const [submitSuccess, setSubmitSuccess] = useState<SimpleMessage>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [artists, setArtists] = useState<Artist[]>([]);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        setLoading(true);
-        setLoadError(null);
-
-        const loadErrorMessage = t("features.artists.error.loadError");
-        const controller = new AbortController();
-
-        const loadArtists = async () => {
-            try {
-                const data = await getArtists(controller.signal);
-                setArtists(data);
-            } catch (error) {
-                if (!isAbortError(error)) {
-                    console.error(error);
-                    setLoadError(loadErrorMessage);
-                    setArtists([]);
-                }
-            } finally {
-                if (!controller.signal.aborted) {
-                    setLoading(false);
-                }
-            }
-        };
-
-        void loadArtists();
-
-        return () => {
-            controller.abort();
-        };
-    }, [t]);
+    const { artists, setArtists, loading, loadError } = useArtists({
+        loadErrorMessage: t("features.artists.error.loadError"),
+    });
 
     const filteredArtists = useMemo(() => {
         const query = searchTerm.trim().toLowerCase();

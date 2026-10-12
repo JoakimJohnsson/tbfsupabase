@@ -1,64 +1,23 @@
-import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { getArtists } from "../api/getArtists";
+import { useArtists } from "../hooks/useArtists";
 import { ArtistListItem } from "../components/ArtistListItem";
-import { isAbortError } from "../../../lib/asyncHelpers/withAbortSignal";
 import { Feedback } from "../../../components/feedback/Feedback";
 import { SimpleSpinner } from "../../../components/spinners/SimpleSpinner";
-import type { Artist, SimpleMessage } from "../../../types";
 
 export const ArtistsPage = () => {
     const { t } = useTranslation();
 
-    const [artists, setArtists] = useState<Artist[]>([]);
-    const [error, setError] = useState<SimpleMessage>(null);
-    const [warning, setWarning] = useState<SimpleMessage>(null);
-    const [loading, setLoading] = useState<boolean>(true);
-
-    const loadError = t("features.artists.error.loadError");
-    const loadWarning = t("features.artists.message.empty");
-
-    useEffect(() => {
-        setLoading(true);
-        setError(null);
-        setWarning(null);
-        setArtists([]);
-
-        const controller = new AbortController();
-
-        const loadArtists = async () => {
-            try {
-                const data = await getArtists(controller.signal);
-                setArtists(data);
-                if (!data?.length) {
-                    setWarning(loadWarning);
-                }
-            } catch (err) {
-                if (!isAbortError(err)) {
-                    console.error(err);
-                    setError(loadError);
-                    setArtists([]);
-                }
-            } finally {
-                if (!controller.signal.aborted) {
-                    setLoading(false);
-                }
-            }
-        };
-
-        void loadArtists();
-
-        return () => {
-            controller.abort();
-        };
-    }, [loadError, loadWarning]);
+    const { artists, loading, loadError } = useArtists({
+        loadErrorMessage: t("features.artists.error.loadError"),
+    });
+    const warning = !loading && !loadError && artists.length === 0 ? t("features.artists.message.empty") : null;
 
     if (loading) {
         return <SimpleSpinner message={t("features.artists.message.loading")} />;
     }
 
-    if (error) {
-        return <Feedback errors={[error]} />;
+    if (loadError) {
+        return <Feedback errors={[loadError]} />;
     }
 
     return (
