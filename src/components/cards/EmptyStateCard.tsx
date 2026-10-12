@@ -1,4 +1,6 @@
 import type { ReactNode } from "react";
+import { Card } from "./Card";
+import { CardBody } from "./CardBody";
 
 interface IEmptyStateCard {
     message: ReactNode;
@@ -11,8 +13,8 @@ const buildClassName = (...classNames: Array<string | undefined>): string => {
 
 export const EmptyStateCard = ({ message, className }: IEmptyStateCard) => {
     return (
-        <div className={buildClassName("card border-0 bg-body-tertiary p-4 text-center text-muted", className)}>
-            {message}
-        </div>
+        <Card variant="flat" background={"tertiary"} className={buildClassName("text-center text-muted", className)}>
+            <CardBody padding="comfortable">{message}</CardBody>
+        </Card>
     );
 };

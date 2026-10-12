@@ -88,7 +88,7 @@ export const ArtistPage = () => {
                             <div className="d-flex flex-column gap-3">
                                 {records.map((record) => (
                                     <div className="card shadow-sm border" key={record.id}>
-                                        <div className="card-body">
+                                        <CardBody>
                                             <div className="d-flex justify-content-between align-items-start gap-2 mb-2">
                                                 <h3 className="h5 card-title fw-semibold mb-0">
                                                     {record.name}
@@ -106,7 +106,7 @@ export const ArtistPage = () => {
                                             {record.description && (
                                                 <p className="card-text text-muted small mb-0">{record.description}</p>
                                             )}
-                                        </div>
+                                        </CardBody>
                                     </div>
                                 ))}
                             </div>

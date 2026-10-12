@@ -1,5 +1,7 @@
 import { type SubmitEvent, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Card } from "../../../components/cards/Card";
+import { CardBody } from "../../../components/cards/CardBody";
 import { Feedback } from "../../../components/feedback/Feedback";
 import { SimpleSpinner } from "../../../components/spinners/SimpleSpinner";
 import { getRecordSongs } from "../../songs/api/getRecordSongs";
@@ -279,70 +281,72 @@ export const RecordSongsManager = ({ availableArtists, defaultArtistIds = [], re
     if (error) return <Feedback errors={[error]} />;
 
     return (
-        <div className="my-3 p-3 bg-body-tertiary rounded border">
-            <h6 className="fw-bold mb-3">{t("features.admin.songs.title")}</h6>
+        <Card variant="outlined" background={"tertiary"} className="my-3">
+            <CardBody>
+                <h6 className="fw-bold mb-3">{t("features.admin.songs.title")}</h6>
 
-            <Feedback errors={[actionFeedback.error]} successes={[actionFeedback.success]} />
+                <Feedback errors={[actionFeedback.error]} successes={[actionFeedback.success]} />
 
-            {songs.length === 0 ? (
-                <p className="text-muted small">{t("features.admin.songs.noSongs")}</p>
-            ) : (
-                <ol className="list-group mb-3">
-                    {songs.map((song) => {
-                        const isEditing = editingSongId === song.id;
-                        const artistNames = song.song_artists
-                            .map((sa) => sa.artists?.name)
-                            .filter(Boolean)
-                            .join(", ");
+                {songs.length === 0 ? (
+                    <p className="text-muted small">{t("features.admin.songs.noSongs")}</p>
+                ) : (
+                    <ol className="list-group mb-3">
+                        {songs.map((song) => {
+                            const isEditing = editingSongId === song.id;
+                            const artistNames = song.song_artists
+                                .map((sa) => sa.artists?.name)
+                                .filter(Boolean)
+                                .join(", ");
 
-                        if (isEditing) {
+                            if (isEditing) {
+                                return (
+                                    <RecordSongsEdit
+                                        availableArtists={availableArtists}
+                                        editArtistIds={editArtistIds}
+                                        editAudioFile={editAudioFile}
+                                        editSongName={editSongName}
+                                        editTrackNumber={editTrackNumber}
+                                        handleSaveEdit={handleSaveEdit}
+                                        isSavingEdit={isSavingEdit}
+                                        key={song.id}
+                                        onArtistChange={(artistId) => setEditArtistIds(artistId ? [artistId] : [])}
+                                        onEditAudioFileSelect={setEditAudioFile}
+                                        setEditSongName={setEditSongName}
+                                        setEditTrackNumber={setEditTrackNumber}
+                                        setEditingSongId={setEditingSongId}
+                                        song={song}
+                                    />
+                                );
+                            }
+
                             return (
-                                <RecordSongsEdit
-                                    availableArtists={availableArtists}
-                                    editArtistIds={editArtistIds}
-                                    editAudioFile={editAudioFile}
-                                    editSongName={editSongName}
-                                    editTrackNumber={editTrackNumber}
-                                    handleSaveEdit={handleSaveEdit}
-                                    isSavingEdit={isSavingEdit}
+                                <RecordSongsToolRow
+                                    artistNames={artistNames}
+                                    handleDeleteSong={handleDeleteSong}
+                                    handleStartEdit={handleStartEdit}
                                     key={song.id}
-                                    onArtistChange={(artistId) => setEditArtistIds(artistId ? [artistId] : [])}
-                                    onEditAudioFileSelect={setEditAudioFile}
-                                    setEditSongName={setEditSongName}
-                                    setEditTrackNumber={setEditTrackNumber}
-                                    setEditingSongId={setEditingSongId}
                                     song={song}
                                 />
                             );
-                        }
+                        })}
+                    </ol>
+                )}
 
-                        return (
-                            <RecordSongsToolRow
-                                artistNames={artistNames}
-                                handleDeleteSong={handleDeleteSong}
-                                handleStartEdit={handleStartEdit}
-                                key={song.id}
-                                song={song}
-                            />
-                        );
-                    })}
-                </ol>
-            )}
-
-            <RecordSongsAdd
-                audioFile={audioFile}
-                availableArtists={availableArtists}
-                handleCreateSong={handleCreateSong}
-                isSubmitting={isSubmitting}
-                onArtistChange={(artistId) => setSelectedArtistIds(artistId ? [artistId] : [])}
-                onAudioFileSelect={setAudioFile}
-                recordId={recordId}
-                selectedArtistIds={selectedArtistIds}
-                setSongName={setSongName}
-                setTrackNumber={setTrackNumber}
-                songName={songName}
-                trackNumber={trackNumber}
-            />
-        </div>
+                <RecordSongsAdd
+                    audioFile={audioFile}
+                    availableArtists={availableArtists}
+                    handleCreateSong={handleCreateSong}
+                    isSubmitting={isSubmitting}
+                    onArtistChange={(artistId) => setSelectedArtistIds(artistId ? [artistId] : [])}
+                    onAudioFileSelect={setAudioFile}
+                    recordId={recordId}
+                    selectedArtistIds={selectedArtistIds}
+                    setSongName={setSongName}
+                    setTrackNumber={setTrackNumber}
+                    songName={songName}
+                    trackNumber={trackNumber}
+                />
+            </CardBody>
+        </Card>
     );
 };
