@@ -112,6 +112,39 @@ export const en = {
                 editSuccess: "Musician updated.",
                 editError: "Could not update musician.",
             },
+            persons: {
+                title: "Musicians",
+                lead: "Here, you can administer all musicians and persons in the archive.",
+                search: "Search musicians...",
+                create: {
+                    title: "Create musician",
+                    submit: "Create musician",
+                    submitting: "Creating musician...",
+                    success: "Musician created successfully.",
+                    error: "Could not create musician.",
+                },
+                edit: {
+                    title: "Edit musician",
+                    submit: "Save musician",
+                    submitting: "Saving musician...",
+                    success: "Musician updated successfully.",
+                    error: "Could not update musician.",
+                },
+                delete: {
+                    confirm:
+                        "Are you sure you want to delete {{name}}? This will also remove them from all associated bands.",
+                    deleting: "Deleting musician...",
+                    success: "Musician deleted successfully.",
+                    error: "Could not delete musician.",
+                },
+                list: {
+                    title: "List of musicians",
+                },
+                message: {
+                    empty: "No musicians found...",
+                    loading: "Loading musicians...",
+                },
+            },
             record: {
                 title: "Record",
                 create: {
@@ -278,6 +311,7 @@ export const en = {
         admin: "Admin",
         adminArtists: "Admin artists",
         adminRecords: "Admin records",
+        adminPersons: "Admin musicians",
         artists: "Artists",
         home: "TBF home",
         login: "Login",

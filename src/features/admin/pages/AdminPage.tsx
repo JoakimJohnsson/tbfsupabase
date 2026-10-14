@@ -214,6 +214,13 @@ export const AdminPage = () => {
                                     <span>{t("features.admin.dashboard.quickActions.viewPublicCatalogue")}</span>
                                     <FontAwesomeIcon icon={faArrowRight} />
                                 </Link>
+                                <Link
+                                    className="btn btn-outline-secondary text-start d-flex justify-content-between align-items-center"
+                                    to="/admin/persons"
+                                >
+                                    <span>{t("navigation.adminPersons")}</span>
+                                    <FontAwesomeIcon icon={faArrowRight} />
+                                </Link>
                             </div>
                         </CardBody>
                     </Card>

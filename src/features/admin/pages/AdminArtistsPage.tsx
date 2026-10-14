@@ -164,7 +164,7 @@ export const AdminArtistsPage = () => {
                                     variant="outline-secondary"
                                 />
                             }
-                            className="list-group-item-action p-3"
+                            className="p-3"
                             key={artist.id}
                         >
                             <ArtistListItem artist={artist} to={`/admin/artists/${artist.slug}`} />

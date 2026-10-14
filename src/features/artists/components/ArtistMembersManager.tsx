@@ -296,28 +296,28 @@ export const ArtistMembersManager = ({ artistId, availablePersons, onPersonsUpda
                                             />
                                         </>
                                     }
-                                    className="py-2"
+                                    className={`py-2${isEditingThisMember ? " bg-primary-subtle" : ""}`}
                                     key={member.id}
                                 >
-                                <div className="d-flex align-items-center gap-2">
-                                    <div
-                                        className="bg-secondary-subtle text-muted rounded-circle d-flex align-items-center justify-content-center overflow-hidden flex-shrink-0 border"
-                                        style={{ width: "32px", height: "32px" }}
-                                    >
-                                        {member.image_path ? (
-                                            <img
-                                                alt={`${member.first_name} ${member.last_name}`}
-                                                className="w-100 h-100 object-fit-cover"
-                                                src={member.image_path}
-                                            />
-                                        ) : (
-                                            <span className="fw-bold small">{member.first_name.charAt(0)}</span>
-                                        )}
+                                    <div className="d-flex align-items-center gap-2">
+                                        <div
+                                            className="bg-secondary-subtle text-muted rounded-circle d-flex align-items-center justify-content-center overflow-hidden flex-shrink-0 border"
+                                            style={{ width: "32px", height: "32px" }}
+                                        >
+                                            {member.image_path ? (
+                                                <img
+                                                    alt={`${member.first_name} ${member.last_name}`}
+                                                    className="w-100 h-100 object-fit-cover"
+                                                    src={member.image_path}
+                                                />
+                                            ) : (
+                                                <span className="fw-bold small">{member.first_name.charAt(0)}</span>
+                                            )}
+                                        </div>
+                                        <span className="fw-semibold">
+                                            {member.first_name} {member.last_name}
+                                        </span>
                                     </div>
-                                    <span className="fw-semibold">
-                                        {member.first_name} {member.last_name}
-                                    </span>
-                                </div>
                                 </ListRowItem>
                             );
                         })}
