@@ -280,85 +280,91 @@ export const RecordSongsManager = ({ availableArtists, defaultArtistIds = [], re
         }
     };
 
+    useEffect(() => {
+        setSelectedArtistIds(defaultArtistIds);
+    }, [defaultArtistIds]);
+
     if (loading) return <SimpleSpinner />;
     if (error) return <Feedback errors={[error]} />;
 
     return (
-        <Card variant="outlined" background={"tertiary"} className="my-3">
+        <Card variant="flat" background={"tertiary"} className="my-3">
             <CardBody>
-                <h6 className="fw-bold mb-3">{t("features.admin.songs.title")}</h6>
+                <fieldset className="border-0 p-0 m-0">
+                    <legend className="fs-6 fw-normal">{t("features.admin.songs.title")}</legend>
 
-                <Feedback errors={[actionFeedback.error]} successes={[actionFeedback.success]} />
+                    <Feedback errors={[actionFeedback.error]} successes={[actionFeedback.success]} />
 
-                {songs.length === 0 ? (
-                    <p className="text-muted small">{t("features.admin.songs.noSongs")}</p>
-                ) : (
-                    <ol className="list-group mb-3">
-                        {songs.map((song) => {
-                            const isEditing = editingSongId === song.id;
-                            const artistNames = song.song_artists
-                                .map((sa) => sa.artists?.name)
-                                .filter(Boolean)
-                                .join(", ");
+                    {songs.length === 0 ? (
+                        <p className="text-muted small">{t("features.admin.songs.noSongs")}</p>
+                    ) : (
+                        <ol className="list-group mb-3">
+                            {songs.map((song) => {
+                                const isEditing = editingSongId === song.id;
+                                const artistNames = song.song_artists
+                                    .map((sa) => sa.artists?.name)
+                                    .filter(Boolean)
+                                    .join(", ");
 
-                            if (isEditing) {
+                                if (isEditing) {
+                                    return (
+                                        <RecordSongsEdit
+                                            availableArtists={availableArtists}
+                                            editArtistIds={editArtistIds}
+                                            editAudioFile={editAudioFile}
+                                            editSongName={editSongName}
+                                            editTrackNumber={editTrackNumber}
+                                            handleSaveEdit={handleSaveEdit}
+                                            isSavingEdit={isSavingEdit}
+                                            key={song.id}
+                                            onArtistChange={(artistId) => setEditArtistIds(artistId ? [artistId] : [])}
+                                            onEditAudioFileSelect={setEditAudioFile}
+                                            setEditSongName={setEditSongName}
+                                            setEditTrackNumber={setEditTrackNumber}
+                                            setEditingSongId={setEditingSongId}
+                                            song={song}
+                                        />
+                                    );
+                                }
+
                                 return (
-                                    <RecordSongsEdit
-                                        availableArtists={availableArtists}
-                                        editArtistIds={editArtistIds}
-                                        editAudioFile={editAudioFile}
-                                        editSongName={editSongName}
-                                        editTrackNumber={editTrackNumber}
-                                        handleSaveEdit={handleSaveEdit}
-                                        isSavingEdit={isSavingEdit}
+                                    <RecordSongsToolRow
+                                        artistNames={artistNames}
+                                        handleDeleteSong={setSongToDelete}
+                                        handleStartEdit={handleStartEdit}
                                         key={song.id}
-                                        onArtistChange={(artistId) => setEditArtistIds(artistId ? [artistId] : [])}
-                                        onEditAudioFileSelect={setEditAudioFile}
-                                        setEditSongName={setEditSongName}
-                                        setEditTrackNumber={setEditTrackNumber}
-                                        setEditingSongId={setEditingSongId}
                                         song={song}
                                     />
                                 );
-                            }
+                            })}
+                        </ol>
+                    )}
 
-                            return (
-                                <RecordSongsToolRow
-                                    artistNames={artistNames}
-                                    handleDeleteSong={setSongToDelete}
-                                    handleStartEdit={handleStartEdit}
-                                    key={song.id}
-                                    song={song}
-                                />
-                            );
-                        })}
-                    </ol>
-                )}
-
-                <RecordSongsAdd
-                    audioFile={audioFile}
-                    availableArtists={availableArtists}
-                    handleCreateSong={handleCreateSong}
-                    isSubmitting={isSubmitting}
-                    onArtistChange={(artistId) => setSelectedArtistIds(artistId ? [artistId] : [])}
-                    onAudioFileSelect={setAudioFile}
-                    recordId={recordId}
-                    selectedArtistIds={selectedArtistIds}
-                    setSongName={setSongName}
-                    setTrackNumber={setTrackNumber}
-                    songName={songName}
-                    trackNumber={trackNumber}
-                />
-                <ConfirmModal
-                    isOpen={songToDelete !== null}
-                    title={t("common.delete")}
-                    message={t("features.admin.songs.deleteConfirm", { name: songToDelete?.name })}
-                    isPending={isDeletingSong}
-                    onCancel={() => setSongToDelete(null)}
-                    onConfirm={() => {
-                        if (songToDelete) void handleDeleteSong(songToDelete);
-                    }}
-                />
+                    <RecordSongsAdd
+                        audioFile={audioFile}
+                        availableArtists={availableArtists}
+                        handleCreateSong={handleCreateSong}
+                        isSubmitting={isSubmitting}
+                        onArtistChange={(artistId) => setSelectedArtistIds(artistId ? [artistId] : [])}
+                        onAudioFileSelect={setAudioFile}
+                        recordId={recordId}
+                        selectedArtistIds={selectedArtistIds}
+                        setSongName={setSongName}
+                        setTrackNumber={setTrackNumber}
+                        songName={songName}
+                        trackNumber={trackNumber}
+                    />
+                    <ConfirmModal
+                        isOpen={songToDelete !== null}
+                        title={t("common.delete")}
+                        message={t("features.admin.songs.deleteConfirm", { name: songToDelete?.name })}
+                        isPending={isDeletingSong}
+                        onCancel={() => setSongToDelete(null)}
+                        onConfirm={() => {
+                            if (songToDelete) void handleDeleteSong(songToDelete);
+                        }}
+                    />
+                </fieldset>
             </CardBody>
         </Card>
     );

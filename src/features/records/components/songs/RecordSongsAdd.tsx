@@ -138,7 +138,9 @@ export const RecordSongsAdd = ({
                         type="file"
                     />
                 </div>
-
+                <div>
+                    <span className="text-muted small">{t("forms.audioUploadHelp")}</span>
+                </div>
                 {/* Submit */}
                 <div className="col-12 col-md-auto ms-auto">
                     <button className="btn btn-primary btn-sm w-100" disabled={isSubmitting} type="submit">

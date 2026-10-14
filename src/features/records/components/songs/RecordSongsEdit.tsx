@@ -60,7 +60,7 @@ export const RecordSongsEdit = ({
     };
 
     return (
-        <li className="list-group-item">
+        <li className="list-group-item bg-body-secondary">
             <form onSubmit={handleSaveEdit}>
                 <div className="row g-2 mb-2 align-items-center">
                     {/* Track Number */}
@@ -147,6 +147,9 @@ export const RecordSongsEdit = ({
                             ref={fileInputRef}
                             type="file"
                         />
+                    </div>
+                    <div>
+                        <span className="text-muted small">{t("forms.audioUploadHelp")}</span>
                     </div>
                 </div>
 

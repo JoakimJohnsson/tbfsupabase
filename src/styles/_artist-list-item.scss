@@ -20,7 +20,7 @@
         align-items: center;
         justify-content: center;
         overflow: hidden;
-        background-color: var(--bs-secondary-bg);
+        background-color: var(--bs-body-bg);
         color: var(--bs-secondary-color);
     }
 
@@ -91,6 +91,20 @@
     &__description--card {
         margin-top: 0.25rem;
     }
+}
+
+.tbf-member-avatar {
+    width: 32px;
+    height: 32px;
+    flex: 0 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 50%;
+    border: 1px solid var(--bs-border-color);
+    background-color: var(--bs-body-bg);
+    color: var(--bs-secondary-color);
 }
 
 

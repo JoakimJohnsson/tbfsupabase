@@ -21,10 +21,7 @@ export const SiteLayout = () => {
         const handleClickOutside = (event: MouseEvent) => {
             const targetNode = event.target as Node;
 
-            if (
-                dropdownRef.current &&
-                !dropdownRef.current.contains(targetNode)
-            ) {
+            if (dropdownRef.current && !dropdownRef.current.contains(targetNode)) {
                 setIsAdminMenuOpen(false);
             }
 
@@ -60,16 +57,9 @@ export const SiteLayout = () => {
     return (
         <div className="d-flex flex-column min-vh-100">
             {/* Main Header / Top Navigation */}
-            <header
-                className="navbar navbar-expand-md border-bottom bg-body-tertiary px-3 py-2"
-                ref={headerRef}
-            >
+            <header className="navbar navbar-expand-md border-bottom bg-body-tertiary px-3 py-2" ref={headerRef}>
                 <div className="container-fluid">
-                    <Link
-                        className="navbar-brand fw-bold me-4"
-                        onClick={handleNavigation}
-                        to="/"
-                    >
+                    <Link className="navbar-brand fw-bold me-4" onClick={handleNavigation} to="/">
                         The Baseball Field
                     </Link>
 
@@ -86,29 +76,18 @@ export const SiteLayout = () => {
                     </button>
 
                     {/* Responsive collapsible container */}
-                    <div
-                        className={`collapse navbar-collapse ${isNavOpen ? "show" : ""}`}
-                        id="topNavbarContent"
-                    >
+                    <div className={`collapse navbar-collapse ${isNavOpen ? "show" : ""}`} id="topNavbarContent">
                         {/* Primary navigation links */}
                         <ul className="navbar-nav me-auto mb-2 mb-md-0 gap-1">
                             <li className="nav-item">
-                                <NavLink
-                                    className="nav-link"
-                                    onClick={handleNavigation}
-                                    to="/"
-                                >
+                                <NavLink className="nav-link" onClick={handleNavigation} to="/">
                                     {t("navigation.home")}
                                 </NavLink>
                             </li>
 
                             {/* Public artist browsing for all users */}
                             <li className="nav-item">
-                                <NavLink
-                                    className="nav-link"
-                                    onClick={handleNavigation}
-                                    to="/artists"
-                                >
+                                <NavLink className="nav-link" onClick={handleNavigation} to="/artists">
                                     {t("navigation.artists")}
                                 </NavLink>
                             </li>
@@ -117,20 +96,12 @@ export const SiteLayout = () => {
                             {user && (
                                 <>
                                     <li className="nav-item">
-                                        <NavLink
-                                            className="nav-link"
-                                            onClick={handleNavigation}
-                                            to="/records"
-                                        >
+                                        <NavLink className="nav-link" onClick={handleNavigation} to="/records">
                                             {t("navigation.records")}
                                         </NavLink>
                                     </li>
                                     <li className="nav-item">
-                                        <NavLink
-                                            className="nav-link"
-                                            onClick={handleNavigation}
-                                            to="/songs"
-                                        >
+                                        <NavLink className="nav-link" onClick={handleNavigation} to="/songs">
                                             {t("navigation.songs")}
                                         </NavLink>
                                     </li>
@@ -139,17 +110,12 @@ export const SiteLayout = () => {
 
                             {/* Admin dropdown managed by React state */}
                             {profile?.is_admin && (
-                                <li
-                                    className={`nav-item dropdown ${isAdminMenuOpen ? "show" : ""}`}
-                                    ref={dropdownRef}
-                                >
+                                <li className={`nav-item dropdown ${isAdminMenuOpen ? "show" : ""}`} ref={dropdownRef}>
                                     <button
                                         aria-expanded={isAdminMenuOpen}
                                         className={`nav-link dropdown-toggle btn btn-link text-decoration-none ${isAdminMenuOpen ? "show" : ""}`}
                                         id="adminDropdown"
-                                        onClick={() =>
-                                            setIsAdminMenuOpen((prev) => !prev)
-                                        }
+                                        onClick={() => setIsAdminMenuOpen((prev) => !prev)}
                                         type="button"
                                     >
                                         {t("navigation.admin")}
@@ -159,11 +125,7 @@ export const SiteLayout = () => {
                                         className={`dropdown-menu shadow-sm ${isAdminMenuOpen ? "show" : ""}`}
                                     >
                                         <li>
-                                            <Link
-                                                className="dropdown-item"
-                                                onClick={handleNavigation}
-                                                to="/admin"
-                                            >
+                                            <Link className="dropdown-item" onClick={handleNavigation} to="/admin">
                                                 {t("navigation.admin")}
                                             </Link>
                                         </li>
@@ -188,6 +150,15 @@ export const SiteLayout = () => {
                                                 {t("navigation.adminRecords")}
                                             </Link>
                                         </li>
+                                        <li>
+                                            <Link
+                                                className="dropdown-item"
+                                                onClick={handleNavigation}
+                                                to="/admin/persons"
+                                            >
+                                                {t("navigation.adminPersons")}
+                                            </Link>
+                                        </li>
                                     </ul>
                                 </li>
                             )}
@@ -197,9 +168,7 @@ export const SiteLayout = () => {
                         <div className="d-flex align-items-center gap-3">
                             {user ? (
                                 <div className="d-flex align-items-center gap-2">
-                                    <span className="small text-muted">
-                                        {profile?.display_name || user.email}
-                                    </span>
+                                    <span className="small text-muted">{profile?.display_name || user.email}</span>
                                     <button
                                         className="btn btn-outline-secondary btn-sm"
                                         onClick={() => void handleSignOut()}
@@ -209,11 +178,7 @@ export const SiteLayout = () => {
                                     </button>
                                 </div>
                             ) : (
-                                <Link
-                                    className="btn btn-primary btn-sm"
-                                    onClick={handleNavigation}
-                                    to="/login"
-                                >
+                                <Link className="btn btn-primary btn-sm" onClick={handleNavigation} to="/login">
                                     {t("navigation.login")}
                                 </Link>
                             )}

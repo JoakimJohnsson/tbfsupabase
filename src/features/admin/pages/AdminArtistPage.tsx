@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import type { SubmitEvent } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 import { useTranslation } from "react-i18next";
-import { faPenToSquare, faTrashCan, faUserPen } from "@fortawesome/pro-solid-svg-icons";
+import { faArrowRight, faPenToSquare, faTrashCan, faUserPen } from "@fortawesome/pro-solid-svg-icons";
 import { useArtist } from "../../artists/hooks/useArtist";
 import { updateArtist } from "../../artists/api/updateArtist";
 import { deleteArtist } from "../../artists/api/deleteArtist";
@@ -21,9 +21,10 @@ import { FormCard } from "../../../components/cards/FormCard";
 import { EmptyStateCard } from "../../../components/cards/EmptyStateCard";
 import { RecordBadges } from "../../records/components/RecordBadges";
 import { getPersons } from "../../persons/api/getPersons";
-import { ArtistMembersManager } from "../../artists/components/ArtistMembersManager";
+import { ArtistMembersManager } from "../../artists/components/members/ArtistMembersManager";
 import { isAbortError } from "../../../lib/asyncHelpers/withAbortSignal";
 import type { Person, SimpleMessage } from "../../../types";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export const AdminArtistPage = () => {
     const { t } = useTranslation();
@@ -185,7 +186,7 @@ export const AdminArtistPage = () => {
         <AdminPageLayout
             lead={artist.name}
             sidebar={
-                <div className="sticky-top" style={{ top: "1rem" }}>
+                <div className="sticky-top-offset">
                     <FormCard icon={faUserPen} title={t("features.admin.artist.edit.title")}>
                         <form onSubmit={handleSubmit}>
                             <FormInput
@@ -223,8 +224,6 @@ export const AdminArtistPage = () => {
                                         ? t("features.admin.artist.edit.submitting")
                                         : t("features.admin.artist.edit.submitEdit")}
                                 </button>
-
-                                <hr aria-hidden="true" className="my-2" />
 
                                 <ToolButton
                                     className="w-100 justify-content-center"
@@ -265,7 +264,8 @@ export const AdminArtistPage = () => {
                 </div>
 
                 <Link className="btn btn-outline-primary btn-sm" to="/admin/records">
-                    {t("navigation.adminRecords")}
+                    <span className={"me-2"}>{t("navigation.adminRecords")}</span>
+                    <FontAwesomeIcon icon={faArrowRight} />
                 </Link>
             </div>
 

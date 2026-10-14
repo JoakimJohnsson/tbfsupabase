@@ -10,6 +10,8 @@ import { ImageUploader } from "../../../components/form/ImageUploader";
 import { RECORD_FORMATS, RECORD_TYPES } from "../constants";
 import { RecordSongsManager } from "./songs/RecordSongsManager";
 import { ArtistSelectCheckboxes } from "../../artists/components/ArtistSelectCheckboxes";
+import { ToolButton } from "../../../components/buttons/ToolButton";
+import { faFloppyDisk, faXmark } from "@fortawesome/pro-solid-svg-icons";
 
 interface IRecordEdit {
     record: RecordWithArtists;
@@ -144,19 +146,25 @@ export const RecordEdit = ({
                 />
 
                 <ToolButtonGroup className="pb-3">
-                    <button className="btn btn-primary" disabled={isSubmittingEdit} type="submit">
-                        {isSubmittingEdit
-                            ? t("features.admin.record.edit.submitting")
-                            : t("features.admin.record.edit.submit")}
-                    </button>
-                    <button
-                        className="btn btn-secondary"
+                    <ToolButton
                         disabled={isSubmittingEdit}
+                        icon={faFloppyDisk}
+                        text={
+                            isSubmittingEdit
+                                ? t("features.admin.record.edit.submitting")
+                                : t("features.admin.record.edit.submit")
+                        }
+                        type="submit"
+                        variant="primary"
+                    />
+                    <ToolButton
+                        disabled={isSubmittingEdit}
+                        icon={faXmark}
                         onClick={handleCancelEdit}
+                        text={t("common.cancel")}
+                        variant="secondary"
                         type="button"
-                    >
-                        {t("common.cancel")}
-                    </button>
+                    />
                 </ToolButtonGroup>
             </form>
 
