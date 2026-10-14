@@ -11,7 +11,7 @@ import { RECORD_FORMATS, RECORD_TYPES } from "../constants";
 import { RecordSongsManager } from "./songs/RecordSongsManager";
 import { ArtistSelectCheckboxes } from "../../artists/components/ArtistSelectCheckboxes";
 import { ToolButton } from "../../../components/buttons/ToolButton";
-import { faFloppyDisk, faPenToSquare, faTrashCan, faXmark } from "@fortawesome/pro-solid-svg-icons";
+import { faFloppyDisk, faXmark } from "@fortawesome/pro-solid-svg-icons";
 
 interface IRecordEdit {
     record: RecordWithArtists;
