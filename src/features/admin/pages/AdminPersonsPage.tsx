@@ -283,10 +283,7 @@ export const AdminPersonsPage = () => {
                                 key={person.id}
                             >
                                 <div className="d-flex align-items-center gap-3">
-                                    <div
-                                        className="bg-secondary-subtle text-muted rounded-circle d-flex align-items-center justify-content-center overflow-hidden flex-shrink-0 border"
-                                        style={{ width: "40px", height: "40px" }}
-                                    >
+                                    <div className="tbf-member-avatar">
                                         {person.image_path ? (
                                             <img
                                                 alt={fullName}

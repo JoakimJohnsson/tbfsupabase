@@ -21,7 +21,7 @@ import { FormCard } from "../../../components/cards/FormCard";
 import { EmptyStateCard } from "../../../components/cards/EmptyStateCard";
 import { RecordBadges } from "../../records/components/RecordBadges";
 import { getPersons } from "../../persons/api/getPersons";
-import { ArtistMembersManager } from "../../artists/components/ArtistMembersManager";
+import { ArtistMembersManager } from "../../artists/components/members/ArtistMembersManager";
 import { isAbortError } from "../../../lib/asyncHelpers/withAbortSignal";
 import type { Person, SimpleMessage } from "../../../types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
