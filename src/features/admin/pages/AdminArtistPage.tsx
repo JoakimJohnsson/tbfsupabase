@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import type { SubmitEvent } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 import { useTranslation } from "react-i18next";
-import { faPenToSquare, faTrashCan, faUserPen } from "@fortawesome/pro-solid-svg-icons";
+import { faArrowRight, faPenToSquare, faTrashCan, faUserPen } from "@fortawesome/pro-solid-svg-icons";
 import { useArtist } from "../../artists/hooks/useArtist";
 import { updateArtist } from "../../artists/api/updateArtist";
 import { deleteArtist } from "../../artists/api/deleteArtist";
@@ -24,6 +24,7 @@ import { getPersons } from "../../persons/api/getPersons";
 import { ArtistMembersManager } from "../../artists/components/ArtistMembersManager";
 import { isAbortError } from "../../../lib/asyncHelpers/withAbortSignal";
 import type { Person, SimpleMessage } from "../../../types";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export const AdminArtistPage = () => {
     const { t } = useTranslation();
@@ -224,8 +225,6 @@ export const AdminArtistPage = () => {
                                         : t("features.admin.artist.edit.submitEdit")}
                                 </button>
 
-                                <hr aria-hidden="true" className="my-2" />
-
                                 <ToolButton
                                     className="w-100 justify-content-center"
                                     disabled={isDeleting || isSubmitting}
@@ -265,7 +264,8 @@ export const AdminArtistPage = () => {
                 </div>
 
                 <Link className="btn btn-outline-primary btn-sm" to="/admin/records">
-                    {t("navigation.adminRecords")}
+                    <span className={"me-2"}>{t("navigation.adminRecords")}</span>
+                    <FontAwesomeIcon icon={faArrowRight} />
                 </Link>
             </div>
 
