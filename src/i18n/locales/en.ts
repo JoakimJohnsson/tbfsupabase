@@ -67,6 +67,27 @@ export const en = {
                     title: "List of artists",
                 },
             },
+            dashboard: {
+                title: "Admin dashboard",
+                lead: "Welcome to the archive administration. Here is an overview of your catalogue.",
+                stats: {
+                    artists: "Artists",
+                    records: "Records",
+                    songs: "Tracks",
+                    audioStatus: "Audio uploads",
+                    totalArtists: "{{count}} registered artists.",
+                    totalRecords: "{{count}} releases in archive.",
+                    audioProgress: "{{withAudio}} of {{total}} tracks have audio.",
+                    allAudioComplete: "All tracks have audio files uploaded.",
+                    missingAudio: "{{count}} tracks missing audio.",
+                },
+                quickActions: {
+                    title: "Quick actions",
+                    manageArtists: "Manage artists",
+                    manageRecords: "Manage records",
+                    viewPublicCatalogue: "View public catalogue",
+                },
+            },
             members: {
                 title: "Band members",
                 member: "member",

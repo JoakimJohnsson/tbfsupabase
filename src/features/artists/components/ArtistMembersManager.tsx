@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import type { SubmitEvent } from "react";
 import { useTranslation } from "react-i18next";
-import { faPenToSquare, faPlus, faTrashCan, faUserGroup } from "@fortawesome/pro-solid-svg-icons";
+import { faPenToSquare, faPlus, faTrashCan, faUserGroup, faXmark } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type { Person, SimpleMessage } from "../../../types";
 import { getArtistMembers } from "../../persons/api/getArtistMembers";
@@ -168,6 +168,11 @@ export const ArtistMembersManager = ({ artistId, availablePersons, onPersonsUpda
     };
 
     const handleStartEditPerson = (person: Person) => {
+        if (editingPersonId === person.id) {
+            handleCancelEditPerson();
+            return;
+        }
+
         setEditingPersonId(person.id);
         setEditFirstName(person.first_name);
         setEditLastName(person.last_name);
@@ -262,31 +267,38 @@ export const ArtistMembersManager = ({ artistId, availablePersons, onPersonsUpda
                     <p className="text-muted small mb-3">{t("features.admin.members.noMembers")}</p>
                 ) : (
                     <ul className="list-group shadow-sm mb-3">
-                        {members.map((member) => (
-                            <ListRowItem
-                                actions={
-                                    <>
-                                        <ToolButton
-                                            ariaLabel={`${t("common.edit")} ${member.first_name} ${member.last_name}`}
-                                            text={t("common.edit")}
-                                            icon={faPenToSquare}
-                                            onClick={() => handleStartEditPerson(member)}
-                                            size="sm"
-                                            variant="outline-secondary"
-                                        />
-                                        <ToolButton
-                                            ariaLabel={`${t("common.remove")} ${member.first_name} ${member.last_name}`}
-                                            text={t("common.remove")}
-                                            icon={faTrashCan}
-                                            onClick={() => setMemberToRemove(member)}
-                                            size="sm"
-                                            variant="outline-danger"
-                                        />
-                                    </>
-                                }
-                                className="py-2"
-                                key={member.id}
-                            >
+                        {members.map((member) => {
+                            const isEditingThisMember = editingPersonId === member.id;
+
+                            return (
+                                <ListRowItem
+                                    actions={
+                                        <>
+                                            <ToolButton
+                                                ariaLabel={
+                                                    isEditingThisMember
+                                                        ? `${t("common.cancel")} ${t("common.edit")} ${member.first_name} ${member.last_name}`
+                                                        : `${t("common.edit")} ${member.first_name} ${member.last_name}`
+                                                }
+                                                text={t(isEditingThisMember ? "common.cancel" : "common.edit")}
+                                                icon={isEditingThisMember ? faXmark : faPenToSquare}
+                                                onClick={() => handleStartEditPerson(member)}
+                                                size="sm"
+                                                variant={isEditingThisMember ? "secondary" : "outline-secondary"}
+                                            />
+                                            <ToolButton
+                                                ariaLabel={`${t("common.remove")} ${member.first_name} ${member.last_name}`}
+                                                text={t("common.remove")}
+                                                icon={faTrashCan}
+                                                onClick={() => setMemberToRemove(member)}
+                                                size="sm"
+                                                variant="outline-danger"
+                                            />
+                                        </>
+                                    }
+                                    className="py-2"
+                                    key={member.id}
+                                >
                                 <div className="d-flex align-items-center gap-2">
                                     <div
                                         className="bg-secondary-subtle text-muted rounded-circle d-flex align-items-center justify-content-center overflow-hidden flex-shrink-0 border"
@@ -306,14 +318,15 @@ export const ArtistMembersManager = ({ artistId, availablePersons, onPersonsUpda
                                         {member.first_name} {member.last_name}
                                     </span>
                                 </div>
-                            </ListRowItem>
-                        ))}
+                                </ListRowItem>
+                            );
+                        })}
                     </ul>
                 )}
 
                 {/* Edit Person Modal / Inline Form */}
                 {editingPersonId && (
-                    <form className="mb-3 p-3 border rounded bg-body" onSubmit={handleSaveEditPerson}>
+                    <form className="mb-3 p-3 rounded bg-body" onSubmit={handleSaveEditPerson}>
                         <h6 className="fw-bold mb-3">{t("features.admin.members.editPersonTitle")}</h6>
                         <div className="row g-2 mb-3">
                             <div className="col-12 col-sm-6">
