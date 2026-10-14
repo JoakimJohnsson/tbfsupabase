@@ -358,7 +358,7 @@ export const AdminRecordsPage = () => {
         <AdminPageLayout
             lead={t("features.admin.records.lead")}
             sidebar={
-                <div className="sticky-top">
+                <div className="sticky-top-offset">
                     <RecordCreate
                         artists={artists}
                         coverFile={coverFile}

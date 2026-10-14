@@ -168,7 +168,7 @@ export const AdminPersonsPage = () => {
         <AdminPageLayout
             lead={t("features.admin.persons.lead")}
             sidebar={
-                <div className="sticky-top" style={{ top: "1rem" }}>
+                <div className="sticky-top-offset">
                     <FormCard
                         icon={editingPersonId ? faUserPen : faPlus}
                         title={

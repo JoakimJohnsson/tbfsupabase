@@ -1,22 +1,19 @@
 import { type SubmitEvent, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { faPenToSquare, faPlus } from "@fortawesome/pro-solid-svg-icons";
+import { faPenToSquare } from "@fortawesome/pro-solid-svg-icons";
 import { createArtist } from "../../artists/api/createArtist";
 import { useArtists } from "../../artists/hooks/useArtists";
 import { ArtistListItem } from "../../artists/components/ArtistListItem";
 import { ToolButton } from "../../../components/buttons/ToolButton";
 import { Feedback } from "../../../components/feedback/Feedback";
-import { FormInput } from "../../../components/form/FormInput";
-import { FormTextArea } from "../../../components/form/FormTextArea";
-import { ImageUploader } from "../../../components/form/ImageUploader";
 import { AdminPageLayout } from "../../../components/layout/AdminPageLayout";
 import { EmptyStateCard } from "../../../components/cards/EmptyStateCard";
-import { FormCard } from "../../../components/cards/FormCard";
 import { ListRowItem } from "../../../components/lists/ListRowItem";
 import { SearchToolbar } from "../../../components/search/SearchToolbar";
 import { SimpleSpinner } from "../../../components/spinners/SimpleSpinner";
 import type { SimpleMessage } from "../../../types";
 import { uploadImage } from "../../../lib/supabase/storage";
+import { ArtistCreate } from "../../artists/components/ArtistCreate";
 
 export const AdminArtistsPage = () => {
     const { t } = useTranslation();
@@ -93,42 +90,19 @@ export const AdminArtistsPage = () => {
         <AdminPageLayout
             lead={t("features.admin.artists.lead")}
             sidebar={
-                <FormCard icon={faPlus} title={t("features.admin.artist.create.title")}>
-                    <form onSubmit={handleSubmit}>
-                        <FormInput
-                            id="name"
-                            label={t("forms.name")}
-                            name="name"
-                            onChange={setName}
-                            required
-                            type="text"
-                            value={name}
-                        />
-
-                        <FormTextArea
-                            id="description"
-                            label={t("forms.description")}
-                            name="description"
-                            onChange={setDescription}
-                            rows={4}
-                            value={description}
-                        />
-
-                        <ImageUploader
-                            disabled={isSubmitting || loading}
-                            id="artist-image-create"
-                            label={t("forms.artistImage")}
-                            onFileSelect={setArtistImageFile}
-                            selectedFile={artistImageFile}
-                        />
-
-                        <button className="btn btn-primary w-100" disabled={isSubmitting || loading} type="submit">
-                            {isSubmitting
-                                ? t("features.admin.artist.create.submitting")
-                                : t("features.admin.artist.create.submit")}
-                        </button>
-                    </form>
-                </FormCard>
+                <div className="sticky-top-offset">
+                    <ArtistCreate
+                        handleSubmit={handleSubmit}
+                        setName={setName}
+                        name={name}
+                        setDescription={setDescription}
+                        description={description}
+                        isSubmitting={isSubmitting}
+                        loading={loading}
+                        setArtistImageFile={setArtistImageFile}
+                        artistImageFile={artistImageFile}
+                    />
+                </div>
             }
             title={t("features.admin.artists.title")}
         >

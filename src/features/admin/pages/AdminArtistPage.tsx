@@ -186,7 +186,7 @@ export const AdminArtistPage = () => {
         <AdminPageLayout
             lead={artist.name}
             sidebar={
-                <div className="sticky-top" style={{ top: "1rem" }}>
+                <div className="sticky-top-offset">
                     <FormCard icon={faUserPen} title={t("features.admin.artist.edit.title")}>
                         <form onSubmit={handleSubmit}>
                             <FormInput
