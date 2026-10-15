@@ -87,7 +87,7 @@ export const ArtistMembersAdd = ({
                 </button>
 
                 {showNewPersonForm && (
-                    <form className="mt-2 p-3 border rounded bg-body" onSubmit={onCreateNewPerson}>
+                    <form className="mt-2 p-3 rounded bg-body" onSubmit={onCreateNewPerson}>
                         <h6 className="fw-bold mb-3">{t("features.admin.members.createPersonTitle")}</h6>
                         <div className="row g-2 mb-3">
                             <div className="col-12 col-sm-6">

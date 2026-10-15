@@ -60,7 +60,7 @@ export const RecordSongsEdit = ({
     };
 
     return (
-        <li className="list-group-item bg-body-secondary">
+        <li className="list-group-item bg-body border-top-0 p-3">
             <form onSubmit={handleSaveEdit}>
                 <div className="row g-2 mb-2 align-items-center">
                     {/* Track Number */}

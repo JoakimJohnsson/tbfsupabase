@@ -39,9 +39,9 @@ export const ArtistMemberEdit = ({
     const { t } = useTranslation();
 
     return (
-        <li className="list-group-item bg-body-tertiary p-3">
+        <li className="list-group-item bg-body p-3 border-top-0">
             <form onSubmit={onSave}>
-                <h3 className="h5">{t("features.admin.members.editPersonTitle")}</h3>
+                <h3 className="h5 mb-3">{t("features.admin.members.editPersonTitle")}</h3>
                 <div className="row g-2 mb-3">
                     <div className="col-12 col-sm-6">
                         <FormInput
