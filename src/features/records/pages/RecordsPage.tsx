@@ -48,10 +48,7 @@ export const RecordsPage = () => {
             <SearchToolbar
                 countText={
                     <>
-                        {filteredRecords.length}{" "}
-                        {filteredRecords.length === 1
-                            ? t("features.admin.record.title")
-                            : t("features.admin.records.title")}
+                        {filteredRecords.length} {filteredRecords.length === 1 ? t("features.records.record") : t("features.records.records")}
                     </>
                 }
                 onSearchChange={setSearchTerm}

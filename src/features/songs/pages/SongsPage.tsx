@@ -55,10 +55,7 @@ export const SongsPage = () => {
             <SearchToolbar
                 countText={
                     <>
-                        {filteredSongs.length}{" "}
-                        {filteredSongs.length === 1
-                            ? t("features.admin.dashboard.stats.song")
-                            : t("features.admin.dashboard.stats.songs")}
+                        {filteredSongs.length} {filteredSongs.length === 1 ? t("features.songs.song") : t("features.songs.songs")}
                     </>
                 }
                 onSearchChange={setSearchTerm}
