@@ -2,16 +2,16 @@ import { useMemo } from "react";
 import { Link } from "react-router";
 import { useTranslation } from "react-i18next";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRight, faCompactDisc, faMusic, faUserGroup } from "@fortawesome/pro-solid-svg-icons";
+import { faArrowRight, faCompactDisc, faUserGroup } from "@fortawesome/pro-solid-svg-icons";
 import { useArtists } from "../../artists/hooks/useArtists";
 import { useRecords } from "../../records/hooks/useRecords";
 import { SimpleSpinner } from "../../../components/spinners/SimpleSpinner";
 import { Feedback } from "../../../components/feedback/Feedback";
 import { Card } from "../../../components/cards/Card";
 import { CardBody } from "../../../components/cards/CardBody";
-import { RecordBadges } from "../../records/components/RecordBadges";
 import { ArtistListItem } from "../../artists/components/ArtistListItem";
 import type { RecordWithArtists } from "../../../types";
+import { RecordCard } from "../../records/components/RecordCard";
 
 // Maximum number of preview items to showcase on the landing page
 const PREVIEW_RECORDS_COUNT = 4;
@@ -117,49 +117,9 @@ export const HomePage = () => {
 
                 <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
                     {previewRecords.map((record: RecordWithArtists) => {
-                        const artistNames = record.record_artists
-                            .map((ra) => ra.artists?.name)
-                            .filter(Boolean)
-                            .join(", ");
-
                         return (
                             <div className="col" key={record.id}>
-                                <Card className="h-100 shadow-sm border-0 d-flex flex-column">
-                                    <div
-                                        className="ratio ratio-1x1 bg-body-tertiary d-flex align-items-center justify-content-center overflow-hidden"
-                                        style={{
-                                            borderTopLeftRadius: "var(--bs-card-inner-border-radius)",
-                                            borderTopRightRadius: "var(--bs-card-inner-border-radius)",
-                                        }}
-                                    >
-                                        {record.cover_path ? (
-                                            <img
-                                                alt={record.name}
-                                                className="w-100 h-100 object-fit-cover"
-                                                src={record.cover_path}
-                                            />
-                                        ) : (
-                                            <div className="d-flex align-items-center justify-content-center h-100 text-secondary">
-                                                <FontAwesomeIcon icon={faCompactDisc} size="3x" />
-                                            </div>
-                                        )}
-                                    </div>
-
-                                    <CardBody className="d-flex flex-column flex-grow-1">
-                                        <h3 className="h6 fw-bold mb-1 text-truncate" title={record.name}>
-                                            {record.name}
-                                        </h3>
-
-                                        <p className="small text-secondary mb-2 text-truncate" title={artistNames}>
-                                            {artistNames || t("features.admin.records.message.noArtists")}
-                                            {record.year && <span> ({record.year})</span>}
-                                        </p>
-
-                                        <div className="mt-auto pt-2">
-                                            <RecordBadges format={record.format} type={record.type} />
-                                        </div>
-                                    </CardBody>
-                                </Card>
+                                <RecordCard record={record} />
                             </div>
                         );
                     })}
