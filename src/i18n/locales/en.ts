@@ -3,6 +3,9 @@ export const en = {
         cancel: "Cancel",
         delete: "Delete",
         edit: "Edit",
+        play: "Play",
+        playing: "Playing",
+        stop: "Stop",
         loading: "Loading...",
         logout: "Log out",
         close: "Close",
@@ -260,9 +263,17 @@ export const en = {
         },
         records: {
             title: "Records",
+            listTitle: "Archive Releases",
+            searchPlaceholder: "Search records, artists...",
+            empty: "No records found.",
+            loadError: "Could not load records.",
         },
         songs: {
             title: "Songs",
+            listTitle: "All Tracks",
+            searchPlaceholder: "Search songs, albums, artists...",
+            empty: "No songs found.",
+            loadError: "Could not load songs.",
         },
     },
     forms: {
