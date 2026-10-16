@@ -261,6 +261,26 @@ export const en = {
                 },
             },
         },
+        home: {
+            hero: {
+                title: "The Baseball Field and Friends",
+                lead: "A curated digital music archive spanning Swedish lo-fi, indie, pop, rock, punk, and folk recordings.",
+                exploreArtists: "Browse artists",
+                exploreRecords: "Browse releases",
+            },
+            sections: {
+                recentReleasesTitle: "Latest releases",
+                recentReleasesLead: "Explore the most recent records added to the archive.",
+                featuredArtistsTitle: "Featured artists",
+                featuredArtistsLead: "Discover bands and solo acts preserving Swedish underground music.",
+                viewAllArtists: "View all artists",
+                viewAllRecords: "View all releases",
+            },
+            stats: {
+                artistsCount: "Artists",
+                recordsCount: "Releases",
+            },
+        },
         records: {
             record: "Record",
             records: "Records",
