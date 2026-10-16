@@ -55,7 +55,8 @@ export const SongsPage = () => {
             <SearchToolbar
                 countText={
                     <>
-                        {filteredSongs.length} {filteredSongs.length === 1 ? t("features.songs.song") : t("features.songs.songs")}
+                        {filteredSongs.length}{" "}
+                        {filteredSongs.length === 1 ? t("features.songs.song") : t("features.songs.songs")}
                     </>
                 }
                 onSearchChange={setSearchTerm}
@@ -70,7 +71,14 @@ export const SongsPage = () => {
                 <div className="card bg-body-secondary shadow-sm mb-4 border">
                     <div className="card-body p-3 d-flex align-items-center gap-3">
                         <FontAwesomeIcon className="text-primary fs-4 flex-shrink-0" icon={faMusic} />
-                        <audio autoPlay className="w-100" controls key={activeSongUrl} src={activeSongUrl} />
+                        <audio
+                            autoPlay
+                            className="w-100"
+                            controls
+                            key={activeSongUrl}
+                            src={activeSongUrl}
+                            onEnded={() => setActiveSongUrl(null)}
+                        />
                     </div>
                 </div>
             )}
