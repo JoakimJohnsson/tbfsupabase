@@ -49,6 +49,10 @@ export type SongWithArtists = Song & {
     song_artists: SongArtistRelation[];
 };
 
+export type SongWithRecordAndArtists = SongWithArtists & {
+    records: Pick<Record, "id" | "name" | "year" | "cover_path"> | null;
+};
+
 // Inputs
 export type CreateArtistInput = {
     name: string;

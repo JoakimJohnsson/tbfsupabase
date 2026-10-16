@@ -101,7 +101,7 @@ export const RecordSongsAdd = ({
                         name="artist"
                         onChange={onArtistChange}
                         options={artistOptions}
-                        placeholder={t("forms.selectArtistPlaceholder", { defaultValue: "-- Select artist --" })}
+                        placeholder={t("forms.selectArtistPlaceholder")}
                         value={selectedArtistIds[0] ?? ""}
                     />
                 </div>

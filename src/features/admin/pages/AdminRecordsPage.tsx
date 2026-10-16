@@ -1,4 +1,4 @@
-import { type SubmitEvent, useEffect, useMemo, useRef, useState } from "react";
+import { Fragment, type SubmitEvent, useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "react-router";
 import { useTranslation } from "react-i18next";
 import { Feedback } from "../../../components/feedback/Feedback";
@@ -410,44 +410,44 @@ export const AdminRecordsPage = () => {
                             .filter(Boolean)
                             .join(", ");
 
-                        if (isEditing) {
-                            return (
-                                <RecordEdit
-                                    artists={artists}
-                                    currentCoverUrl={currentCoverUrl}
-                                    editArtistIds={editArtistIds}
-                                    editCoverFile={editCoverFile}
-                                    editDescription={editDescription}
-                                    editFormat={editFormat}
-                                    editName={editName}
-                                    editType={editType}
-                                    editYear={editYear}
-                                    handleCancelEdit={handleCancelEdit}
-                                    handleEditArtistCheckboxChange={handleEditArtistCheckboxChange}
-                                    handleSaveEdit={handleSaveEdit}
-                                    isSubmittingEdit={isSubmittingEdit}
-                                    key={record.id}
-                                    onEditCoverFileSelect={setEditCoverFile}
-                                    onRemoveCurrentCover={() => setCurrentCoverUrl(null)}
-                                    record={record}
-                                    setEditDescription={setEditDescription}
-                                    setEditFormat={setEditFormat}
-                                    setEditName={setEditName}
-                                    setEditType={setEditType}
-                                    setEditYear={setEditYear}
-                                />
-                            );
-                        }
-
                         return (
-                            <RecordToolRow
-                                artistNames={artistNames}
-                                deletingRecordId={deletingRecordId}
-                                handleDeleteRecord={setRecordToDelete}
-                                handleStartEdit={handleStartEdit}
-                                key={record.id}
-                                record={record}
-                            />
+                            <Fragment key={record.id}>
+                                <RecordToolRow
+                                    artistNames={artistNames}
+                                    deletingRecordId={deletingRecordId}
+                                    handleCancelEdit={handleCancelEdit}
+                                    handleDeleteRecord={setRecordToDelete}
+                                    handleStartEdit={handleStartEdit}
+                                    isEditing={isEditing}
+                                    record={record}
+                                />
+
+                                {isEditing && (
+                                    <RecordEdit
+                                        artists={artists}
+                                        currentCoverUrl={currentCoverUrl}
+                                        editArtistIds={editArtistIds}
+                                        editCoverFile={editCoverFile}
+                                        editDescription={editDescription}
+                                        editFormat={editFormat}
+                                        editName={editName}
+                                        editType={editType}
+                                        editYear={editYear}
+                                        handleCancelEdit={handleCancelEdit}
+                                        handleEditArtistCheckboxChange={handleEditArtistCheckboxChange}
+                                        handleSaveEdit={handleSaveEdit}
+                                        isSubmittingEdit={isSubmittingEdit}
+                                        onEditCoverFileSelect={setEditCoverFile}
+                                        onRemoveCurrentCover={() => setCurrentCoverUrl(null)}
+                                        record={record}
+                                        setEditDescription={setEditDescription}
+                                        setEditFormat={setEditFormat}
+                                        setEditName={setEditName}
+                                        setEditType={setEditType}
+                                        setEditYear={setEditYear}
+                                    />
+                                )}
+                            </Fragment>
                         );
                     })}
                 </ul>

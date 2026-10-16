@@ -73,7 +73,7 @@ export const RecordEdit = ({
     }));
 
     return (
-        <li className="list-group-item bg-body-secondary">
+        <li className="list-group-item bg-body border-top-0 p-3">
             <form onSubmit={handleSaveEdit}>
                 <FormInput
                     id={`name-${record.id}`}

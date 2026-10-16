@@ -1,4 +1,4 @@
-import { type SubmitEvent, useEffect, useState } from "react";
+import { Fragment, type SubmitEvent, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Card } from "../../../../components/cards/Card";
 import { CardBody } from "../../../../components/cards/CardBody";
@@ -306,35 +306,40 @@ export const RecordSongsManager = ({ availableArtists, defaultArtistIds = [], re
                                     .filter(Boolean)
                                     .join(", ");
 
-                                if (isEditing) {
-                                    return (
-                                        <RecordSongsEdit
-                                            availableArtists={availableArtists}
-                                            editArtistIds={editArtistIds}
-                                            editAudioFile={editAudioFile}
-                                            editSongName={editSongName}
-                                            editTrackNumber={editTrackNumber}
-                                            handleSaveEdit={handleSaveEdit}
-                                            isSavingEdit={isSavingEdit}
-                                            key={song.id}
-                                            onArtistChange={(artistId) => setEditArtistIds(artistId ? [artistId] : [])}
-                                            onEditAudioFileSelect={setEditAudioFile}
-                                            setEditSongName={setEditSongName}
-                                            setEditTrackNumber={setEditTrackNumber}
-                                            setEditingSongId={setEditingSongId}
+                                return (
+                                    <Fragment key={song.id}>
+                                        <RecordSongsToolRow
+                                            artistNames={artistNames}
+                                            handleCancelEdit={() => {
+                                                setEditingSongId(null);
+                                                setEditAudioFile(null);
+                                            }}
+                                            handleDeleteSong={setSongToDelete}
+                                            handleStartEdit={handleStartEdit}
+                                            isEditing={isEditing}
                                             song={song}
                                         />
-                                    );
-                                }
 
-                                return (
-                                    <RecordSongsToolRow
-                                        artistNames={artistNames}
-                                        handleDeleteSong={setSongToDelete}
-                                        handleStartEdit={handleStartEdit}
-                                        key={song.id}
-                                        song={song}
-                                    />
+                                        {isEditing && (
+                                            <RecordSongsEdit
+                                                availableArtists={availableArtists}
+                                                editArtistIds={editArtistIds}
+                                                editAudioFile={editAudioFile}
+                                                editSongName={editSongName}
+                                                editTrackNumber={editTrackNumber}
+                                                handleSaveEdit={handleSaveEdit}
+                                                isSavingEdit={isSavingEdit}
+                                                onArtistChange={(artistId) =>
+                                                    setEditArtistIds(artistId ? [artistId] : [])
+                                                }
+                                                onEditAudioFileSelect={setEditAudioFile}
+                                                setEditSongName={setEditSongName}
+                                                setEditTrackNumber={setEditTrackNumber}
+                                                setEditingSongId={setEditingSongId}
+                                                song={song}
+                                            />
+                                        )}
+                                    </Fragment>
                                 );
                             })}
                         </ol>

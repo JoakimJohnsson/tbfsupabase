@@ -60,7 +60,7 @@ export const RecordSongsEdit = ({
     };
 
     return (
-        <li className="list-group-item bg-body-secondary">
+        <li className="list-group-item bg-body border-top-0 p-3">
             <form onSubmit={handleSaveEdit}>
                 <div className="row g-2 mb-2 align-items-center">
                     {/* Track Number */}
@@ -96,15 +96,15 @@ export const RecordSongsEdit = ({
                     {/* Performing Artist Selector */}
                     <div className="col-12 col-sm-5 col-md-3">
                         <FormSelect
-                            ariaLabel={t("forms.artist", { defaultValue: "Artist" })}
+                            ariaLabel={t("forms.artist")}
                             containerClassName=""
                             hideLabel
                             id={`edit-artist-${song.id}`}
-                            label={t("forms.artist", { defaultValue: "Artist" })}
+                            label={t("forms.artist")}
                             name="artist"
                             onChange={onArtistChange}
                             options={artistOptions}
-                            placeholder={t("forms.selectArtistPlaceholder", { defaultValue: "-- Select artist --" })}
+                            placeholder={t("forms.selectArtistPlaceholder")}
                             value={editArtistIds[0] ?? ""}
                         />
                     </div>

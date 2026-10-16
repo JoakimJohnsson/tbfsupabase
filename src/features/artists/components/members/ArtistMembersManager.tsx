@@ -1,4 +1,4 @@
-import { useEffect, useState, type SubmitEvent } from "react";
+import { useEffect, useState, type SubmitEvent, Fragment } from "react";
 import { useTranslation } from "react-i18next";
 import { faUserGroup } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -270,33 +270,33 @@ export const ArtistMembersManager = ({ artistId, availablePersons, onPersonsUpda
                         {members.map((member) => {
                             const isEditing = editingPersonId === member.id;
 
-                            if (isEditing) {
-                                return (
-                                    <ArtistMemberEdit
-                                        currentEditImageUrl={currentEditImageUrl}
-                                        editFirstName={editFirstName}
-                                        editImageFile={editImageFile}
-                                        editLastName={editLastName}
-                                        isSaving={isUpdatingPerson}
-                                        key={member.id}
-                                        member={member}
-                                        onCancel={handleCancelEditPerson}
-                                        onEditImageFileSelect={setEditImageFile}
-                                        onFirstNameChange={setEditFirstName}
-                                        onLastNameChange={setEditLastName}
-                                        onRemoveCurrentEditImage={() => setCurrentEditImageUrl(null)}
-                                        onSave={handleSaveEditPerson}
-                                    />
-                                );
-                            }
-
                             return (
-                                <ArtistMemberToolRow
-                                    key={member.id}
-                                    member={member}
-                                    onDelete={setMemberToRemove}
-                                    onStartEdit={handleStartEditPerson}
-                                />
+                                <Fragment key={member.id}>
+                                    <ArtistMemberToolRow
+                                        isEditing={isEditing}
+                                        member={member}
+                                        onCancelEdit={handleCancelEditPerson}
+                                        onDelete={setMemberToRemove}
+                                        onStartEdit={handleStartEditPerson}
+                                    />
+
+                                    {isEditing && (
+                                        <ArtistMemberEdit
+                                            currentEditImageUrl={currentEditImageUrl}
+                                            editFirstName={editFirstName}
+                                            editImageFile={editImageFile}
+                                            editLastName={editLastName}
+                                            isSaving={isUpdatingPerson}
+                                            member={member}
+                                            onCancel={handleCancelEditPerson}
+                                            onEditImageFileSelect={setEditImageFile}
+                                            onFirstNameChange={setEditFirstName}
+                                            onLastNameChange={setEditLastName}
+                                            onRemoveCurrentEditImage={() => setCurrentEditImageUrl(null)}
+                                            onSave={handleSaveEditPerson}
+                                        />
+                                    )}
+                                </Fragment>
                             );
                         })}
                     </ul>
