@@ -10,8 +10,8 @@ import { Feedback } from "../../../components/feedback/Feedback";
 import { Card } from "../../../components/cards/Card";
 import { CardBody } from "../../../components/cards/CardBody";
 import { ArtistListItem } from "../../artists/components/ArtistListItem";
-import type { RecordWithArtists } from "../../../types";
 import { RecordCard } from "../../records/components/RecordCard";
+import type { RecordWithArtists } from "../../../types";
 
 // Maximum number of preview items to showcase on the landing page
 const PREVIEW_RECORDS_COUNT = 4;
@@ -39,7 +39,7 @@ export const HomePage = () => {
     const loading = artistsLoading || recordsLoading;
     const loadError = artistsError ?? recordsError;
 
-    // Pick top preview records (records already sorted by year descending from API)
+    // Pick top preview records (already sorted by year descending from API)
     const previewRecords = useMemo(() => records.slice(0, PREVIEW_RECORDS_COUNT), [records]);
 
     // Pick a curated slice of artists for the landing showcase
@@ -116,13 +116,11 @@ export const HomePage = () => {
                 </div>
 
                 <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
-                    {previewRecords.map((record: RecordWithArtists) => {
-                        return (
-                            <div className="col" key={record.id}>
-                                <RecordCard record={record} />
-                            </div>
-                        );
-                    })}
+                    {previewRecords.map((record: RecordWithArtists) => (
+                        <div className="col" key={record.id}>
+                            <RecordCard record={record} />
+                        </div>
+                    ))}
                 </div>
             </section>
 

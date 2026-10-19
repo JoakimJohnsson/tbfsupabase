@@ -163,7 +163,7 @@ export const AdminPage = () => {
                                     <FontAwesomeIcon className="text-primary fs-5" icon={faFileAudio} />
                                 </div>
                                 <div className="display-6 fw-bold mb-1">{audioStats.percentage}%</div>
-                                <div className="progress mb-2" style={{ height: "6px" }}>
+                                <div className="progress tbf-progress-thin mb-2">
                                     <div
                                         aria-valuemax={100}
                                         aria-valuemin={0}

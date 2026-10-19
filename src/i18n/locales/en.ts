@@ -282,13 +282,14 @@ export const en = {
             },
         },
         records: {
-            record: "Record",
-            records: "Records",
-            title: "Records",
+            record: "record",
+            records: "records",
             listTitle: "Archive Releases",
             searchPlaceholder: "Search records, artists...",
             empty: "No records found.",
             loadError: "Could not load records.",
+            audioProgressTooltip: "{{count}} of {{total}} tracks have audio",
+            title: "Records",
         },
         songs: {
             song: "Track",

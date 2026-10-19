@@ -22,7 +22,6 @@
     aspect-ratio: 16 / 9;
   }
 
-  // Media element (e.g. img)
   img {
     display: block;
     width: 100%;
@@ -30,7 +29,6 @@
     object-fit: cover;
   }
 
-  // Centered placeholder icon
   &__placeholder {
     display: flex;
     align-items: center;
@@ -39,4 +37,22 @@
     height: 100%;
     color: var(--bs-secondary-color);
   }
+}
+
+// Song item record cover thumbnail
+.tbf-song-record-thumb {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 2px solid var(--bs-border-color);
+  border-radius: var(--bs-border-radius);
+}
+
+// Slim dashboard progress bar
+.tbf-progress-thin {
+  height: 6px;
 }
