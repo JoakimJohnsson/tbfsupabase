@@ -50,11 +50,14 @@ export const RecordCard = ({ record, showTrackCount = false }: IRecordCard) => {
                     {showTrackCount && totalSongs > 0 && (
                         <span
                             className="badge text-bg-light border small d-inline-flex align-items-center gap-1"
-                            title={`${songsWithAudio} of ${totalSongs} tracks have audio`}
+                            title={t("features.records.audioProgressTooltip", {
+                                count: songsWithAudio,
+                                total: totalSongs,
+                            })}
                         >
                             <FontAwesomeIcon
-                                icon={faFileAudio}
                                 className={songsWithAudio > 0 ? "text-success" : "text-muted"}
+                                icon={faFileAudio}
                             />
                             {totalSongs}
                         </span>

@@ -5,8 +5,8 @@ import { SearchToolbar } from "../../../components/search/SearchToolbar";
 import { SimpleSpinner } from "../../../components/spinners/SimpleSpinner";
 import { Feedback } from "../../../components/feedback/Feedback";
 import { EmptyStateCard } from "../../../components/cards/EmptyStateCard";
-import type { RecordWithArtists } from "../../../types";
 import { RecordCard } from "../components/RecordCard";
+import type { RecordWithArtists } from "../../../types";
 
 export const RecordsPage = () => {
     const { t } = useTranslation();
@@ -59,13 +59,11 @@ export const RecordsPage = () => {
                 <EmptyStateCard message={t("features.records.empty")} />
             ) : (
                 <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 mb-4">
-                    {filteredRecords.map((record: RecordWithArtists) => {
-                        return (
-                            <div className="col" key={record.id}>
-                                <RecordCard record={record} showTrackCount />
-                            </div>
-                        );
-                    })}
+                    {filteredRecords.map((record: RecordWithArtists) => (
+                        <div className="col" key={record.id}>
+                            <RecordCard record={record} showTrackCount />
+                        </div>
+                    ))}
                 </div>
             )}
         </main>

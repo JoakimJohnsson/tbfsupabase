@@ -114,10 +114,7 @@ export const SongsPage = () => {
                                 key={song.id}
                             >
                                 <div className="d-flex align-items-center gap-3 min-w-0">
-                                    <div
-                                        className="d-flex align-items-center justify-content-center bg-body border rounded flex-shrink-0 overflow-hidden"
-                                        style={{ width: "40px", height: "40px" }}
-                                    >
+                                    <div className="tbf-song-record-thumb">
                                         {song.records?.cover_path ? (
                                             <img
                                                 alt={song.records.name}
