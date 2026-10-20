@@ -42,10 +42,10 @@ export const getArtistRecords = async (artistId: string, signal?: AbortSignal): 
 
     // Sort: Year descending (nulls last), then Name ascending
     return Array.from(recordMap.values()).sort((a, b) => {
-        if (a.year === null && b.year === null) return a.name.localeCompare(b.name);
+        if (a.year === null && b.year === null) return a.name.localeCompare(b.name, "sv");
         if (a.year === null) return 1;
         if (b.year === null) return -1;
         if (a.year !== b.year) return b.year - a.year;
-        return a.name.localeCompare(b.name);
+        return a.name.localeCompare(b.name, "sv");
     });
 };
