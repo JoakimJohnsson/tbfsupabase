@@ -1,6 +1,7 @@
 import { supabase } from "../../../lib/supabase/client";
 import { withAbortSignal } from "../../../lib/asyncHelpers/withAbortSignal";
 
+// Fetch all artists and sort according to Swedish alphabetical collation (Å, Ä, Ö)
 export const getArtists = async (signal?: AbortSignal) => {
     const queryPromise = supabase.from("artists").select("*").order("name");
 
@@ -10,5 +11,5 @@ export const getArtists = async (signal?: AbortSignal) => {
         throw error;
     }
 
-    return data;
+    return (data ?? []).sort((a, b) => a.name.localeCompare(b.name, "sv"));
 };

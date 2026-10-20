@@ -225,6 +225,12 @@ export const en = {
             },
         },
         artist: {
+            membersTitle: "Members",
+            membersLoadError: "Could not load artist members.",
+            noMembers: "No members listed for this artist.",
+            songsTitle: "Songs",
+            songsEmpty: "No songs found for this artist.",
+            songsLoadError: "Could not load songs for this artist.",
             error: {
                 loadError: "Could not load artist.",
             },

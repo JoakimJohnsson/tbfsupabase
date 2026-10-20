@@ -63,7 +63,7 @@ export const AdminArtistsPage = () => {
             });
 
             setArtists((currentArtists) =>
-                [...currentArtists, createdArtist].sort((a, b) => a.name.localeCompare(b.name)),
+                [...currentArtists, createdArtist].sort((a, b) => a.name.localeCompare(b.name, "sv")),
             );
 
             setName("");
