@@ -50,7 +50,7 @@ export const SongsPage = () => {
 
     return (
         <main className="container-fluid" id="main-content">
-            <h1 className="h2 fw-bold mb-4">{t("features.songs.title")}</h1>
+            <h1>{t("features.songs.title")}</h1>
 
             <SearchToolbar
                 countText={
@@ -106,7 +106,7 @@ export const SongsPage = () => {
                                             onClick={() => handleTogglePlay(song.audio_path)}
                                             size="sm"
                                             text={isPlaying ? t("common.stop") : t("common.play")}
-                                            variant={isPlaying ? "primary" : "outline-success"}
+                                            variant={isPlaying ? "primary" : "outline-primary"}
                                         />
                                     ) : undefined
                                 }

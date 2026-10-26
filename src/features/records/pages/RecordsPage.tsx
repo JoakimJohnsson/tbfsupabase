@@ -39,7 +39,7 @@ export const RecordsPage = () => {
 
     return (
         <main className="container-fluid" id="main-content">
-            <h1 className="h2 fw-bold mb-4">{t("features.records.title")}</h1>
+            <h1>{t("features.records.title")}</h1>
 
             <SearchToolbar
                 countText={

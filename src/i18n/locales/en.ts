@@ -260,6 +260,7 @@ export const en = {
         auth: {
             login: {
                 title: "Login",
+                lead: "Sign in to access your archive and tools.",
                 submit: "Log in",
                 submitting: "Logging in...",
                 error: {

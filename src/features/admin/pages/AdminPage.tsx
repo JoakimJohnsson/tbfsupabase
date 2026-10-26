@@ -59,11 +59,9 @@ export const AdminPage = () => {
     }
 
     return (
-        <div className="container-fluid">
-            <header className="mb-4">
-                <h1 className="h2 fw-bold">{t("features.admin.dashboard.title")}</h1>
-                <p className="text-secondary mb-0">{t("features.admin.dashboard.lead")}</p>
-            </header>
+        <main className="container-fluid" id="main-content">
+            <h1>{t("features.admin.dashboard.title")}</h1>
+            <p className="lead">{t("features.admin.dashboard.lead")}</p>
 
             {/* Statistics cards */}
             <div className="row g-4 mb-4">
@@ -165,6 +163,7 @@ export const AdminPage = () => {
                                 <div className="display-6 fw-bold mb-1">{audioStats.percentage}%</div>
                                 <div className="progress tbf-progress-thin mb-2">
                                     <div
+                                        aria-label={t("features.admin.dashboard.stats.audioStatus")}
                                         aria-valuemax={100}
                                         aria-valuemin={0}
                                         aria-valuenow={audioStats.percentage}
@@ -226,6 +225,6 @@ export const AdminPage = () => {
                     </Card>
                 </div>
             </div>
-        </div>
+        </main>
     );
 };
