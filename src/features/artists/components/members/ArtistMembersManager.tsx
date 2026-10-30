@@ -92,7 +92,9 @@ export const ArtistMembersManager = ({ artistId, availablePersons, onPersonsUpda
             await addArtistMember(artistId, selectedPersonId);
             const addedPerson = availablePersons.find((person) => person.id === selectedPersonId);
             if (addedPerson) {
-                setMembers((cur) => [...cur, addedPerson].sort((a, b) => a.first_name.localeCompare(b.first_name)));
+                setMembers((cur) =>
+                    [...cur, addedPerson].sort((a, b) => a.first_name.localeCompare(b.first_name, "sv")),
+                );
             }
             setSelectedPersonId("");
             setFeedbackSuccess(t("features.admin.members.addSuccess"));
@@ -152,7 +154,7 @@ export const ArtistMembersManager = ({ artistId, availablePersons, onPersonsUpda
 
             await addArtistMember(artistId, created.id);
 
-            setMembers((cur) => [...cur, created].sort((a, b) => a.first_name.localeCompare(b.first_name)));
+            setMembers((cur) => [...cur, created].sort((a, b) => a.first_name.localeCompare(b.first_name, "sv")));
             setNewFirstName("");
             setNewLastName("");
             setNewPersonImageFile(null);
@@ -229,7 +231,7 @@ export const ArtistMembersManager = ({ artistId, availablePersons, onPersonsUpda
             setMembers((cur) =>
                 cur
                     .map((member) => (member.id === updated.id ? updated : member))
-                    .sort((a, b) => a.first_name.localeCompare(b.first_name)),
+                    .sort((a, b) => a.first_name.localeCompare(b.first_name, "sv")),
             );
 
             handleCancelEditPerson();

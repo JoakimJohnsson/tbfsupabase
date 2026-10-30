@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCompactDisc, faFileAudio } from "@fortawesome/pro-solid-svg-icons";
 import { Card } from "../../../components/cards/Card";
@@ -9,10 +10,11 @@ import type { RecordWithArtists } from "../../../types";
 
 interface IRecordCard {
     record: RecordWithArtists;
+    to?: string;
     showTrackCount?: boolean;
 }
 
-export const RecordCard = ({ record, showTrackCount = false }: IRecordCard) => {
+export const RecordCard = ({ record, to, showTrackCount = false }: IRecordCard) => {
     const { t } = useTranslation();
 
     const artistNames = record.record_artists
@@ -36,8 +38,14 @@ export const RecordCard = ({ record, showTrackCount = false }: IRecordCard) => {
             </CardMedia>
 
             <CardBody className="d-flex flex-column flex-grow-1">
-                <h3 className="h6 fw-bold mb-1 text-truncate" title={record.name}>
-                    {record.name}
+                <h3 className="h6 fw-bold mb-1" title={record.name}>
+                    {to ? (
+                        <Link className="stretched-link d-block" to={to}>
+                            <span className="d-block text-truncate">{record.name}</span>
+                        </Link>
+                    ) : (
+                        <span className="d-block text-truncate">{record.name}</span>
+                    )}
                 </h3>
 
                 <p className="small text-secondary mb-2 text-truncate" title={artistNames}>

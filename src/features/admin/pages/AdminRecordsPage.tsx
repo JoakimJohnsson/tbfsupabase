@@ -26,11 +26,11 @@ const sortRecordsList = (recordsList: RecordWithArtists[]): RecordWithArtists[] 
         const bArtistName =
             b.record_artists.find((ra) => ra.is_primary)?.artists?.name ?? b.record_artists[0]?.artists?.name ?? "";
 
-        const artistCompare = aArtistName.localeCompare(bArtistName);
+        const artistCompare = aArtistName.localeCompare(bArtistName, "sv");
 
         if (artistCompare !== 0) return artistCompare;
 
-        return a.name.localeCompare(b.name);
+        return a.name.localeCompare(b.name, "sv");
     });
 };
 

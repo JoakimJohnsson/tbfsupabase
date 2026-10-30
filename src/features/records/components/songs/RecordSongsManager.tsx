@@ -24,11 +24,11 @@ interface IRecordSongsManager {
 
 const sortSongs = (list: SongWithArtists[]) => {
     return [...list].sort((a, b) => {
-        if (a.track_number === null && b.track_number === null) return a.name.localeCompare(b.name);
+        if (a.track_number === null && b.track_number === null) return a.name.localeCompare(b.name, "sv");
         if (a.track_number === null) return 1;
         if (b.track_number === null) return -1;
         if (a.track_number !== b.track_number) return a.track_number - b.track_number;
-        return a.name.localeCompare(b.name);
+        return a.name.localeCompare(b.name, "sv");
     });
 };
 

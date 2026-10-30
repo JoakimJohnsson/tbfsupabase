@@ -37,6 +37,15 @@ export type RecordWithArtists = Record & {
     songs?: RecordSongSummary[];
 };
 
+export type RecordWithArtistsAndSongs = Database["public"]["Tables"]["records"]["Row"] & {
+    record_artists: {
+        artist_id: string;
+        is_primary: boolean;
+        artists: Artist | null;
+    }[];
+    songs: SongWithArtists[];
+};
+
 export type SongArtistRelation = SongArtist & {
     artists: {
         id: string;

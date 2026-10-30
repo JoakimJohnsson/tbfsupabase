@@ -112,7 +112,7 @@ export const AdminPersonsPage = () => {
                 setPersons((cur) =>
                     cur
                         .map((p) => (p.id === updated.id ? updated : p))
-                        .sort((a, b) => a.first_name.localeCompare(b.first_name)),
+                        .sort((a, b) => a.first_name.localeCompare(b.first_name, "sv")),
                 );
 
                 handleCancelEdit();
@@ -125,7 +125,7 @@ export const AdminPersonsPage = () => {
                     image_path: imagePath || undefined,
                 });
 
-                setPersons((cur) => [...cur, created].sort((a, b) => a.first_name.localeCompare(b.first_name)));
+                setPersons((cur) => [...cur, created].sort((a, b) => a.first_name.localeCompare(b.first_name, "sv")));
 
                 handleCancelEdit();
                 setSubmitSuccess(t("features.admin.persons.create.success"));

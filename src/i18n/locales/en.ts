@@ -15,7 +15,7 @@ export const en = {
     features: {
         admin: {
             ariaLabels: {
-                sidebar: "Administrator sidebar",
+                editor: "Create or edit",
             },
             artist: {
                 title: "Artist",
@@ -225,6 +225,12 @@ export const en = {
             },
         },
         artist: {
+            membersTitle: "Members",
+            membersLoadError: "Could not load artist members.",
+            noMembers: "No members listed for this artist.",
+            songsTitle: "Songs",
+            songsEmpty: "No songs found for this artist.",
+            songsLoadError: "Could not load songs for this artist.",
             error: {
                 loadError: "Could not load artist.",
             },
@@ -254,6 +260,7 @@ export const en = {
         auth: {
             login: {
                 title: "Login",
+                lead: "Sign in to access your archive and tools.",
                 submit: "Log in",
                 submitting: "Logging in...",
                 error: {
@@ -349,7 +356,7 @@ export const en = {
         adminRecords: "Admin records",
         adminPersons: "Admin musicians",
         artists: "Artists",
-        home: "TBF home",
+        home: "TBF",
         login: "Login",
         records: "Records",
         songs: "Songs",

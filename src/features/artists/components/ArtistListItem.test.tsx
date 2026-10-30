@@ -43,7 +43,7 @@ describe("ArtistListItem", () => {
         expect(markup).toContain('class="card-body p-3 tbf-artist-list-item__body d-flex flex-column"');
         expect(markup).toContain("tbf-artist-list-item__description--card");
         expect(markup).toContain('href="/artists/example-artist"');
-        expect(markup).not.toContain("stretched-link");
+        expect(markup).toContain('class="tbf-artist-list-item__name stretched-link"');
         expect(markup.indexOf("tbf-artist-list-item__media")).toBeLessThan(markup.indexOf("card-body"));
     });
 
@@ -55,6 +55,7 @@ describe("ArtistListItem", () => {
         expect(markup).toContain('<span class="tbf-artist-list-item__initial">E</span>');
         expect(markup).toContain('<span class="tbf-artist-list-item__name">Example Artist</span>');
         expect(markup).not.toContain("<a ");
+        expect(markup).not.toContain("stretched-link");
         expect(markup).not.toContain("<p ");
     });
 

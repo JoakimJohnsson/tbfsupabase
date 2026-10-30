@@ -62,11 +62,8 @@
     }
 
     &__name {
-        position: relative;
-        z-index: 1;
         display: inline-block;
         font-weight: 700;
-        color: inherit;
         text-decoration: none;
 
         &:hover,
@@ -106,5 +103,3 @@
     background-color: var(--bs-body-bg);
     color: var(--bs-secondary-color);
 }
-
-

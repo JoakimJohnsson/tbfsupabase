@@ -27,5 +27,5 @@ export const getArtistMembers = async (artistId: string, signal?: AbortSignal): 
     return (data ?? [])
         .map((entry) => entry.persons)
         .filter((person): person is Person => person !== null)
-        .sort((a, b) => a.first_name.localeCompare(b.first_name));
+        .sort((a, b) => a.first_name.localeCompare(b.first_name, "sv"));
 };
