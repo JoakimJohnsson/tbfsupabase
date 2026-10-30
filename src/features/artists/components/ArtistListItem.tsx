@@ -30,7 +30,7 @@ export const ArtistListItem = ({ artist, to, variant = "row" }: IArtistListItem)
     const content = (
         <>
             {to ? (
-                <Link className={buildClassName("tbf-artist-list-item__name", !isCard && "stretched-link")} to={to}>
+                <Link className="tbf-artist-list-item__name stretched-link" to={to}>
                     {artist.name}
                 </Link>
             ) : (

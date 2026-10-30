@@ -14,6 +14,7 @@ import { AdminRecordsPage } from "../features/admin/pages/AdminRecordsPage";
 import { RecordsPage } from "../features/records/pages/RecordsPage";
 import { SongsPage } from "../features/songs/pages/SongsPage";
 import { AdminPersonsPage } from "../features/admin/pages/AdminPersonsPage";
+import { RecordPage } from "../features/records/pages/RecordPage";
 
 export const router = createBrowserRouter([
     {
@@ -45,6 +46,10 @@ export const router = createBrowserRouter([
                     {
                         path: "records",
                         element: <RecordsPage />,
+                    },
+                    {
+                        path: "records/:recordId",
+                        element: <RecordPage />,
                     },
                     {
                         path: "songs",

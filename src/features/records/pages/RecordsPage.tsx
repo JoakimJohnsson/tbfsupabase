@@ -61,7 +61,7 @@ export const RecordsPage = () => {
                 <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 mb-4">
                     {filteredRecords.map((record: RecordWithArtists) => (
                         <div className="col" key={record.id}>
-                            <RecordCard record={record} showTrackCount />
+                            <RecordCard record={record} showTrackCount to={`/records/${record.id}`} />
                         </div>
                     ))}
                 </div>

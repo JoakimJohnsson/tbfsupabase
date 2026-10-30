@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router";
+import { Link, useLocation, useNavigate, useParams } from "react-router";
 import { useTranslation } from "react-i18next";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCompactDisc, faMusic, faPlay, faStop, faUserGroup } from "@fortawesome/pro-solid-svg-icons";
@@ -186,7 +186,9 @@ export const ArtistPage = () => {
                                             <CardBody>
                                                 <div className="d-flex justify-content-between align-items-start gap-2 mb-2">
                                                     <h3 className="h5 card-title fw-semibold mb-0">
-                                                        {record.name}
+                                                        <Link className="stretched-link" to={`/records/${record.id}`}>
+                                                            {record.name}
+                                                        </Link>
                                                         {record.year && (
                                                             <span className="text-muted fs-6 fw-normal ms-2">
                                                                 ({record.year})
