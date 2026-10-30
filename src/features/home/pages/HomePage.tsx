@@ -54,7 +54,7 @@ export const HomePage = () => {
     }
 
     return (
-        <main className="container-fluid" id="main-content">
+        <div className="container-fluid">
             {/* Hero banner */}
             <div className="p-4 p-md-5 mb-4 rounded bg-body-tertiary">
                 <div className="col-xxl-8">
@@ -154,6 +154,6 @@ export const HomePage = () => {
                     ))}
                 </div>
             </section>
-        </main>
+        </div>
     );
 };

@@ -83,11 +83,13 @@ export const ArtistPage = () => {
     return (
         <div className="row g-4">
             {/* Left column: Artist biography and band members */}
-            <aside className="col-12 col-lg-4 col-xl-3">
+            <section aria-labelledby="artist-heading" className="col-12 col-lg-4 col-xl-3">
                 <Card className="mb-4">
                     {artist.image_path && <img alt={artist.name} className="card-img-top" src={artist.image_path} />}
                     <CardBody>
-                        <h1 className="h3 card-title fw-bold mb-3">{artist.name}</h1>
+                        <h1 className="h3 card-title fw-bold mb-3" id="artist-heading">
+                            {artist.name}
+                        </h1>
                         {artist.description ? (
                             <p className="card-text text-secondary">{artist.description}</p>
                         ) : (
@@ -121,10 +123,10 @@ export const ArtistPage = () => {
                         )}
                     </CardBody>
                 </Card>
-            </aside>
+            </section>
 
             {/* Right column: Artist songs and discography */}
-            <main className="col-12 col-lg-8 col-xl-9" id="main-content">
+            <div className="col-12 col-lg-8 col-xl-9">
                 {!user ? (
                     // Prompt unauthenticated visitors to sign in before exploring releases
                     <Card background={"tertiary"} className="text-center" variant="outlined">
@@ -277,7 +279,7 @@ export const ArtistPage = () => {
                         </section>
                     </>
                 )}
-            </main>
+            </div>
         </div>
     );
 };

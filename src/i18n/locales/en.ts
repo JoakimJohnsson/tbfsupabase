@@ -15,7 +15,7 @@ export const en = {
     features: {
         admin: {
             ariaLabels: {
-                sidebar: "Administrator sidebar",
+                editor: "Create or edit",
             },
             artist: {
                 title: "Artist",

@@ -39,7 +39,7 @@ export const LoginPage = () => {
     };
 
     return (
-        <main className="container my-5" id="main-content">
+        <div className="container my-5">
             <div className="row justify-content-center">
                 <div className="col-12 col-sm-8 col-md-6 col-lg-5">
                     <Card className="shadow-sm border">
@@ -90,6 +90,6 @@ export const LoginPage = () => {
                     </Card>
                 </div>
             </div>
-        </main>
+        </div>
     );
 };
