@@ -89,6 +89,7 @@ export const AdminArtistsPage = () => {
     return (
         <AdminPageLayout
             lead={t("features.admin.artists.lead")}
+            breadcrumbs={undefined}
             sidebar={
                 <div className="sticky-top-offset">
                     <ArtistCreate

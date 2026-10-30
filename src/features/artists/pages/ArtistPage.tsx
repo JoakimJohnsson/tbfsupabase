@@ -16,6 +16,7 @@ import { useArtistSongs } from "../../songs/hooks/useArtistSongs";
 import { useAuth } from "../../auth/hooks/useAuth";
 import { RecordBadges } from "../../records/components/RecordBadges";
 import { ArtistMemberItem } from "../components/members/ArtistMemberItem";
+import { Breadcrumbs } from "../../../components/navs/Breadcrumbs";
 
 export const ArtistPage = () => {
     const { t } = useTranslation();
@@ -30,6 +31,13 @@ export const ArtistPage = () => {
         artistSlug,
         loadErrorMessage,
     });
+
+    // Breadcrumbs
+    const breadcrumbItems = [
+        { label: t("navigation.home"), to: "/" },
+        { label: t("navigation.artists"), to: "/artists" },
+        ...(artist ? [{ label: artist.name }] : []),
+    ];
 
     // Public member list accessible to all visitors
     const {
@@ -82,6 +90,7 @@ export const ArtistPage = () => {
 
     return (
         <div className="row g-4">
+            <Breadcrumbs items={breadcrumbItems} />
             {/* Left column: Artist biography and band members */}
             <section aria-labelledby="artist-heading" className="col-12 col-lg-4 col-xl-3">
                 <Card className="mb-4">

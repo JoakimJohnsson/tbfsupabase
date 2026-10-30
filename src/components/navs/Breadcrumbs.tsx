@@ -17,7 +17,7 @@ export const Breadcrumbs = ({ items, className = "" }: IBreadcrumbs) => {
 
     return (
         <nav aria-label="breadcrumb" className={className}>
-            <ol className="breadcrumb mb-3">
+            <ol className="breadcrumb mb-0">
                 {items.map((item, index) => {
                     const isLast = index === items.length - 1;
 

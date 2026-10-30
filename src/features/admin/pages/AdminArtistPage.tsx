@@ -25,6 +25,7 @@ import { ArtistMembersManager } from "../../artists/components/members/ArtistMem
 import { isAbortError } from "../../../lib/asyncHelpers/withAbortSignal";
 import type { Person, SimpleMessage } from "../../../types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Breadcrumbs } from "../../../components/navs/Breadcrumbs";
 
 export const AdminArtistPage = () => {
     const { t } = useTranslation();
@@ -45,6 +46,14 @@ export const AdminArtistPage = () => {
         artistId: artist?.id,
         recordsLoadErrorMessage,
     });
+
+    // Breadcrumbs
+    const breadcrumbItems = [
+        { label: t("navigation.home"), to: "/" },
+        { label: t("navigation.admin"), to: "/admin" },
+        { label: t("navigation.adminArtists"), to: "/admin/artists" },
+        ...(artist ? [{ label: artist.name }] : []),
+    ];
 
     const [availablePersons, setAvailablePersons] = useState<Person[]>([]);
 
@@ -184,7 +193,9 @@ export const AdminArtistPage = () => {
 
     return (
         <AdminPageLayout
-            lead={artist.name}
+            lead={undefined}
+            breadcrumbs={<Breadcrumbs items={breadcrumbItems} />}
+            title={artist.name}
             sidebar={
                 <div className="sticky-top-offset">
                     <FormCard icon={faUserPen} title={t("features.admin.artist.edit.title")}>
@@ -242,7 +253,6 @@ export const AdminArtistPage = () => {
                     </FormCard>
                 </div>
             }
-            title={t("features.admin.artist.title")}
         >
             <Feedback errors={[editError, deleteError, recordsLoadError]} successes={[editSuccess]} />
 
