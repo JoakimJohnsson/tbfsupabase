@@ -356,7 +356,7 @@ export const en = {
         adminRecords: "Admin records",
         adminPersons: "Admin musicians",
         artists: "Artists",
-        home: "TBF home",
+        home: "TBF",
         login: "Login",
         records: "Records",
         songs: "Songs",
