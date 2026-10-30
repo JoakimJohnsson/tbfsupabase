@@ -81,7 +81,7 @@ export const RecordPage = () => {
             </aside>
 
             {/* Right column: Description and track list */}
-            <main className="col-12 col-lg-8 col-xl-9" id="main-content">
+            <div className="col-12 col-lg-8 col-xl-9">
                 {record.description && (
                     <Card className="mb-4">
                         <CardBody>
@@ -159,7 +159,7 @@ export const RecordPage = () => {
                         </ul>
                     )}
                 </section>
-            </main>
+            </div>
         </div>
     );
 };

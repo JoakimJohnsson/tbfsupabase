@@ -90,7 +90,7 @@ describe("SiteLayout page landmarks", () => {
         expect(host.querySelectorAll("main")).toHaveLength(1);
         expect(host.querySelectorAll("#main-content")).toHaveLength(1);
         const main = host.querySelector("main#main-content")!;
-        expect(main.className).toBe("container-fluid py-4 flex-grow-1");
+        expect(main.className).toBe("container-fluid py-3 flex-grow-1");
         expect(main.contains(host.querySelector("header"))).toBe(false);
         expect(main.querySelector(".container-fluid")).toBeNull();
         for (const column of main.querySelectorAll('[class*="col-"], .col')) {
