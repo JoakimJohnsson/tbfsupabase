@@ -21,7 +21,7 @@ export const ArtistsPage = () => {
     }
 
     return (
-        <div className="container-fluid">
+        <>
             <h1 className="mb-4">{t("features.artists.title")}</h1>
             <Feedback warnings={[warning]} />
 
@@ -34,6 +34,6 @@ export const ArtistsPage = () => {
                     ))}
                 </div>
             )}
-        </div>
+        </>
     );
 };

@@ -49,7 +49,7 @@ export const SongsPage = () => {
     }
 
     return (
-        <div className="container-fluid">
+        <>
             <h1>{t("features.songs.title")}</h1>
 
             <SearchToolbar
@@ -147,6 +147,6 @@ export const SongsPage = () => {
                     })}
                 </ul>
             )}
-        </div>
+        </>
     );
 };

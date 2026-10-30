@@ -16,6 +16,12 @@
 Pages and nested layouts must not add another `<main>`. This keeps page headings,
 forms, lists, and loading/error states inside the same main landmark.
 
+`SiteLayout` also owns the shared fluid container and page gutters. Full-width
+pages and nested layouts should use fragments rather than another container.
+Place Bootstrap columns inside rows; rows can sit directly in the shared
+container or in unpadded page sections. The login page intentionally uses a
+centered, responsive `.container` to constrain its form width.
+
 Page-specific breadcrumbs belong inside this landmark, before the page heading
 and outside any multi-column row. When adding breadcrumbs to admin pages, render
 them in `AdminPageLayout` before its `<h1>`; on the artist detail page, place them

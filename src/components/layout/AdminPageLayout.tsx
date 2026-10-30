@@ -12,7 +12,7 @@ export const AdminPageLayout = ({ title, lead, sidebar, children }: AdminPageLay
     const { t } = useTranslation();
 
     return (
-        <div className="container-fluid">
+        <>
             <h1>{title}</h1>
             {lead && <p className="lead">{lead}</p>}
 
@@ -22,6 +22,6 @@ export const AdminPageLayout = ({ title, lead, sidebar, children }: AdminPageLay
                 </section>
                 <div className="col-12 col-lg-7 col-xl-8">{children}</div>
             </div>
-        </div>
+        </>
     );
 };

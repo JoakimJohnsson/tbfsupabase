@@ -38,7 +38,7 @@ export const RecordsPage = () => {
     }
 
     return (
-        <div className="container-fluid">
+        <>
             <h1>{t("features.records.title")}</h1>
 
             <SearchToolbar
@@ -66,6 +66,6 @@ export const RecordsPage = () => {
                     ))}
                 </div>
             )}
-        </div>
+        </>
     );
 };

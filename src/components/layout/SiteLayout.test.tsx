@@ -92,6 +92,10 @@ describe("SiteLayout page landmarks", () => {
         const main = host.querySelector("main#main-content")!;
         expect(main.className).toBe("container-fluid py-4 flex-grow-1");
         expect(main.contains(host.querySelector("header"))).toBe(false);
+        expect(main.querySelector(".container-fluid")).toBeNull();
+        for (const column of main.querySelectorAll('[class*="col-"], .col')) {
+            expect(column.parentElement?.classList.contains("row")).toBe(true);
+        }
         return main;
     };
 
@@ -106,6 +110,21 @@ describe("SiteLayout page landmarks", () => {
     ])("keeps the %s page heading inside a single main landmark", (_name, page) => {
         const main = renderPage(page);
         expect(main.querySelectorAll("h1")).toHaveLength(1);
+    });
+
+    it("keeps the login form in its intentionally constrained container", () => {
+        const main = renderPage(<LoginPage />);
+        expect(
+            main.querySelector(":scope > .container.my-5 > .row.justify-content-center > .col-12 form"),
+        ).not.toBeNull();
+    });
+
+    it("aligns the home hero and artist grid with the shared page container", () => {
+        const main = renderPage(<HomePage />);
+        expect(main.querySelector(":scope > .row.g-0 > .col-xxl-8")).not.toBeNull();
+
+        renderPage(<ArtistPage />);
+        expect(main.querySelector(':scope > .row.g-4 > section[aria-labelledby="artist-heading"]')).not.toBeNull();
     });
 
     it("includes the admin title, introduction, editor, and list in main", () => {

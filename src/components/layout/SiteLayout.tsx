@@ -188,7 +188,7 @@ export const SiteLayout = () => {
             </header>
 
             {/* Main application outlet */}
-            <main className="container-fluid py-4 flex-grow-1" id="main-content">
+            <main className="container-fluid py-3 flex-grow-1" id="main-content">
                 <Outlet />
             </main>
         </div>

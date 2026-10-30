@@ -54,9 +54,9 @@ export const HomePage = () => {
     }
 
     return (
-        <div className="container-fluid">
+        <>
             {/* Hero banner */}
-            <div className="p-4 p-md-5 mb-4 rounded bg-body-tertiary">
+            <div className="row g-0 p-4 p-md-5 mb-4">
                 <div className="col-xxl-8">
                     <h1 className="display-5 fw-bold mb-3">{t("features.home.hero.title")}</h1>
                     <p className="lead text-secondary mb-4">{t("features.home.hero.lead")}</p>
@@ -154,6 +154,6 @@ export const HomePage = () => {
                     ))}
                 </div>
             </section>
-        </div>
+        </>
     );
 };

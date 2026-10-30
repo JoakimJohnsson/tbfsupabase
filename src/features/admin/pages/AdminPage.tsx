@@ -59,7 +59,7 @@ export const AdminPage = () => {
     }
 
     return (
-        <div className="container-fluid">
+        <>
             <h1>{t("features.admin.dashboard.title")}</h1>
             <p className="lead">{t("features.admin.dashboard.lead")}</p>
 
@@ -225,6 +225,6 @@ export const AdminPage = () => {
                     </Card>
                 </div>
             </div>
-        </div>
+        </>
     );
 };
