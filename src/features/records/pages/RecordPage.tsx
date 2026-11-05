@@ -58,9 +58,8 @@ export const RecordPage = () => {
 
     return (
         <>
+            <Breadcrumbs items={breadcrumbItems} />
             <div className="row g-4">
-                <Breadcrumbs items={breadcrumbItems} />
-
                 {/* Left column: Cover and record metadata */}
                 <section aria-labelledby={"record-heading"} className="col-12 col-lg-4 col-xl-3">
                     <Card className="mb-4">
