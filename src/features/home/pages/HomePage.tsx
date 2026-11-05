@@ -118,7 +118,7 @@ export const HomePage = () => {
                 <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
                     {previewRecords.map((record: RecordWithArtists) => (
                         <div className="col" key={record.id}>
-                            <RecordCard record={record} />
+                            <RecordCard record={record} to={`/records/${record.id}`} />
                         </div>
                     ))}
                 </div>
