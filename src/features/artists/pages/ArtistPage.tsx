@@ -1,14 +1,12 @@
-import { useState } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router";
 import { useTranslation } from "react-i18next";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCompactDisc, faMusic, faPlay, faStop, faUserGroup } from "@fortawesome/pro-solid-svg-icons";
+import { faUserGroup } from "@fortawesome/pro-solid-svg-icons";
 import { Card } from "../../../components/cards/Card";
 import { CardBody } from "../../../components/cards/CardBody";
 import { Feedback } from "../../../components/feedback/Feedback";
 import { SimpleSpinner } from "../../../components/spinners/SimpleSpinner";
-import { ListRowItem } from "../../../components/lists/ListRowItem";
-import { ToolButton } from "../../../components/buttons/ToolButton";
+import { SongList } from "../../songs/components/SongList";
 import { useArtist } from "../hooks/useArtist";
 import { useArtistRecords } from "../../records/hooks/useArtistRecords";
 import { useArtistMembers } from "../hooks/useArtistMembers";
@@ -24,7 +22,6 @@ export const ArtistPage = () => {
     const { user } = useAuth();
     const location = useLocation();
     const navigate = useNavigate();
-    const [activeSongUrl, setActiveSongUrl] = useState<string | null>(null);
 
     const loadErrorMessage = t("features.artist.error.loadError");
     const { artist, loadError, loading } = useArtist({
@@ -63,14 +60,6 @@ export const ArtistPage = () => {
         artistId: user ? artist?.id : undefined,
         loadErrorMessage: t("features.artist.songsLoadError"),
     });
-
-    const handleTogglePlay = (audioPath: string) => {
-        if (activeSongUrl === audioPath) {
-            setActiveSongUrl(null);
-        } else {
-            setActiveSongUrl(audioPath);
-        }
-    };
 
     if (loadError) {
         return <Feedback errors={[loadError]} />;
@@ -150,23 +139,6 @@ export const ArtistPage = () => {
                 ) : (
                     // Authenticated members can view tracks and releases
                     <>
-                        {/* Audio player when a song is playing */}
-                        {activeSongUrl && (
-                            <div className="card bg-body-secondary shadow-sm mb-4 border">
-                                <div className="card-body p-3 d-flex align-items-center gap-3">
-                                    <FontAwesomeIcon className="text-primary fs-4 flex-shrink-0" icon={faMusic} />
-                                    <audio
-                                        autoPlay
-                                        className="w-100"
-                                        controls
-                                        key={activeSongUrl}
-                                        onEnded={() => setActiveSongUrl(null)}
-                                        src={activeSongUrl}
-                                    />
-                                </div>
-                            </div>
-                        )}
-
                         {/* Releases section */}
                         <section aria-labelledby="artist-records-heading" className={"mb-5"}>
                             <h2 className="h4 fw-bold mb-3" id="artist-records-heading">
@@ -221,71 +193,13 @@ export const ArtistPage = () => {
 
                             {songsLoading ? (
                                 <SimpleSpinner />
-                            ) : songs.length === 0 ? (
-                                <p className="text-muted">{t("features.artist.songsEmpty")}</p>
                             ) : (
-                                <ul className="list-group shadow-sm">
-                                    {songs.map((song) => {
-                                        const hasAudio = Boolean(song.audio_path?.trim());
-                                        const isPlaying = activeSongUrl === song.audio_path;
-
-                                        return (
-                                            <ListRowItem
-                                                actions={
-                                                    hasAudio ? (
-                                                        <ToolButton
-                                                            ariaLabel={
-                                                                isPlaying
-                                                                    ? `${t("common.stop")} ${song.name}`
-                                                                    : `${t("common.play")} ${song.name}`
-                                                            }
-                                                            icon={isPlaying ? faStop : faPlay}
-                                                            onClick={() => handleTogglePlay(song.audio_path)}
-                                                            size="sm"
-                                                            text={isPlaying ? t("common.stop") : t("common.play")}
-                                                            variant={isPlaying ? "primary" : "outline-success"}
-                                                        />
-                                                    ) : undefined
-                                                }
-                                                className={`py-2${isPlaying ? " bg-primary-subtle" : ""}`}
-                                                key={song.id}
-                                            >
-                                                <div className="d-flex align-items-center gap-3 min-w-0">
-                                                    <div className="tbf-song-record-thumb">
-                                                        {song.records?.cover_path ? (
-                                                            <img
-                                                                alt={song.records.name}
-                                                                className="w-100 h-100 object-fit-cover"
-                                                                src={song.records.cover_path}
-                                                            />
-                                                        ) : (
-                                                            <FontAwesomeIcon
-                                                                className="text-secondary"
-                                                                icon={faCompactDisc}
-                                                            />
-                                                        )}
-                                                    </div>
-
-                                                    <div className="min-w-0">
-                                                        <div
-                                                            className={`fw-semibold text-truncate ${hasAudio ? "text-success" : ""}`}
-                                                        >
-                                                            {song.name}
-                                                        </div>
-                                                        {song.records && (
-                                                            <div className="small text-secondary text-truncate">
-                                                                <span>{song.records.name}</span>
-                                                                {song.records.year && (
-                                                                    <span> ({song.records.year})</span>
-                                                                )}
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                </div>
-                                            </ListRowItem>
-                                        );
-                                    })}
-                                </ul>
+                                <SongList
+                                    showCover
+                                    showRecordInfo
+                                    songs={songs}
+                                    emptyMessage={t("features.artist.songsEmpty")}
+                                />
                             )}
                         </section>
                     </>
