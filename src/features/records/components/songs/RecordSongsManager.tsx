@@ -292,15 +292,10 @@ export const RecordSongsManager = ({ availableArtists, defaultArtistIds = [], re
                         <ol className="list-group mb-3">
                             {songs.map((song) => {
                                 const isEditing = editingSongId === song.id;
-                                const artistNames = song.song_artists
-                                    .map((sa) => sa.artists?.name)
-                                    .filter(Boolean)
-                                    .join(", ");
 
                                 return (
                                     <Fragment key={song.id}>
                                         <RecordSongsToolRow
-                                            artistNames={artistNames}
                                             handleCancelEdit={() => {
                                                 setEditingSongId(null);
                                                 setEditAudioFile(null);
