@@ -89,8 +89,8 @@ export const HomePage = () => {
     return (
         <>
             {/* Hero banner */}
-            <div className="row g-5 p-4 p-md-5 mb-4">
-                <div className="col-12">
+            <div className="row g-5 mb-4">
+                <div className="col-12 p-4 p-md-5">
                     <h1 className="display-5 fw-bold mb-3">{t("features.home.hero.title")}</h1>
                     <p className="lead text-secondary mb-4">{t("features.home.hero.lead")}</p>
                     <div className="d-flex flex-wrap gap-3">

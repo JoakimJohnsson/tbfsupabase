@@ -57,53 +57,57 @@ export const RecordPage = () => {
     }));
 
     return (
-        <div className="row g-4">
-            <Breadcrumbs items={breadcrumbItems} />
+        <>
+            <div className="row g-4">
+                <Breadcrumbs items={breadcrumbItems} />
 
-            {/* Left column: Cover and record metadata */}
-            <aside className="col-12 col-lg-4 col-xl-3">
-                <Card className="mb-4">
-                    {record.cover_path ? (
-                        <img alt={record.name} className="card-img-top" src={record.cover_path} />
-                    ) : (
-                        <div className="text-center py-5 bg-body-tertiary text-secondary">
-                            <FontAwesomeIcon icon={faCompactDisc} size="4x" />
-                        </div>
-                    )}
-                    <CardBody>
-                        <h1 className="h3 card-title fw-bold mb-2">{record.name}</h1>
-                        <p className="text-secondary small mb-3">
-                            {artistNames} {record.year && <span>({record.year})</span>}
-                        </p>
-                        <RecordBadges format={record.format} type={record.type} />
-                    </CardBody>
-                </Card>
-            </aside>
-
-            {/* Right column: Description and song list */}
-            <div className="col-12 col-lg-8 col-xl-9">
-                {record.description && (
+                {/* Left column: Cover and record metadata */}
+                <section aria-labelledby={"record-heading"} className="col-12 col-lg-4 col-xl-3">
                     <Card className="mb-4">
+                        {record.cover_path ? (
+                            <img alt={record.name} className="card-img-top" src={record.cover_path} />
+                        ) : (
+                            <div className="text-center py-5 bg-body-tertiary text-secondary">
+                                <FontAwesomeIcon icon={faCompactDisc} size="4x" />
+                            </div>
+                        )}
                         <CardBody>
-                            <h2 className="h5 fw-bold mb-2">{t("forms.description")}</h2>
-                            <p className="card-text text-secondary mb-0">{record.description}</p>
+                            <h1 className="h3 card-title fw-bold mb-2" id="record-heading">
+                                {record.name}
+                            </h1>
+                            <p className="text-secondary small mb-3">
+                                {artistNames} {record.year && <span>({record.year})</span>}
+                            </p>
+                            <RecordBadges format={record.format} type={record.type} />
                         </CardBody>
                     </Card>
-                )}
-
-                <section aria-labelledby="record-songs-heading">
-                    <h2 className="h4 fw-bold mb-3" id="record-songs-heading">
-                        {t("features.songs.title")}
-                    </h2>
-
-                    <SongList
-                        emptyMessage={t("features.songs.empty")}
-                        showCover={false}
-                        showRecordInfo={false}
-                        songs={songsWithRecord}
-                    />
                 </section>
+
+                {/* Right column: Description and song list */}
+                <div className="col-12 col-lg-8 col-xl-9">
+                    {record.description && (
+                        <Card className="mb-4">
+                            <CardBody>
+                                <h2 className="h5 fw-bold mb-2">{t("forms.description")}</h2>
+                                <p className="card-text text-secondary mb-0">{record.description}</p>
+                            </CardBody>
+                        </Card>
+                    )}
+
+                    <section aria-labelledby="record-songs-heading">
+                        <h2 className="h4 fw-bold mb-3" id="record-songs-heading">
+                            {t("features.songs.title")}
+                        </h2>
+
+                        <SongList
+                            emptyMessage={t("features.songs.empty")}
+                            showCover={false}
+                            showRecordInfo={false}
+                            songs={songsWithRecord}
+                        />
+                    </section>
+                </div>
             </div>
-        </div>
+        </>
     );
 };
