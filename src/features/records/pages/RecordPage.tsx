@@ -10,7 +10,6 @@ import { Breadcrumbs } from "../../../components/navs/Breadcrumbs";
 import { useRecord } from "../hooks/useRecord";
 import { RecordBadges } from "../components/RecordBadges";
 import { SongList } from "../../songs/components/SongList";
-import { sortSongsByTrackNumber } from "../../../lib/helpers/sortHelpers";
 
 export const RecordPage = () => {
     const { t } = useTranslation();
@@ -47,17 +46,15 @@ export const RecordPage = () => {
         .join(", ");
 
     // Ensure that the songs are sent with the record reference if needed
-    const songsWithRecord = sortSongsByTrackNumber(
-        (record.songs ?? []).map((song) => ({
-            ...song,
-            records: {
-                id: record.id,
-                name: record.name,
-                year: record.year,
-                cover_path: record.cover_path,
-            },
-        })),
-    );
+    const songsWithRecord = (record.songs ?? []).map((song) => ({
+        ...song,
+        records: {
+            id: record.id,
+            name: record.name,
+            year: record.year,
+            cover_path: record.cover_path,
+        },
+    }));
 
     return (
         <div className="row g-4">
