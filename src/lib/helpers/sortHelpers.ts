@@ -8,3 +8,13 @@ export const shuffle = <T>(items: readonly T[]): T[] => {
 
     return shuffled;
 };
+
+export const sortSongsByTrackNumber = <T extends { track_number: number | null; name: string }>(songs: T[]): T[] => {
+    return [...songs].sort((a, b) => {
+        if (a.track_number === null && b.track_number === null) return a.name.localeCompare(b.name, "sv");
+        if (a.track_number === null) return 1;
+        if (b.track_number === null) return -1;
+        if (a.track_number !== b.track_number) return a.track_number - b.track_number;
+        return a.name.localeCompare(b.name, "sv");
+    });
+};

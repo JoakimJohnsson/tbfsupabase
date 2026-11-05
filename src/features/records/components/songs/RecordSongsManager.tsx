@@ -15,22 +15,13 @@ import type { Artist, SimpleMessage, SongWithArtists } from "../../../../types";
 import { RecordSongsEdit } from "./RecordSongsEdit";
 import { RecordSongsToolRow } from "./RecordSongsToolRow";
 import { RecordSongsAdd } from "./RecordSongsAdd";
+import { sortSongsByTrackNumber } from "../../../../lib/helpers/sortHelpers";
 
 interface IRecordSongsManager {
     availableArtists: Artist[];
     defaultArtistIds?: string[];
     recordId: string;
 }
-
-const sortSongs = (list: SongWithArtists[]) => {
-    return [...list].sort((a, b) => {
-        if (a.track_number === null && b.track_number === null) return a.name.localeCompare(b.name, "sv");
-        if (a.track_number === null) return 1;
-        if (b.track_number === null) return -1;
-        if (a.track_number !== b.track_number) return a.track_number - b.track_number;
-        return a.name.localeCompare(b.name, "sv");
-    });
-};
 
 export const RecordSongsManager = ({ availableArtists, defaultArtistIds = [], recordId }: IRecordSongsManager) => {
     const { t } = useTranslation();
@@ -157,7 +148,7 @@ export const RecordSongsManager = ({ availableArtists, defaultArtistIds = [], re
                 song_artists: mapArtistRelations(selectedArtistIds),
             };
 
-            setSongs((cur) => sortSongs([...cur, withArtists]));
+            setSongs((cur) => sortSongsByTrackNumber([...cur, withArtists]));
             setSongName("");
             setTrackNumber("");
             setAudioFile(null);
@@ -238,7 +229,7 @@ export const RecordSongsManager = ({ availableArtists, defaultArtistIds = [], re
                 song_artists: mapArtistRelations(editArtistIds),
             };
 
-            setSongs((cur) => sortSongs(cur.map((s) => (s.id === updated.id ? withArtists : s))));
+            setSongs((cur) => sortSongsByTrackNumber(cur.map((s) => (s.id === updated.id ? withArtists : s))));
             setEditingSongId(null);
             setEditAudioFile(null);
             setActionFeedback({

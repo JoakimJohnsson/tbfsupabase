@@ -27,13 +27,17 @@ export const RecordToolRow = ({
     const { t } = useTranslation();
     const deleteRecordText =
         deletingRecordId === record.id ? t("features.admin.records.deleteRecord.deleting") : t("common.delete");
+    const deleteRecordLabel =
+        deletingRecordId === record.id
+            ? t("features.admin.records.deleteRecord.deleting")
+            : `${t("common.delete")} ${record.name.toLowerCase()}`;
 
     return (
         <ListRowItem
             actions={
                 <>
                     <ToolButton
-                        ariaLabel={isEditing ? t("common.cancel") : t("common.edit")}
+                        ariaLabel={isEditing ? t("common.cancel") : `${t("common.edit")} ${record.name.toLowerCase()}`}
                         icon={isEditing ? faXmark : faPenToSquare}
                         onClick={() => (isEditing ? handleCancelEdit() : handleStartEdit(record))}
                         size="sm"
@@ -41,7 +45,7 @@ export const RecordToolRow = ({
                         variant={isEditing ? "secondary" : "outline-secondary"}
                     />
                     <ToolButton
-                        ariaLabel={deleteRecordText}
+                        ariaLabel={deleteRecordLabel}
                         disabled={isEditing || deletingRecordId !== null}
                         icon={faTrashCan}
                         onClick={() => {

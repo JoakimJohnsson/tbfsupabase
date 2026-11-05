@@ -29,7 +29,7 @@ export const RecordSongsToolRow = ({
             actions={
                 <>
                     <ToolButton
-                        ariaLabel={isEditing ? t("common.cancel") : t("common.edit")}
+                        ariaLabel={isEditing ? t("common.cancel") : `${t("common.edit")} ${song.name.toLowerCase()}`}
                         icon={isEditing ? faXmark : faPenToSquare}
                         onClick={() => (isEditing ? handleCancelEdit() : handleStartEdit(song))}
                         size="sm"
@@ -37,7 +37,7 @@ export const RecordSongsToolRow = ({
                         variant={isEditing ? "secondary" : "outline-secondary"}
                     />
                     <ToolButton
-                        ariaLabel={t("common.delete")}
+                        ariaLabel={`${t("common.delete")} ${song.name.toLowerCase()}`}
                         disabled={isEditing}
                         icon={faTrashCan}
                         onClick={() => {
