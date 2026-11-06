@@ -31,6 +31,48 @@ Use labelled `<section>` elements for primary-content groups such as admin
 editors and artist details. Reserve `<aside>` for genuinely supplementary content,
 not simply content displayed in a side column.
 
+## Audio player
+
+`PlayerProvider` wraps the router so playback survives page navigation.
+`SiteLayout` renders `BottomPlayer` at the bottom of the viewport once a song is
+selected, including while paused. It shares the song-list playback state and
+provides play/pause, elapsed and total time, seeking, and volume controls.
+The timeline is enabled after audio metadata loads; volume is retained across
+song changes. Playback failures are shown in the player.
+
+Starting a song in `SongList` captures that list's displayed order as the queue.
+When a track ends, the next track with an audio path starts automatically.
+Tracks without audio are skipped and playback stops at the end without looping.
+`playNext()` and `playPrevious()` move to the next or previous playable track,
+starting it from the beginning; at queue boundaries they leave playback unchanged.
+Pausing, resuming from `BottomPlayer`, and page navigation retain the queue.
+Starting a different song without a supplied list creates a single-song queue.
+`BottomPlayer` includes previous/next buttons, disabled at queue boundaries.
+Closing the player stops and unloads the audio, clears the queue and timing,
+and hides the player until another song is selected. Volume is retained.
+
+The Shuffle button toggles a randomized queue with the current track first,
+without interrupting playback. Each other playable track follows once, without
+looping; previous/next follow that same shuffled order. Turning shuffle off
+restores the original list order while keeping the current track and position.
+Shuffle stays enabled across pause, navigation, and new list selections, but
+resets when the player is closed.
+
+Repeat is a separate toggle that wraps the queue in both directions, including
+a single-track queue. With shuffle enabled, repeat loops the same shuffled order.
+Both toggles reset on close. Logged-in users can start TBF Radio from the home
+page: it loads the full song catalogue in pages, skips tracks without audio,
+and starts a random track with shuffle and repeat enabled.
+
+## Catalogue filters and sorting
+
+`RecordsPage` combines text search with one format chip and one type chip.
+Clicking an active chip or its "All" button clears that filter. Sort records
+or songs by newest year, oldest year, or title; songs use their record's year.
+Missing years sort last in either direction, with titles breaking year ties.
+Records default to newest first and songs to title order. The song playback
+queue follows the displayed, filtered and sorted list when a track is started.
+
 ## Local files - Git ignored
 
 ### Font Awesome

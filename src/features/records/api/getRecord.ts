@@ -33,6 +33,7 @@ export const getRecord = async (recordId: string, signal?: AbortSignal): Promise
         `,
         )
         .eq("id", recordId)
+        .order("track_number", { referencedTable: "songs", ascending: true })
         .single();
 
     const { data, error } = await withAbortSignal(query, signal);

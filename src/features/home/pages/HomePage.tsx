@@ -12,13 +12,19 @@ import { CardBody } from "../../../components/cards/CardBody";
 import { ArtistListItem } from "../../artists/components/ArtistListItem";
 import { RecordCard } from "../../records/components/RecordCard";
 import type { RecordWithArtists } from "../../../types";
+import { useAuth } from "../../auth/hooks/useAuth";
+import { shuffle } from "../../../lib/helpers/sortHelpers";
+import { RadioButton } from "../components/RadioButton";
 
 // Maximum number of preview items to showcase on the landing page
 const PREVIEW_RECORDS_COUNT = 4;
+const RANDOM_RECORDS_COUNT = 4;
 const PREVIEW_ARTISTS_COUNT = 6;
+const RANDOM_ARTISTS_COUNT = 6;
 
 export const HomePage = () => {
     const { t } = useTranslation();
+    const { user } = useAuth();
 
     const {
         artists,
@@ -41,9 +47,37 @@ export const HomePage = () => {
 
     // Pick top preview records (already sorted by year descending from API)
     const previewRecords = useMemo(() => records.slice(0, PREVIEW_RECORDS_COUNT), [records]);
+    // Pick random records from the remaining ones
+    const randomRecords = useMemo(() => {
+        const previewIds = new Set(previewRecords.map((record) => record.id));
+        const remaining = records.filter((record) => !previewIds.has(record.id));
 
-    // Pick a curated slice of artists for the landing showcase
+        for (let i = remaining.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [remaining[i], remaining[j]] = [remaining[j], remaining[i]];
+        }
+
+        return remaining.slice(0, RANDOM_RECORDS_COUNT);
+    }, [records, previewRecords]);
+
+    // Pick top preview artists
     const previewArtists = useMemo(() => artists.slice(0, PREVIEW_ARTISTS_COUNT), [artists]);
+    // Pick random artists from the remaining ones
+    const randomArtists = useMemo(() => {
+        const previewIds = new Set(previewArtists.map((artist) => artist.id));
+        const remaining = artists.filter((artist) => !previewIds.has(artist.id));
+
+        for (let i = remaining.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [remaining[i], remaining[j]] = [remaining[j], remaining[i]];
+        }
+
+        return remaining.slice(0, RANDOM_ARTISTS_COUNT);
+    }, [artists, previewArtists]);
+
+    const mixedRecords = useMemo(() => shuffle([...previewRecords, ...randomRecords]), [previewRecords, randomRecords]);
+
+    const mixedArtists = useMemo(() => shuffle([...previewArtists, ...randomArtists]), [previewArtists, randomArtists]);
 
     if (loading) {
         return <SimpleSpinner message={t("common.loading")} />;
@@ -56,26 +90,27 @@ export const HomePage = () => {
     return (
         <>
             {/* Hero banner */}
-            <div className="row g-0 p-4 p-md-5 mb-4">
-                <div className="col-xxl-8">
+            <div className="row mb-5">
+                <div className="col-12">
                     <h1 className="display-5 fw-bold mb-3">{t("features.home.hero.title")}</h1>
                     <p className="lead text-secondary mb-4">{t("features.home.hero.lead")}</p>
-                    <div className="d-flex flex-wrap gap-2">
+                    <div className="d-flex flex-wrap gap-3 mb-4">
                         <Link className="btn btn-primary btn-lg px-4" to="/artists">
                             <FontAwesomeIcon className="me-2" icon={faUserGroup} />
                             {t("features.home.hero.exploreArtists")}
                         </Link>
-                        <Link className="btn btn-outline-secondary btn-lg px-4" to="/records">
-                            <FontAwesomeIcon className="me-2" icon={faCompactDisc} />
-                            {t("features.home.hero.exploreRecords")}
-                        </Link>
+
+                        {user && (
+                            <Link className="btn btn-outline-secondary btn-lg px-4" to="/records">
+                                <FontAwesomeIcon className="me-2" icon={faCompactDisc} />
+                                {t("features.home.hero.exploreRecords")}
+                            </Link>
+                        )}
                     </div>
                 </div>
-            </div>
 
-            {/* Quick stats counter */}
-            <div className="row g-3 mb-5">
-                <div className="col-6 col-md-3">
+                {/* Quick stats counter */}
+                <div className="col-12 col-sm-6 col-md-3 mb-3">
                     <Card>
                         <CardBody className="text-center py-3">
                             <div className="display-6 fw-bold text-primary mb-1">{artists.length}</div>
@@ -85,7 +120,7 @@ export const HomePage = () => {
                         </CardBody>
                     </Card>
                 </div>
-                <div className="col-6 col-md-3">
+                <div className="col-12 col-sm-6 col-md-3 mb-3">
                     <Card>
                         <CardBody className="text-center py-3">
                             <div className="display-6 fw-bold text-primary mb-1">{records.length}</div>
@@ -95,6 +130,7 @@ export const HomePage = () => {
                         </CardBody>
                     </Card>
                 </div>
+                {user && <RadioButton />}
             </div>
 
             {/* Latest releases showcase */}
@@ -116,9 +152,9 @@ export const HomePage = () => {
                 </div>
 
                 <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
-                    {previewRecords.map((record: RecordWithArtists) => (
+                    {mixedRecords.map((record: RecordWithArtists) => (
                         <div className="col" key={record.id}>
-                            <RecordCard record={record} />
+                            <RecordCard record={record} to={user ? `/records/${record.id}` : undefined} />
                         </div>
                     ))}
                 </div>
@@ -143,7 +179,7 @@ export const HomePage = () => {
                 </div>
 
                 <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-                    {previewArtists.map((artist) => (
+                    {mixedArtists.map((artist) => (
                         <div className="col" key={artist.id}>
                             <Card className="h-100 p-2">
                                 <CardBody className="p-2">

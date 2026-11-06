@@ -3,11 +3,10 @@ import { faPenToSquare, faTrashCan, faXmark } from "@fortawesome/pro-solid-svg-i
 import { ToolButton } from "../../../../components/buttons/ToolButton";
 import { ListRowItem } from "../../../../components/lists/ListRowItem";
 import type { SongWithArtists } from "../../../../types";
-import { SongListItem } from "./SongListItem";
+import { SongListItemContent } from "../../../songs/components/SongListItemContent";
 
 interface IRecordSongsToolRow {
     song: SongWithArtists;
-    artistNames: string;
     isEditing: boolean;
     handleStartEdit: (song: SongWithArtists) => void;
     handleCancelEdit: () => void;
@@ -16,7 +15,6 @@ interface IRecordSongsToolRow {
 
 export const RecordSongsToolRow = ({
     song,
-    artistNames,
     isEditing,
     handleStartEdit,
     handleCancelEdit,
@@ -29,7 +27,7 @@ export const RecordSongsToolRow = ({
             actions={
                 <>
                     <ToolButton
-                        ariaLabel={isEditing ? t("common.cancel") : t("common.edit")}
+                        ariaLabel={isEditing ? t("common.cancel") : `${t("common.edit")} ${song.name.toLowerCase()}`}
                         icon={isEditing ? faXmark : faPenToSquare}
                         onClick={() => (isEditing ? handleCancelEdit() : handleStartEdit(song))}
                         size="sm"
@@ -37,7 +35,7 @@ export const RecordSongsToolRow = ({
                         variant={isEditing ? "secondary" : "outline-secondary"}
                     />
                     <ToolButton
-                        ariaLabel={t("common.delete")}
+                        ariaLabel={`${t("common.delete")} ${song.name.toLowerCase()}`}
                         disabled={isEditing}
                         icon={faTrashCan}
                         onClick={() => {
@@ -51,7 +49,7 @@ export const RecordSongsToolRow = ({
             }
             className={`py-2${isEditing ? " bg-primary-subtle" : ""}`}
         >
-            <SongListItem artistNames={artistNames} song={song} />
+            <SongListItemContent song={song} />
         </ListRowItem>
     );
 };

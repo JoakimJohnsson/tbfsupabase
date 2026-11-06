@@ -1,0 +1,57 @@
+.tbf-bottom-player {
+    flex-shrink: 0;
+    padding-bottom: calc(1rem + env(safe-area-inset-bottom)) !important;
+
+    &__controls {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        grid-template-areas:
+            "song song close"
+            "play play play"
+            "timeline timeline timeline"
+            "volume volume volume";
+        align-items: center;
+        gap: 0.75rem;
+
+        @include media-breakpoint-up(lg) {
+            grid-template-columns: minmax(0, 1fr) auto minmax(0, 2fr) 8rem auto;
+            grid-template-areas: "song play timeline volume close";
+            gap: 1rem;
+        }
+    }
+
+    &__song {
+        grid-area: song;
+        min-width: 0;
+
+        .min-w-0 {
+            min-width: 0;
+        }
+    }
+
+    &__play {
+        grid-area: play;
+        flex-wrap: wrap;
+    }
+
+    &__timeline {
+        grid-area: timeline;
+        min-width: 0;
+
+        span {
+            font-variant-numeric: tabular-nums;
+        }
+
+        input {
+            min-width: 0;
+        }
+    }
+
+    &__volume {
+        grid-area: volume;
+    }
+
+    &__close {
+        grid-area: close;
+    }
+}

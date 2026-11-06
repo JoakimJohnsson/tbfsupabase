@@ -15,7 +15,7 @@ export const AdminPageLayout = ({ title, lead, sidebar, children, breadcrumbs }:
     return (
         <>
             {breadcrumbs}
-            <h1 className={"mt-3"}>{title}</h1>
+            <h1>{title}</h1>
             {lead && <p className="lead">{lead}</p>}
 
             <div className="row g-4">

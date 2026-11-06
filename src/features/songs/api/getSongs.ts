@@ -2,11 +2,17 @@ import { supabase } from "../../../lib/supabase/client";
 import { withAbortSignal } from "../../../lib/asyncHelpers/withAbortSignal";
 import type { SongWithRecordAndArtists } from "../../../types";
 
-export const getSongs = async (signal?: AbortSignal): Promise<SongWithRecordAndArtists[]> => {
-    const query = supabase
-        .from("songs")
-        .select(
-            `
+export const getSongs = async (
+    signal?: AbortSignal,
+    { all = false }: { all?: boolean } = {},
+): Promise<SongWithRecordAndArtists[]> => {
+    const songs: SongWithRecordAndArtists[] = [];
+    const pageSize = 500;
+    do {
+        const query = supabase
+            .from("songs")
+            .select(
+                `
             *,
             records (
                 id,
@@ -24,14 +30,22 @@ export const getSongs = async (signal?: AbortSignal): Promise<SongWithRecordAndA
                 )
             )
         `,
-        )
-        .order("name", { ascending: true });
+            )
+            .order("name", { ascending: true })
+            .order("id", { ascending: true });
 
-    const { data, error } = await withAbortSignal(query, signal);
+        const { data, error } = await withAbortSignal(
+            all ? query.range(songs.length, songs.length + pageSize - 1) : query,
+            signal,
+        );
 
-    if (error) {
-        throw error;
-    }
+        if (error) {
+            throw error;
+        }
 
-    return (data ?? []) as unknown as SongWithRecordAndArtists[];
+        const page = (data ?? []) as unknown as SongWithRecordAndArtists[];
+        songs.push(...page);
+        if (!all || page.length < pageSize) return songs;
+    } while (!signal?.aborted);
+    throw new DOMException("Song loading aborted", "AbortError");
 };

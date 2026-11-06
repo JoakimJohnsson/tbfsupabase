@@ -5,9 +5,10 @@ import type { SongWithRecordAndArtists } from "../../../types";
 
 type UseSongsOptions = {
     loadErrorMessage: string;
+    all?: boolean;
 };
 
-export const useSongs = ({ loadErrorMessage }: UseSongsOptions) => {
+export const useSongs = ({ loadErrorMessage, all = false }: UseSongsOptions) => {
     const [songs, setSongs] = useState<SongWithRecordAndArtists[]>([]);
     const [loading, setLoading] = useState(true);
     const [hasLoadError, setHasLoadError] = useState(false);
@@ -20,7 +21,7 @@ export const useSongs = ({ loadErrorMessage }: UseSongsOptions) => {
             setHasLoadError(false);
 
             try {
-                const data = await getSongs(controller.signal);
+                const data = await getSongs(controller.signal, { all });
                 if (!controller.signal.aborted) {
                     setSongs(data);
                 }
@@ -42,7 +43,7 @@ export const useSongs = ({ loadErrorMessage }: UseSongsOptions) => {
         return () => {
             controller.abort();
         };
-    }, []);
+    }, [all]);
 
     return {
         songs,
