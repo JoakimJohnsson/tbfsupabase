@@ -31,6 +31,15 @@ Use labelled `<section>` elements for primary-content groups such as admin
 editors and artist details. Reserve `<aside>` for genuinely supplementary content,
 not simply content displayed in a side column.
 
+## Audio player
+
+`PlayerProvider` wraps the router so playback survives page navigation.
+`SiteLayout` renders `BottomPlayer` at the bottom of the viewport once a song is
+selected, including while paused. It shares the song-list playback state and
+provides play/pause, elapsed and total time, seeking, and volume controls.
+The timeline is enabled after audio metadata loads; volume is retained across
+song changes. Playback failures are shown in the player.
+
 ## Local files - Git ignored
 
 ### Font Awesome

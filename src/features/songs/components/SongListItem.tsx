@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { faPlay, faStop } from "@fortawesome/pro-solid-svg-icons";
+import { faPlay, faPause } from "@fortawesome/pro-solid-svg-icons";
 import { ListRowItem } from "../../../components/lists/ListRowItem";
 import { ToolButton } from "../../../components/buttons/ToolButton";
 import type { SongWithRecordAndArtists } from "../../../types";
@@ -23,10 +23,10 @@ export const SongListItem = ({ song, showCover = false, showRecordInfo = false }
             actions={
                 hasAudio ? (
                     <ToolButton
-                        icon={isCurrent ? faStop : faPlay}
+                        icon={isCurrent ? faPause : faPlay}
                         onClick={() => togglePlay(song)}
                         variant={isCurrent ? "primary" : "outline-primary"}
-                        text={isCurrent ? t("common.stop") : t("common.play")}
+                        text={isCurrent ? t("common.pause") : t("common.play")}
                     />
                 ) : undefined
             }

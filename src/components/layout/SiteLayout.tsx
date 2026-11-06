@@ -3,6 +3,7 @@ import { Link, NavLink, Outlet } from "react-router";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../../features/auth/hooks/useAuth";
 import { signOut } from "../../features/auth/api/signOut";
+import { BottomPlayer } from "../../features/player/components/BottomPlayer";
 
 export const SiteLayout = () => {
     const { t } = useTranslation();
@@ -185,6 +186,7 @@ export const SiteLayout = () => {
             <main className="container-fluid px-3 px-md-5 py-5 flex-grow-1" id="main-content">
                 <Outlet />
             </main>
+            <BottomPlayer />
         </div>
     );
 };

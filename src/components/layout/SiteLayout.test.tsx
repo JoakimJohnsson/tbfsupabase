@@ -5,6 +5,7 @@ import { MemoryRouter, Route, Routes } from "react-router";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import "../../i18n/i18n";
 import { SiteLayout } from "./SiteLayout";
+import { PlayerProvider } from "../../features/player/PlayerProvider";
 import { AdminPageLayout } from "./AdminPageLayout";
 import { AdminLayout } from "./AdminLayout";
 import { AuthenticatedLayout } from "./AuthenticatedLayout";
@@ -78,13 +79,15 @@ describe("SiteLayout page landmarks", () => {
     const renderPage = (page: ReactNode) => {
         act(() =>
             root.render(
-                <MemoryRouter>
-                    <Routes>
-                        <Route element={<SiteLayout />}>
-                            <Route index element={page} />
-                        </Route>
-                    </Routes>
-                </MemoryRouter>,
+                <PlayerProvider>
+                    <MemoryRouter>
+                        <Routes>
+                            <Route element={<SiteLayout />}>
+                                <Route index element={page} />
+                            </Route>
+                        </Routes>
+                    </MemoryRouter>
+                </PlayerProvider>,
             ),
         );
         expect(host.querySelectorAll("main")).toHaveLength(1);

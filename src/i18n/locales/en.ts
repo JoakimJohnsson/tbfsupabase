@@ -4,6 +4,7 @@ export const en = {
         delete: "Delete",
         edit: "Edit",
         play: "Play",
+        pause: "Pause",
         playing: "Playing",
         stop: "Stop",
         loading: "Loading...",
@@ -13,6 +14,12 @@ export const en = {
         save: "Save",
     },
     features: {
+        player: {
+            title: "Audio player",
+            position: "Playback position",
+            volume: "Volume",
+            playbackError: "Could not play this audio. Please try again.",
+        },
         admin: {
             ariaLabels: {
                 editor: "Create or edit",
