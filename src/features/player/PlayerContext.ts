@@ -4,6 +4,8 @@ import type { SongWithRecordAndArtists } from "../../types";
 export type PlayerContextValue = {
     currentSong: SongWithRecordAndArtists | null;
     queue: SongWithRecordAndArtists[];
+    isShuffling: boolean;
+    toggleShuffle: () => void;
     isPlaying: boolean;
     currentTime: number;
     duration: number;

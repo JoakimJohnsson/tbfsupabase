@@ -431,6 +431,89 @@ describe("persistent audio player", () => {
         expect(host.querySelector('[role="alert"]')).toBeNull();
     });
 
+    it("toggles shuffle without interrupting playback and restores the original order", async () => {
+        vi.spyOn(Math, "random").mockReturnValue(0);
+        const thirdSong = { ...song, id: "song-3", audio_path: "/third.mp3" };
+        const songs = [song, nextSong, thirdSong];
+        await act(async () => player.playSong(song, songs));
+        loadMetadata(120);
+        act(() => player.seekTo(35));
+        const shuffle = host.querySelector<HTMLButtonElement>('button[aria-label="Shuffle"]')!;
+        expect(shuffle.getAttribute("aria-pressed")).toBe("false");
+        click(shuffle);
+        expect(shuffle.getAttribute("aria-pressed")).toBe("true");
+        expect(shuffle.classList.contains("btn-primary")).toBe(true);
+        expect(player.isShuffling).toBe(true);
+        expect(player.queue).toEqual([song, thirdSong, nextSong]);
+        expect(songs).toEqual([song, nextSong, thirdSong]);
+        expect(player.currentTime).toBe(35);
+        expect(player.isPlaying).toBe(true);
+        expect(audio.play).toHaveBeenCalledOnce();
+        await act(async () => player.playNext());
+        expect(player.currentSong?.id).toBe(thirdSong.id);
+        click(shuffle);
+        expect(player.queue).toEqual(songs);
+        expect(player.currentSong?.id).toBe(thirdSong.id);
+        expect(player.isShuffling).toBe(false);
+        expect(player.hasNext).toBe(false);
+        expect(audio.play).toHaveBeenCalledTimes(2);
+        await act(async () => player.playPrevious());
+        expect(player.currentSong?.id).toBe(nextSong.id);
+    });
+
+    it("automatically plays the shuffled queue once and previous follows the same order", async () => {
+        vi.spyOn(Math, "random").mockReturnValue(0);
+        const thirdSong = { ...song, id: "song-3", audio_path: "/third.mp3" };
+        await act(async () => player.playSong(song, [song, nextSong, thirdSong, silentSong]));
+        act(() => player.toggleShuffle());
+        expect(player.queue).toEqual([song, thirdSong, silentSong, nextSong]);
+        await act(async () => audio.dispatchEvent(new Event("ended")));
+        expect(player.currentSong?.id).toBe(thirdSong.id);
+        await act(async () => player.playPrevious());
+        expect(player.currentSong?.id).toBe(song.id);
+        await act(async () => audio.dispatchEvent(new Event("ended")));
+        expect(player.currentSong?.id).toBe(thirdSong.id);
+        await act(async () => audio.dispatchEvent(new Event("ended")));
+        expect(player.currentSong?.id).toBe(nextSong.id);
+        expect(player.hasNext).toBe(false);
+        await act(async () => audio.dispatchEvent(new Event("ended")));
+        expect(player.isPlaying).toBe(false);
+        expect(player.currentSong?.id).toBe(nextSong.id);
+    });
+
+    it("retains shuffle order on resume and navigation, and reshuffles new list selections", async () => {
+        vi.spyOn(Math, "random").mockReturnValue(0);
+        await act(async () => player.playSong(nextSong, [song, nextSong, silentSong]));
+        act(() => player.toggleShuffle());
+        const shuffled = [...player.queue];
+        expect(shuffled[0]).toEqual(nextSong);
+        click(host.querySelector('section button[aria-label="Pause"]'));
+        await act(async () => click(host.querySelector('section button[aria-label="Play"]')));
+        click(host.querySelector('a[href="/next"]'));
+        expect(player.isShuffling).toBe(true);
+        expect(player.queue).toEqual(shuffled);
+        const thirdSong = { ...song, id: "song-3", audio_path: "/third.mp3" };
+        await act(async () => player.playSong(song, [song, nextSong, thirdSong]));
+        expect(player.queue).toEqual([song, thirdSong, nextSong]);
+        act(() => player.toggleShuffle());
+        expect(player.queue).toEqual([song, nextSong, thirdSong]);
+    });
+
+    it("supports single-track shuffle and resets it when closing", async () => {
+        act(() => player.toggleShuffle());
+        expect(player.isShuffling).toBe(false);
+        await startSong();
+        act(() => player.toggleShuffle());
+        expect(player.queue).toEqual([song]);
+        expect(player.hasNext).toBe(false);
+        expect(player.hasPrevious).toBe(false);
+        click(host.querySelector('section button[aria-label="Close player"]'));
+        expect(player.isShuffling).toBe(false);
+        await startSong();
+        expect(player.queue).toEqual([song]);
+        expect(player.isShuffling).toBe(false);
+    });
+
     it("ignores pending playback rejection after closing", async () => {
         let rejectPlay: (error: Error) => void = () => {};
         vi.mocked(audio.play).mockImplementationOnce(

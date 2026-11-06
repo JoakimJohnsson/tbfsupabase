@@ -4,7 +4,7 @@
 
     &__controls {
         display: grid;
-        grid-template-columns: minmax(0, 1fr) 5rem auto;
+        grid-template-columns: auto minmax(0, 1fr) auto;
         grid-template-areas:
             "song song close"
             "play volume volume"
@@ -12,7 +12,7 @@
         align-items: center;
         gap: 0.75rem;
 
-        @include media-breakpoint-up(md) {
+        @include media-breakpoint-up(lg) {
             grid-template-columns: minmax(0, 1fr) auto minmax(0, 2fr) 8rem auto;
             grid-template-areas: "song play timeline volume close";
             gap: 1rem;

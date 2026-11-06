@@ -1,4 +1,4 @@
-import { faBackwardStep, faForwardStep, faPause, faPlay, faXmark } from "@fortawesome/pro-solid-svg-icons";
+import { faBackwardStep, faForwardStep, faPause, faPlay, faShuffle, faXmark } from "@fortawesome/pro-solid-svg-icons";
 import { useTranslation } from "react-i18next";
 import { ToolButton } from "../../../components/buttons/ToolButton";
 import { SongListItemContent } from "../../songs/components/SongListItemContent";
@@ -26,6 +26,8 @@ export const BottomPlayer = () => {
         hasNext,
         hasPrevious,
         closePlayer,
+        isShuffling,
+        toggleShuffle,
     } = usePlayer();
 
     if (!currentSong) return null;
@@ -40,6 +42,13 @@ export const BottomPlayer = () => {
                     <SongListItemContent showCover song={currentSong} />
                 </div>
                 <div className="tbf-bottom-player__play d-flex align-items-center gap-2">
+                    <ToolButton
+                        ariaLabel={t("features.player.shuffle")}
+                        ariaPressed={isShuffling}
+                        icon={faShuffle}
+                        onClick={toggleShuffle}
+                        variant={isShuffling ? "primary" : "outline-secondary"}
+                    />
                     <ToolButton
                         ariaLabel={t("features.player.previous")}
                         disabled={!hasPrevious}

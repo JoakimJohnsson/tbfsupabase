@@ -25,6 +25,7 @@ type ToolButtonIconOnlyProps = ToolButtonBaseProps & {
 };
 
 type ToolButtonButtonProps = {
+    ariaPressed?: boolean;
     onClick?: () => void;
     type?: "button" | "submit" | "reset";
     href?: never;
@@ -146,10 +147,17 @@ export const ToolButton = (props: ToolButtonProps) => {
         );
     }
 
-    const { onClick, type = "button" } = props;
+    const { onClick, type = "button", ariaPressed } = props;
 
     return (
-        <button aria-label={accessibleLabel} className={classNames} onClick={onClick} type={type} disabled={disabled}>
+        <button
+            aria-label={accessibleLabel}
+            aria-pressed={ariaPressed}
+            className={classNames}
+            onClick={onClick}
+            type={type}
+            disabled={disabled}
+        >
             {commonContent}
         </button>
     );

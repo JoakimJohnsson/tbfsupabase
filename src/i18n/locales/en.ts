@@ -19,6 +19,7 @@ export const en = {
             previous: "Previous track",
             next: "Next track",
             close: "Close player",
+            shuffle: "Shuffle",
             position: "Playback position",
             volume: "Volume",
             playbackError: "Could not play this audio. Please try again.",

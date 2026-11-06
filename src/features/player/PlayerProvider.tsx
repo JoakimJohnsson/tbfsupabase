@@ -2,9 +2,20 @@ import { useState, useRef, useEffect, useCallback, type ReactNode } from "react"
 import { PlayerContext } from "./PlayerContext";
 import type { SongWithRecordAndArtists } from "../../types";
 
+const shuffleQueue = (songs: SongWithRecordAndArtists[], currentSong: SongWithRecordAndArtists) => {
+    const remaining = songs.filter((song) => song.id !== currentSong.id);
+    for (let i = remaining.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [remaining[i], remaining[j]] = [remaining[j], remaining[i]];
+    }
+    return [currentSong, ...remaining];
+};
+
 export const PlayerProvider = ({ children }: { children: ReactNode }) => {
     const [currentSong, setCurrentSong] = useState<SongWithRecordAndArtists | null>(null);
     const [queue, setQueue] = useState<SongWithRecordAndArtists[]>([]);
+    const [originalQueue, setOriginalQueue] = useState<SongWithRecordAndArtists[]>([]);
+    const [isShuffling, setIsShuffling] = useState(false);
     const [isPlaying, setIsPlaying] = useState(false);
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
@@ -38,22 +49,7 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
         if (audioRef.current) audioRef.current.volume = volume;
     }, [volume]);
 
-    const playSong = (song: SongWithRecordAndArtists, songs?: SongWithRecordAndArtists[]) => {
-        if (!song.audio_path?.trim()) {
-            console.error("Cannot play a song without an audio path", song.id);
-            return;
-        }
-
-        if (songs) {
-            if (!songs.some((item) => item.id === song.id)) {
-                console.error("Cannot play a song outside the supplied queue", song.id);
-                return;
-            }
-            setQueue([...songs]);
-        } else if (currentSong?.id !== song.id) {
-            setQueue([song]);
-        }
-
+    const selectSong = (song: SongWithRecordAndArtists) => {
         if (currentSong?.id === song.id) {
             startPlayback();
             return;
@@ -65,6 +61,33 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
         setIsPlaying(false);
         setPlaybackError(false);
         setCurrentSong(song);
+    };
+
+    const playSong = (song: SongWithRecordAndArtists, songs?: SongWithRecordAndArtists[]) => {
+        if (!song.audio_path?.trim()) {
+            console.error("Cannot play a song without an audio path", song.id);
+            return;
+        }
+
+        if (songs) {
+            if (!songs.some((item) => item.id === song.id)) {
+                console.error("Cannot play a song outside the supplied queue", song.id);
+                return;
+            }
+            setOriginalQueue([...songs]);
+            setQueue(isShuffling ? shuffleQueue(songs, song) : [...songs]);
+        } else if (currentSong?.id !== song.id) {
+            setOriginalQueue([song]);
+            setQueue([song]);
+        }
+
+        selectSong(song);
+    };
+
+    const toggleShuffle = () => {
+        if (!currentSong) return;
+        setQueue(isShuffling ? [...originalQueue] : shuffleQueue(originalQueue, currentSong));
+        setIsShuffling(!isShuffling);
     };
 
     const pauseSong = () => {
@@ -82,6 +105,8 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
         }
         setCurrentSong(null);
         setQueue([]);
+        setOriginalQueue([]);
+        setIsShuffling(false);
         setCurrentTime(0);
         setDuration(0);
         setPlaybackError(false);
@@ -97,12 +122,12 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
 
     const playNext = () => {
         const song = adjacentSong(1);
-        if (song) playSong(song, queue);
+        if (song) selectSong(song);
     };
 
     const playPrevious = () => {
         const song = adjacentSong(-1);
-        if (song) playSong(song, queue);
+        if (song) selectSong(song);
     };
 
     const seekTo = (time: number) => {
@@ -138,6 +163,8 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
             value={{
                 currentSong,
                 queue,
+                isShuffling,
+                toggleShuffle,
                 isPlaying,
                 currentTime,
                 duration,

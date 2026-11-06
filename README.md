@@ -51,6 +51,13 @@ Starting a different song without a supplied list creates a single-song queue.
 Closing the player stops and unloads the audio, clears the queue and timing,
 and hides the player until another song is selected. Volume is retained.
 
+The Shuffle button toggles a randomized queue with the current track first,
+without interrupting playback. Each other playable track follows once, without
+looping; previous/next follow that same shuffled order. Turning shuffle off
+restores the original list order while keeping the current track and position.
+Shuffle stays enabled across pause, navigation, and new list selections, but
+resets when the player is closed.
+
 ## Local files - Git ignored
 
 ### Font Awesome
