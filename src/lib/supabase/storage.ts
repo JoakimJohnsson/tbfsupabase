@@ -3,7 +3,7 @@ import { supabase } from "./client";
 export const IMAGES_BUCKET = "images";
 export const AUDIO_BUCKET = "audio";
 
-export type ImageFolder = "records" | "artists" | "persons";
+export type ImageFolder = "records" | "artists" | "persons" | "profiles";
 
 export const uploadImage = async (file: File, folder: ImageFolder, customFileName?: string): Promise<string> => {
     const fileExt = file.name.split(".").pop()?.toLowerCase() || "jpg";

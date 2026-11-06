@@ -126,6 +126,7 @@ export type Database = {
           display_name: string | null
           first_name: string | null
           id: string
+          image_path: string | null
           is_admin: boolean
           last_name: string | null
         }
@@ -134,6 +135,7 @@ export type Database = {
           display_name?: string | null
           first_name?: string | null
           id: string
+          image_path?: string | null
           is_admin?: boolean
           last_name?: string | null
         }
@@ -142,6 +144,7 @@ export type Database = {
           display_name?: string | null
           first_name?: string | null
           id?: string
+          image_path?: string | null
           is_admin?: boolean
           last_name?: string | null
         }

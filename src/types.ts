@@ -137,6 +137,7 @@ export type AuthContextValue = {
     session: Session | null;
     user: User | null;
     profile: Profile | null;
+    setProfile: (profile: Profile) => void;
     isLoading: boolean;
 };
 

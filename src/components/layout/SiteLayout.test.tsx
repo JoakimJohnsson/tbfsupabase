@@ -54,7 +54,13 @@ describe("SiteLayout page landmarks", () => {
         host = document.createElement("div");
         document.body.append(host);
         root = createRoot(host);
-        vi.mocked(useAuth).mockReturnValue({ user: null, profile: null, session: null, isLoading: false });
+        vi.mocked(useAuth).mockReturnValue({
+            user: null,
+            profile: null,
+            session: null,
+            setProfile: vi.fn(),
+            isLoading: false,
+        });
         vi.mocked(useArtist).mockReturnValue({
             artist: {
                 id: "artist-1",
@@ -142,6 +148,7 @@ describe("SiteLayout page landmarks", () => {
             user: { id: "user-1", email: "member@example.com" } as NonNullable<ReturnType<typeof useAuth>["user"]>,
             profile: null,
             session: null,
+            setProfile: vi.fn(),
             isLoading: false,
         });
         renderPage(<HomePage />);
@@ -249,7 +256,13 @@ describe("SiteLayout page landmarks", () => {
         ["admin", <AdminLayout />],
         ["member", <AuthenticatedLayout />],
     ])("preserves main while the %s route guard is loading", (_name, layout) => {
-        vi.mocked(useAuth).mockReturnValue({ user: null, profile: null, session: null, isLoading: true });
+        vi.mocked(useAuth).mockReturnValue({
+            user: null,
+            profile: null,
+            session: null,
+            setProfile: vi.fn(),
+            isLoading: true,
+        });
         expect(renderPage(layout).querySelector('[role="status"]')).not.toBeNull();
     });
 });

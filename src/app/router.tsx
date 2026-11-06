@@ -15,6 +15,7 @@ import { RecordsPage } from "../features/records/pages/RecordsPage";
 import { SongsPage } from "../features/songs/pages/SongsPage";
 import { AdminPersonsPage } from "../features/admin/pages/AdminPersonsPage";
 import { RecordPage } from "../features/records/pages/RecordPage";
+import { ProfilePage } from "../features/profile/pages/ProfilePage";
 
 export const router = createBrowserRouter([
     {
@@ -43,6 +44,10 @@ export const router = createBrowserRouter([
             {
                 element: <AuthenticatedLayout />,
                 children: [
+                    {
+                        path: "profile",
+                        element: <ProfilePage />,
+                    },
                     {
                         path: "records",
                         element: <RecordsPage />,

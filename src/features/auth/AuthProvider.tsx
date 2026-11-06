@@ -94,14 +94,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
     // If there is an active session/user but we haven't fetched their profile yet,
     // the auth layer is still loading!
-    const isProfilePending = Boolean(
-        session?.user && profile === null && !isProfileLoading,
-    );
+    const isProfilePending = Boolean(session?.user && profile === null && !isProfileLoading);
 
     const value = {
         session,
         user: session?.user ?? null,
         profile,
+        setProfile,
         isLoading: isSessionLoading || isProfileLoading || isProfilePending,
     };
 

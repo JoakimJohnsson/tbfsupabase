@@ -325,6 +325,16 @@ export const en = {
             empty: "No tracks found.",
             loadError: "Could not load tracks.",
         },
+        profile: {
+            title: "My profile",
+            lead: "Manage your account profile.",
+            email: "Email address",
+            image: "Profile picture",
+            save: "Save profile picture",
+            saved: "Profile picture updated.",
+            saveError: "Could not update your profile picture.",
+            cleanupWarning: "Your profile picture was saved, but the previous image could not be removed.",
+        },
     },
     catalogue: {
         allFormats: "All formats",
