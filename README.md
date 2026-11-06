@@ -40,6 +40,14 @@ provides play/pause, elapsed and total time, seeking, and volume controls.
 The timeline is enabled after audio metadata loads; volume is retained across
 song changes. Playback failures are shown in the player.
 
+Starting a song in `SongList` captures that list's displayed order as the queue.
+When a track ends, the next track with an audio path starts automatically.
+Tracks without audio are skipped and playback stops at the end without looping.
+`playNext()` and `playPrevious()` move to the next or previous playable track,
+starting it from the beginning; at queue boundaries they leave playback unchanged.
+Pausing, resuming from `BottomPlayer`, and page navigation retain the queue.
+Starting a different song without a supplied list creates a single-song queue.
+
 ## Local files - Git ignored
 
 ### Font Awesome

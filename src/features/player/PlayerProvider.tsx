@@ -4,6 +4,7 @@ import type { SongWithRecordAndArtists } from "../../types";
 
 export const PlayerProvider = ({ children }: { children: ReactNode }) => {
     const [currentSong, setCurrentSong] = useState<SongWithRecordAndArtists | null>(null);
+    const [queue, setQueue] = useState<SongWithRecordAndArtists[]>([]);
     const [isPlaying, setIsPlaying] = useState(false);
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
@@ -37,10 +38,20 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
         if (audioRef.current) audioRef.current.volume = volume;
     }, [volume]);
 
-    const playSong = (song: SongWithRecordAndArtists) => {
+    const playSong = (song: SongWithRecordAndArtists, songs?: SongWithRecordAndArtists[]) => {
         if (!song.audio_path?.trim()) {
             console.error("Cannot play a song without an audio path", song.id);
             return;
+        }
+
+        if (songs) {
+            if (!songs.some((item) => item.id === song.id)) {
+                console.error("Cannot play a song outside the supplied queue", song.id);
+                return;
+            }
+            setQueue([...songs]);
+        } else if (currentSong?.id !== song.id) {
+            setQueue([song]);
         }
 
         if (currentSong?.id === song.id) {
@@ -60,6 +71,24 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
         playRequest.current++;
         audioRef.current?.pause();
         setIsPlaying(false);
+    };
+
+    const adjacentSong = (direction: 1 | -1) => {
+        const index = queue.findIndex((song) => song.id === currentSong?.id);
+        if (index < 0) return;
+        for (let i = index + direction; i >= 0 && i < queue.length; i += direction) {
+            if (queue[i].audio_path?.trim()) return queue[i];
+        }
+    };
+
+    const playNext = () => {
+        const song = adjacentSong(1);
+        if (song) playSong(song, queue);
+    };
+
+    const playPrevious = () => {
+        const song = adjacentSong(-1);
+        if (song) playSong(song, queue);
     };
 
     const seekTo = (time: number) => {
@@ -82,11 +111,11 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
         setVolume(Math.min(Math.max(value, 0), 1));
     };
 
-    const togglePlay = (song: SongWithRecordAndArtists) => {
+    const togglePlay = (song: SongWithRecordAndArtists, songs?: SongWithRecordAndArtists[]) => {
         if (currentSong?.id === song.id && isPlaying) {
             pauseSong();
         } else {
-            playSong(song);
+            playSong(song, songs);
         }
     };
 
@@ -94,6 +123,7 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
         <PlayerContext
             value={{
                 currentSong,
+                queue,
                 isPlaying,
                 currentTime,
                 duration,
@@ -102,6 +132,8 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
                 seekTo,
                 setVolume: changeVolume,
                 playSong,
+                playNext,
+                playPrevious,
                 pauseSong,
                 togglePlay,
             }}
@@ -112,7 +144,10 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
                 src={currentSong?.audio_path || undefined}
                 onPlay={() => setIsPlaying(true)}
                 onPause={() => setIsPlaying(false)}
-                onEnded={() => setIsPlaying(false)}
+                onEnded={() => {
+                    setIsPlaying(false);
+                    playNext();
+                }}
                 onTimeUpdate={(event) => setCurrentTime(event.currentTarget.currentTime)}
                 onSeeked={(event) => setCurrentTime(event.currentTarget.currentTime)}
                 onVolumeChange={(event) => setVolume(event.currentTarget.volume)}

@@ -17,7 +17,13 @@ export const SongList = ({ songs, emptyMessage, showCover = false, showRecordInf
     return (
         <ul className="list-group shadow-sm mb-4">
             {songs.map((song) => (
-                <SongListItem key={song.id} showCover={showCover} showRecordInfo={showRecordInfo} song={song} />
+                <SongListItem
+                    key={song.id}
+                    showCover={showCover}
+                    showRecordInfo={showRecordInfo}
+                    song={song}
+                    songs={songs}
+                />
             ))}
         </ul>
     );

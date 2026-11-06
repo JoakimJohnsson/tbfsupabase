@@ -5,7 +5,7 @@ import { Link, MemoryRouter, Route, Routes } from "react-router";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import "../../i18n/i18n";
 import { SiteLayout } from "../../components/layout/SiteLayout";
-import { SongListItem } from "../songs/components/SongListItem";
+import { SongList } from "../songs/components/SongList";
 import type { SongWithRecordAndArtists } from "../../types";
 import { PlayerProvider } from "./PlayerProvider";
 import { usePlayer } from "./hooks/usePlayer";
@@ -34,6 +34,7 @@ const song: SongWithRecordAndArtists = {
     records: { id: "record-1", name: "Example Record", year: 2026, cover_path: "/cover.jpg" },
 };
 const nextSong = { ...song, id: "song-2", name: "Next Song", audio_path: "/next.mp3" };
+const silentSong = { ...song, id: "silent-song", audio_path: "" };
 
 describe("persistent audio player", () => {
     let host: HTMLDivElement;
@@ -95,9 +96,7 @@ describe("persistent audio player", () => {
                                     index
                                     element={
                                         <>
-                                            <ul>
-                                                <SongListItem song={song} />
-                                            </ul>
+                                            <SongList songs={[song, silentSong, nextSong]} />
                                             <Link to="/next">Next page</Link>
                                         </>
                                     }
@@ -251,6 +250,116 @@ describe("persistent audio player", () => {
         act(() => audio.dispatchEvent(new Event("ended")));
         expect(player.isPlaying).toBe(false);
         expect(host.querySelector('section button[aria-label="Play"]')).not.toBeNull();
+    });
+
+    it("automatically starts the next playable track from SongList when audio ends", async () => {
+        await act(async () => click(host.querySelector('main button[aria-label="Play"]')));
+        expect(player.queue).toEqual([song, silentSong, nextSong]);
+        loadMetadata(120);
+        act(() => player.seekTo(120));
+        await act(async () => audio.dispatchEvent(new Event("ended")));
+        expect(player.currentSong?.id).toBe(nextSong.id);
+        expect(audio.getAttribute("src")).toBe("/next.mp3");
+        expect(audio.play).toHaveBeenCalledTimes(2);
+        expect(player.isPlaying).toBe(true);
+        expect(player.currentTime).toBe(0);
+        expect(player.duration).toBe(0);
+        expect(player.queue).toEqual([song, silentSong, nextSong]);
+        expect(host.querySelector('section[aria-label="Audio player"]')?.textContent).toContain("Next Song");
+
+        await act(async () => audio.dispatchEvent(new Event("ended")));
+        expect(player.currentSong?.id).toBe(nextSong.id);
+        expect(player.isPlaying).toBe(false);
+        expect(audio.play).toHaveBeenCalledTimes(2);
+    });
+
+    it("starts at the selected track and advances in the supplied list order", async () => {
+        const thirdSong = { ...song, id: "song-3", audio_path: "/third.mp3" };
+        const songs = [thirdSong, nextSong, song];
+        await act(async () => player.playSong(nextSong, songs));
+        expect(player.queue).toEqual(songs);
+        await act(async () => audio.dispatchEvent(new Event("ended")));
+        expect(player.currentSong?.id).toBe(song.id);
+        await act(async () => player.playPrevious());
+        expect(player.currentSong?.id).toBe(nextSong.id);
+    });
+
+    it("supports next and previous while skipping missing audio in both directions", async () => {
+        await act(async () =>
+            player.playSong(song, [song, silentSong, { ...silentSong, id: "blank", audio_path: " " }, nextSong]),
+        );
+        await act(async () => player.playNext());
+        expect(player.currentSong?.id).toBe(nextSong.id);
+        act(() => player.pauseSong());
+        await act(async () => player.playPrevious());
+        expect(player.currentSong?.id).toBe(song.id);
+        expect(player.isPlaying).toBe(true);
+        expect(audio.play).toHaveBeenCalledTimes(3);
+    });
+
+    it("leaves playback unchanged at queue boundaries and before selecting a song", async () => {
+        act(() => {
+            player.playNext();
+            player.playPrevious();
+        });
+        expect(player.queue).toEqual([]);
+        expect(audio.play).not.toHaveBeenCalled();
+        await startSong();
+        act(() => {
+            player.playNext();
+            player.playPrevious();
+        });
+        expect(audio.play).toHaveBeenCalledOnce();
+        expect(player.isPlaying).toBe(true);
+    });
+
+    it("keeps the queue through bottom-player pause, resume and page navigation", async () => {
+        await act(async () => click(host.querySelector('main button[aria-label="Play"]')));
+        click(host.querySelector('section button[aria-label="Pause"]'));
+        await act(async () => click(host.querySelector('section button[aria-label="Play"]')));
+        click(host.querySelector('a[href="/next"]'));
+        expect(player.queue).toEqual([song, silentSong, nextSong]);
+        await act(async () => audio.dispatchEvent(new Event("ended")));
+        expect(player.currentSong?.id).toBe(nextSong.id);
+        expect(player.isPlaying).toBe(true);
+    });
+
+    it("replaces the queue on a new list selection even when resuming the same song", async () => {
+        await act(async () => player.playSong(song, [song, nextSong]));
+        act(() => player.pauseSong());
+        await act(async () => player.togglePlay(song, [nextSong, song]));
+        expect(player.queue).toEqual([nextSong, song]);
+        await act(async () => audio.dispatchEvent(new Event("ended")));
+        expect(player.currentSong?.id).toBe(song.id);
+        expect(player.isPlaying).toBe(false);
+        await act(async () => player.playSong(nextSong));
+        expect(player.queue).toEqual([nextSong]);
+    });
+
+    it("captures the queue without retaining a mutable list reference", async () => {
+        const songs = [song, nextSong];
+        await act(async () => player.playSong(song, songs));
+        songs.pop();
+        expect(player.queue).toEqual([song, nextSong]);
+        await act(async () => audio.dispatchEvent(new Event("ended")));
+        expect(player.currentSong?.id).toBe(nextSong.id);
+    });
+
+    it("stops after the last playable track when only tracks without audio remain", async () => {
+        await act(async () => player.playSong(song, [song, silentSong]));
+        await act(async () => audio.dispatchEvent(new Event("ended")));
+        expect(player.currentSong?.id).toBe(song.id);
+        expect(player.isPlaying).toBe(false);
+        expect(audio.play).toHaveBeenCalledOnce();
+    });
+
+    it("rejects a selected song missing from the supplied queue", async () => {
+        const log = vi.spyOn(console, "error").mockImplementation(() => {});
+        await act(async () => player.playSong(song, [nextSong]));
+        expect(player.currentSong).toBeNull();
+        expect(player.queue).toEqual([]);
+        expect(audio.play).not.toHaveBeenCalled();
+        expect(log).toHaveBeenCalledOnce();
     });
 
     it("reports a rejected playback request and allows retry", async () => {

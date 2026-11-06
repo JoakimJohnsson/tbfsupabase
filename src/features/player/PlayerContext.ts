@@ -3,6 +3,7 @@ import type { SongWithRecordAndArtists } from "../../types";
 
 export type PlayerContextValue = {
     currentSong: SongWithRecordAndArtists | null;
+    queue: SongWithRecordAndArtists[];
     isPlaying: boolean;
     currentTime: number;
     duration: number;
@@ -10,9 +11,11 @@ export type PlayerContextValue = {
     playbackError: boolean;
     seekTo: (time: number) => void;
     setVolume: (volume: number) => void;
-    playSong: (song: SongWithRecordAndArtists) => void;
+    playSong: (song: SongWithRecordAndArtists, songs?: SongWithRecordAndArtists[]) => void;
+    playNext: () => void;
+    playPrevious: () => void;
     pauseSong: () => void;
-    togglePlay: (song: SongWithRecordAndArtists) => void;
+    togglePlay: (song: SongWithRecordAndArtists, songs?: SongWithRecordAndArtists[]) => void;
 };
 
 export const PlayerContext = createContext<PlayerContextValue | null>(null);
