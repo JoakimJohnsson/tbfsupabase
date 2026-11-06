@@ -16,6 +16,9 @@ export const en = {
     features: {
         player: {
             title: "Audio player",
+            previous: "Previous track",
+            next: "Next track",
+            close: "Close player",
             position: "Playback position",
             volume: "Volume",
             playbackError: "Could not play this audio. Please try again.",

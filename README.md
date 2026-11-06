@@ -47,6 +47,9 @@ Tracks without audio are skipped and playback stops at the end without looping.
 starting it from the beginning; at queue boundaries they leave playback unchanged.
 Pausing, resuming from `BottomPlayer`, and page navigation retain the queue.
 Starting a different song without a supplied list creates a single-song queue.
+`BottomPlayer` includes previous/next buttons, disabled at queue boundaries.
+Closing the player stops and unloads the audio, clears the queue and timing,
+and hides the player until another song is selected. Volume is retained.
 
 ## Local files - Git ignored
 

@@ -4,16 +4,17 @@
 
     &__controls {
         display: grid;
-        grid-template-columns: minmax(0, 1fr) auto 5rem;
+        grid-template-columns: minmax(0, 1fr) 5rem auto;
         grid-template-areas:
-            "song play volume"
+            "song song close"
+            "play volume volume"
             "timeline timeline timeline";
         align-items: center;
         gap: 0.75rem;
 
         @include media-breakpoint-up(md) {
-            grid-template-columns: minmax(0, 1fr) auto minmax(0, 2fr) 8rem;
-            grid-template-areas: "song play timeline volume";
+            grid-template-columns: minmax(0, 1fr) auto minmax(0, 2fr) 8rem auto;
+            grid-template-areas: "song play timeline volume close";
             gap: 1rem;
         }
     }
@@ -46,5 +47,9 @@
 
     &__volume {
         grid-area: volume;
+    }
+
+    &__close {
+        grid-area: close;
     }
 }

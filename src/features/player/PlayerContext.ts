@@ -14,6 +14,9 @@ export type PlayerContextValue = {
     playSong: (song: SongWithRecordAndArtists, songs?: SongWithRecordAndArtists[]) => void;
     playNext: () => void;
     playPrevious: () => void;
+    hasNext: boolean;
+    hasPrevious: boolean;
+    closePlayer: () => void;
     pauseSong: () => void;
     togglePlay: (song: SongWithRecordAndArtists, songs?: SongWithRecordAndArtists[]) => void;
 };

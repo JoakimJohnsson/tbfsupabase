@@ -73,6 +73,20 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
         setIsPlaying(false);
     };
 
+    const closePlayer = () => {
+        pauseSong();
+        const audio = audioRef.current;
+        if (audio) {
+            audio.removeAttribute("src");
+            audio.load();
+        }
+        setCurrentSong(null);
+        setQueue([]);
+        setCurrentTime(0);
+        setDuration(0);
+        setPlaybackError(false);
+    };
+
     const adjacentSong = (direction: 1 | -1) => {
         const index = queue.findIndex((song) => song.id === currentSong?.id);
         if (index < 0) return;
@@ -134,6 +148,9 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
                 playSong,
                 playNext,
                 playPrevious,
+                hasNext: Boolean(adjacentSong(1)),
+                hasPrevious: Boolean(adjacentSong(-1)),
+                closePlayer,
                 pauseSong,
                 togglePlay,
             }}
@@ -142,24 +159,33 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
             <audio
                 ref={audioRef}
                 src={currentSong?.audio_path || undefined}
-                onPlay={() => setIsPlaying(true)}
+                onPlay={() => {
+                    if (currentSong) setIsPlaying(true);
+                }}
                 onPause={() => setIsPlaying(false)}
                 onEnded={() => {
                     setIsPlaying(false);
                     playNext();
                 }}
-                onTimeUpdate={(event) => setCurrentTime(event.currentTarget.currentTime)}
-                onSeeked={(event) => setCurrentTime(event.currentTarget.currentTime)}
+                onTimeUpdate={(event) => {
+                    if (currentSong) setCurrentTime(event.currentTarget.currentTime);
+                }}
+                onSeeked={(event) => {
+                    if (currentSong) setCurrentTime(event.currentTarget.currentTime);
+                }}
                 onVolumeChange={(event) => setVolume(event.currentTarget.volume)}
                 onLoadedMetadata={(event) => {
+                    if (!currentSong) return;
                     const length = event.currentTarget.duration;
                     setDuration(Number.isFinite(length) ? length : 0);
                 }}
                 onDurationChange={(event) => {
+                    if (!currentSong) return;
                     const length = event.currentTarget.duration;
                     setDuration(Number.isFinite(length) ? length : 0);
                 }}
                 onError={(event) => {
+                    if (!currentSong) return;
                     playRequest.current++;
                     console.error("Could not load audio", event.currentTarget.error);
                     setIsPlaying(false);

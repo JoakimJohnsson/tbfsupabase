@@ -1,4 +1,4 @@
-import { faPause, faPlay } from "@fortawesome/pro-solid-svg-icons";
+import { faBackwardStep, faForwardStep, faPause, faPlay, faXmark } from "@fortawesome/pro-solid-svg-icons";
 import { useTranslation } from "react-i18next";
 import { ToolButton } from "../../../components/buttons/ToolButton";
 import { SongListItemContent } from "../../songs/components/SongListItemContent";
@@ -11,8 +11,22 @@ const formatTime = (seconds: number) => {
 
 export const BottomPlayer = () => {
     const { t } = useTranslation();
-    const { currentSong, isPlaying, currentTime, duration, volume, playbackError, togglePlay, seekTo, setVolume } =
-        usePlayer();
+    const {
+        currentSong,
+        isPlaying,
+        currentTime,
+        duration,
+        volume,
+        playbackError,
+        togglePlay,
+        seekTo,
+        setVolume,
+        playNext,
+        playPrevious,
+        hasNext,
+        hasPrevious,
+        closePlayer,
+    } = usePlayer();
 
     if (!currentSong) return null;
 
@@ -25,12 +39,24 @@ export const BottomPlayer = () => {
                 <div className="tbf-bottom-player__song min-w-0">
                     <SongListItemContent showCover song={currentSong} />
                 </div>
-                <div className="tbf-bottom-player__play">
+                <div className="tbf-bottom-player__play d-flex align-items-center gap-2">
+                    <ToolButton
+                        ariaLabel={t("features.player.previous")}
+                        disabled={!hasPrevious}
+                        icon={faBackwardStep}
+                        onClick={playPrevious}
+                    />
                     <ToolButton
                         ariaLabel={isPlaying ? t("common.pause") : t("common.play")}
                         icon={isPlaying ? faPause : faPlay}
                         onClick={() => togglePlay(currentSong)}
                         variant="primary"
+                    />
+                    <ToolButton
+                        ariaLabel={t("features.player.next")}
+                        disabled={!hasNext}
+                        icon={faForwardStep}
+                        onClick={playNext}
                     />
                 </div>
                 <div className="tbf-bottom-player__timeline d-flex align-items-center gap-2">
@@ -62,6 +88,9 @@ export const BottomPlayer = () => {
                         value={volume}
                     />
                 </label>
+                <div className="tbf-bottom-player__close">
+                    <ToolButton ariaLabel={t("features.player.close")} icon={faXmark} onClick={closePlayer} />
+                </div>
             </div>
             {playbackError && (
                 <div className="text-danger small mt-2" role="alert">

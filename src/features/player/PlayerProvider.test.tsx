@@ -75,6 +75,7 @@ describe("persistent audio player", () => {
 
     beforeEach(() => {
         vi.stubGlobal("IS_REACT_ACT_ENVIRONMENT", true);
+        vi.spyOn(HTMLMediaElement.prototype, "load").mockImplementation(() => {});
         vi.spyOn(HTMLMediaElement.prototype, "play").mockImplementation(function (this: HTMLMediaElement) {
             this.dispatchEvent(new Event("play"));
             return Promise.resolve();
@@ -360,6 +361,90 @@ describe("persistent audio player", () => {
         expect(player.queue).toEqual([]);
         expect(audio.play).not.toHaveBeenCalled();
         expect(log).toHaveBeenCalledOnce();
+    });
+
+    it("navigates with the player buttons and disables unavailable directions", async () => {
+        const button = (label: string) =>
+            host.querySelector<HTMLButtonElement>(`section button[aria-label="${label}"]`)!;
+        await act(async () => click(host.querySelector('main button[aria-label="Play"]')));
+        expect(button("Previous track").disabled).toBe(true);
+        expect(button("Next track").disabled).toBe(false);
+        await act(async () => click(button("Next track")));
+        expect(player.currentSong?.id).toBe(nextSong.id);
+        expect(player.isPlaying).toBe(true);
+        expect(button("Previous track").disabled).toBe(false);
+        expect(button("Next track").disabled).toBe(true);
+        await act(async () => click(button("Previous track")));
+        expect(player.currentSong?.id).toBe(song.id);
+        expect(player.isPlaying).toBe(true);
+        expect(button("Previous track").disabled).toBe(true);
+        await act(async () => player.playSong(nextSong));
+        expect(button("Previous track").disabled).toBe(true);
+        expect(button("Next track").disabled).toBe(true);
+    });
+
+    it.each([false, true])("fully closes the player when paused is %s and allows restarting", async (paused) => {
+        await act(async () => click(host.querySelector('main button[aria-label="Play"]')));
+        loadMetadata(120);
+        act(() => {
+            player.seekTo(35);
+            player.setVolume(0.25);
+            if (paused) player.pauseSong();
+        });
+        click(host.querySelector('section button[aria-label="Close player"]'));
+        expect(audio.pause).toHaveBeenCalled();
+        expect(audio.load).toHaveBeenCalledOnce();
+        expect(audio.hasAttribute("src")).toBe(false);
+        expect(player.currentSong).toBeNull();
+        expect(player.queue).toEqual([]);
+        expect(player.isPlaying).toBe(false);
+        expect(player.currentTime).toBe(0);
+        expect(player.duration).toBe(0);
+        expect(player.playbackError).toBe(false);
+        expect(player.volume).toBe(0.25);
+        expect(host.querySelector('section[aria-label="Audio player"]')).toBeNull();
+        expect(host.querySelector('main button[aria-label="Pause"]')).toBeNull();
+        act(() => {
+            audio.dispatchEvent(new Event("ended"));
+            audio.dispatchEvent(new Event("timeupdate"));
+            audio.dispatchEvent(new Event("durationchange"));
+            audio.dispatchEvent(new Event("error"));
+        });
+        expect(player.currentSong).toBeNull();
+        expect(player.currentTime).toBe(0);
+        expect(player.duration).toBe(0);
+        expect(player.playbackError).toBe(false);
+        await act(async () => click(host.querySelector('main button[aria-label="Play"]')));
+        expect(player.currentSong?.id).toBe(song.id);
+        expect(player.queue).toEqual([song, silentSong, nextSong]);
+        expect(player.isPlaying).toBe(true);
+        expect(audio.volume).toBe(0.25);
+    });
+
+    it("clears playback errors on close", async () => {
+        vi.spyOn(console, "error").mockImplementation(() => {});
+        vi.mocked(audio.play).mockRejectedValueOnce(new Error("Playback failed"));
+        await startSong();
+        expect(player.playbackError).toBe(true);
+        click(host.querySelector('section button[aria-label="Close player"]'));
+        expect(player.playbackError).toBe(false);
+        expect(host.querySelector('[role="alert"]')).toBeNull();
+    });
+
+    it("ignores pending playback rejection after closing", async () => {
+        let rejectPlay: (error: Error) => void = () => {};
+        vi.mocked(audio.play).mockImplementationOnce(
+            () =>
+                new Promise<void>((_resolve, reject) => {
+                    rejectPlay = reject;
+                }),
+        );
+        await startSong();
+        click(host.querySelector('section button[aria-label="Close player"]'));
+        await act(async () => rejectPlay(new Error("Playback interrupted")));
+        expect(player.currentSong).toBeNull();
+        expect(player.isPlaying).toBe(false);
+        expect(player.playbackError).toBe(false);
     });
 
     it("reports a rejected playback request and allows retry", async () => {
