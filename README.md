@@ -5,10 +5,10 @@
 * Supabase - https://app.supabase.com/projects
 
 ## TODO
+- User tools - toggle light/dark theme.
 
-- Prepare app for i18n
-- I will have only en for now but be prepared for other languages
-- Continue with app skeleton
+### What not to do
+- i18n: I will have only support for `en` for now, but be prepared for other languages.
 
 ## Page structure
 
