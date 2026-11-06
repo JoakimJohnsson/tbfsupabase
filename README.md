@@ -64,6 +64,15 @@ Both toggles reset on close. Logged-in users can start TBF Radio from the home
 page: it loads the full song catalogue in pages, skips tracks without audio,
 and starts a random track with shuffle and repeat enabled.
 
+## Catalogue filters and sorting
+
+`RecordsPage` combines text search with one format chip and one type chip.
+Clicking an active chip or its "All" button clears that filter. Sort records
+or songs by newest year, oldest year, or title; songs use their record's year.
+Missing years sort last in either direction, with titles breaking year ties.
+Records default to newest first and songs to title order. The song playback
+queue follows the displayed, filtered and sorted list when a track is started.
+
 ## Local files - Git ignored
 
 ### Font Awesome

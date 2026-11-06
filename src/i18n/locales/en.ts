@@ -326,6 +326,16 @@ export const en = {
             loadError: "Could not load tracks.",
         },
     },
+    catalogue: {
+        allFormats: "All formats",
+        allTypes: "All types",
+        sort: {
+            label: "Sort by",
+            "year-desc": "Year: newest first",
+            "year-asc": "Year: oldest first",
+            title: "Title: A–Z",
+        },
+    },
     forms: {
         description: "Description",
         email: "E-mail",
