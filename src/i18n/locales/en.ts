@@ -291,7 +291,7 @@ export const en = {
         records: {
             record: "record",
             records: "records",
-            listTitle: "Archive Releases",
+            listTitle: "Complete catalogue",
             searchPlaceholder: "Search records, artists...",
             empty: "No records found.",
             loadError: "Could not load records.",

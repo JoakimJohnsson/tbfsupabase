@@ -80,7 +80,6 @@ export const ArtistPage = () => {
     return (
         <>
             <Breadcrumbs items={breadcrumbItems} />
-
             <div className="row g-4">
                 {/* Left column: Artist biography and band members */}
                 <section aria-labelledby="artist-heading" className="col-12 col-lg-4 col-xl-3">

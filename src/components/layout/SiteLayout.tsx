@@ -79,12 +79,6 @@ export const SiteLayout = () => {
                     <div className={`collapse navbar-collapse ${isNavOpen ? "show" : ""}`} id="topNavbarContent">
                         {/* Primary navigation links */}
                         <ul className="navbar-nav me-auto mb-2 mb-md-0 gap-1">
-                            <li className="nav-item">
-                                <NavLink className="nav-link" onClick={handleNavigation} to="/">
-                                    {t("navigation.home")}
-                                </NavLink>
-                            </li>
-
                             {/* Public artist browsing for all users */}
                             <li className="nav-item">
                                 <NavLink className="nav-link" onClick={handleNavigation} to="/artists">
