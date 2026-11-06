@@ -431,6 +431,88 @@ describe("persistent audio player", () => {
         expect(host.querySelector('[role="alert"]')).toBeNull();
     });
 
+    it("toggles repeat independently and wraps next and previous around the queue", async () => {
+        await act(async () => player.playSong(nextSong, [silentSong, song, nextSong, silentSong]));
+        const repeat = host.querySelector<HTMLButtonElement>('button[aria-label="Repeat queue"]')!;
+        expect(player.hasNext).toBe(false);
+        expect(repeat.getAttribute("aria-pressed")).toBe("false");
+        click(repeat);
+        expect(repeat.getAttribute("aria-pressed")).toBe("true");
+        expect(player.isRepeating).toBe(true);
+        expect(player.isShuffling).toBe(false);
+        expect(player.hasNext).toBe(true);
+        await act(async () => audio.dispatchEvent(new Event("ended")));
+        expect(player.currentSong?.id).toBe(song.id);
+        expect(player.isPlaying).toBe(true);
+        await act(async () => player.playPrevious());
+        expect(player.currentSong?.id).toBe(nextSong.id);
+        click(repeat);
+        expect(player.hasNext).toBe(false);
+        await act(async () => audio.dispatchEvent(new Event("ended")));
+        expect(player.isPlaying).toBe(false);
+    });
+
+    it("restarts a single repeating track from zero and resets repeat on close", async () => {
+        await startSong();
+        loadMetadata(120);
+        act(() => {
+            player.seekTo(120);
+            player.toggleRepeat();
+        });
+        await act(async () => audio.dispatchEvent(new Event("ended")));
+        expect(player.currentSong?.id).toBe(song.id);
+        expect(audio.currentTime).toBe(0);
+        expect(player.currentTime).toBe(0);
+        expect(player.isPlaying).toBe(true);
+        expect(audio.play).toHaveBeenCalledTimes(2);
+        expect(player.hasNext).toBe(true);
+        expect(player.hasPrevious).toBe(true);
+        click(host.querySelector('section button[aria-label="Close player"]'));
+        expect(player.isRepeating).toBe(false);
+    });
+
+    it("starts radio with only playable songs, shuffle and repeat, and loops its shuffled order", async () => {
+        vi.spyOn(Math, "random").mockReturnValue(0);
+        const thirdSong = { ...song, id: "song-3", audio_path: "/third.mp3" };
+        await act(async () => player.startRadio([song, silentSong, nextSong, thirdSong]));
+        expect(player.queue).toEqual([nextSong, thirdSong, song]);
+        expect(player.currentSong?.id).toBe(nextSong.id);
+        expect(player.isShuffling).toBe(true);
+        expect(player.isRepeating).toBe(true);
+        for (const expected of [thirdSong, song, nextSong, thirdSong]) {
+            await act(async () => audio.dispatchEvent(new Event("ended")));
+            expect(player.currentSong?.id).toBe(expected.id);
+            expect(player.isPlaying).toBe(true);
+        }
+        act(() => player.toggleShuffle());
+        expect(player.queue).toEqual([song, nextSong, thirdSong]);
+        expect(player.isRepeating).toBe(true);
+        await act(async () => audio.dispatchEvent(new Event("ended")));
+        expect(player.currentSong?.id).toBe(song.id);
+    });
+
+    it("restarts radio when the random first track is already current", async () => {
+        await startSong();
+        loadMetadata(120);
+        act(() => player.seekTo(40));
+        await act(async () => player.startRadio([song]));
+        expect(player.currentTime).toBe(0);
+        expect(audio.currentTime).toBe(0);
+        expect(player.isRepeating).toBe(true);
+        expect(player.isPlaying).toBe(true);
+    });
+
+    it("rejects an empty radio queue without disturbing current playback", async () => {
+        const log = vi.spyOn(console, "error").mockImplementation(() => {});
+        await startSong();
+        act(() => player.startRadio([silentSong]));
+        expect(player.currentSong?.id).toBe(song.id);
+        expect(player.queue).toEqual([song]);
+        expect(player.isShuffling).toBe(false);
+        expect(player.isRepeating).toBe(false);
+        expect(log).toHaveBeenCalledOnce();
+    });
+
     it("toggles shuffle without interrupting playback and restores the original order", async () => {
         vi.spyOn(Math, "random").mockReturnValue(0);
         const thirdSong = { ...song, id: "song-3", audio_path: "/third.mp3" };

@@ -1,13 +1,10 @@
 import { useState, useRef, useEffect, useCallback, type ReactNode } from "react";
 import { PlayerContext } from "./PlayerContext";
 import type { SongWithRecordAndArtists } from "../../types";
+import { shuffle } from "../../lib/helpers/sortHelpers";
 
 const shuffleQueue = (songs: SongWithRecordAndArtists[], currentSong: SongWithRecordAndArtists) => {
-    const remaining = songs.filter((song) => song.id !== currentSong.id);
-    for (let i = remaining.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [remaining[i], remaining[j]] = [remaining[j], remaining[i]];
-    }
+    const remaining = shuffle(songs.filter((song) => song.id !== currentSong.id));
     return [currentSong, ...remaining];
 };
 
@@ -16,6 +13,7 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
     const [queue, setQueue] = useState<SongWithRecordAndArtists[]>([]);
     const [originalQueue, setOriginalQueue] = useState<SongWithRecordAndArtists[]>([]);
     const [isShuffling, setIsShuffling] = useState(false);
+    const [isRepeating, setIsRepeating] = useState(false);
     const [isPlaying, setIsPlaying] = useState(false);
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
@@ -49,8 +47,12 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
         if (audioRef.current) audioRef.current.volume = volume;
     }, [volume]);
 
-    const selectSong = (song: SongWithRecordAndArtists) => {
+    const selectSong = (song: SongWithRecordAndArtists, restart = false) => {
         if (currentSong?.id === song.id) {
+            if (restart && audioRef.current) {
+                audioRef.current.currentTime = 0;
+                setCurrentTime(0);
+            }
             startPlayback();
             return;
         }
@@ -84,11 +86,27 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
         selectSong(song);
     };
 
+    const startRadio = (songs: SongWithRecordAndArtists[]) => {
+        const playable = songs.filter((song) => song.audio_path?.trim());
+        if (!playable.length) {
+            console.error("Cannot start radio without playable songs");
+            return;
+        }
+        const shuffled = shuffle(playable);
+        setOriginalQueue([...playable]);
+        setQueue(shuffled);
+        setIsShuffling(true);
+        setIsRepeating(true);
+        selectSong(shuffled[0], true);
+    };
+
     const toggleShuffle = () => {
         if (!currentSong) return;
         setQueue(isShuffling ? [...originalQueue] : shuffleQueue(originalQueue, currentSong));
         setIsShuffling(!isShuffling);
     };
+
+    const toggleRepeat = () => setIsRepeating((repeating) => !repeating);
 
     const pauseSong = () => {
         playRequest.current++;
@@ -107,6 +125,7 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
         setQueue([]);
         setOriginalQueue([]);
         setIsShuffling(false);
+        setIsRepeating(false);
         setCurrentTime(0);
         setDuration(0);
         setPlaybackError(false);
@@ -118,16 +137,20 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
         for (let i = index + direction; i >= 0 && i < queue.length; i += direction) {
             if (queue[i].audio_path?.trim()) return queue[i];
         }
+        if (isRepeating) {
+            const playable = queue.filter((song) => song.audio_path?.trim());
+            return direction === 1 ? playable[0] : playable[playable.length - 1];
+        }
     };
 
     const playNext = () => {
         const song = adjacentSong(1);
-        if (song) selectSong(song);
+        if (song) selectSong(song, true);
     };
 
     const playPrevious = () => {
         const song = adjacentSong(-1);
-        if (song) selectSong(song);
+        if (song) selectSong(song, true);
     };
 
     const seekTo = (time: number) => {
@@ -165,6 +188,9 @@ export const PlayerProvider = ({ children }: { children: ReactNode }) => {
                 queue,
                 isShuffling,
                 toggleShuffle,
+                isRepeating,
+                toggleRepeat,
+                startRadio,
                 isPlaying,
                 currentTime,
                 duration,

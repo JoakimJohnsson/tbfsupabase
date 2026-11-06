@@ -6,6 +6,9 @@ export type PlayerContextValue = {
     queue: SongWithRecordAndArtists[];
     isShuffling: boolean;
     toggleShuffle: () => void;
+    isRepeating: boolean;
+    toggleRepeat: () => void;
+    startRadio: (songs: SongWithRecordAndArtists[]) => void;
     isPlaying: boolean;
     currentTime: number;
     duration: number;

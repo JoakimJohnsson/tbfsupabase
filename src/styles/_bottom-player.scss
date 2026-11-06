@@ -7,8 +7,9 @@
         grid-template-columns: auto minmax(0, 1fr) auto;
         grid-template-areas:
             "song song close"
-            "play volume volume"
-            "timeline timeline timeline";
+            "play play play"
+            "timeline timeline timeline"
+            "volume volume volume";
         align-items: center;
         gap: 0.75rem;
 
@@ -30,6 +31,7 @@
 
     &__play {
         grid-area: play;
+        flex-wrap: wrap;
     }
 
     &__timeline {

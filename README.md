@@ -58,6 +58,12 @@ restores the original list order while keeping the current track and position.
 Shuffle stays enabled across pause, navigation, and new list selections, but
 resets when the player is closed.
 
+Repeat is a separate toggle that wraps the queue in both directions, including
+a single-track queue. With shuffle enabled, repeat loops the same shuffled order.
+Both toggles reset on close. Logged-in users can start TBF Radio from the home
+page: it loads the full song catalogue in pages, skips tracks without audio,
+and starts a random track with shuffle and repeat enabled.
+
 ## Local files - Git ignored
 
 ### Font Awesome

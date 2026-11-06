@@ -20,6 +20,7 @@ export const en = {
             next: "Next track",
             close: "Close player",
             shuffle: "Shuffle",
+            repeat: "Repeat queue",
             position: "Playback position",
             volume: "Volume",
             playbackError: "Could not play this audio. Please try again.",
@@ -280,6 +281,12 @@ export const en = {
             },
         },
         home: {
+            radio: {
+                start: "Start TBF Radio",
+                lead: "All tracks, shuffled and on repeat.",
+                empty: "No playable tracks available yet.",
+                loadError: "Could not load radio tracks.",
+            },
             hero: {
                 title: "The Baseball Field and Friends",
                 lead: "A curated digital music archive spanning Swedish lo-fi, indie, pop, rock, punk, and folk recordings.",

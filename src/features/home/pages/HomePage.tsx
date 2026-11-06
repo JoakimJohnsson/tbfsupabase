@@ -14,6 +14,7 @@ import { RecordCard } from "../../records/components/RecordCard";
 import type { RecordWithArtists } from "../../../types";
 import { useAuth } from "../../auth/hooks/useAuth";
 import { shuffle } from "../../../lib/helpers/sortHelpers";
+import { RadioButton } from "../components/RadioButton";
 
 // Maximum number of preview items to showcase on the landing page
 const PREVIEW_RECORDS_COUNT = 4;
@@ -89,11 +90,11 @@ export const HomePage = () => {
     return (
         <>
             {/* Hero banner */}
-            <div className="row mb-4">
-                <div className="col-12 p-4 p-md-5">
+            <div className="row mb-5">
+                <div className="col-12">
                     <h1 className="display-5 fw-bold mb-3">{t("features.home.hero.title")}</h1>
                     <p className="lead text-secondary mb-4">{t("features.home.hero.lead")}</p>
-                    <div className="d-flex flex-wrap gap-3">
+                    <div className="d-flex flex-wrap gap-3 mb-4">
                         <Link className="btn btn-primary btn-lg px-4" to="/artists">
                             <FontAwesomeIcon className="me-2" icon={faUserGroup} />
                             {t("features.home.hero.exploreArtists")}
@@ -109,7 +110,7 @@ export const HomePage = () => {
                 </div>
 
                 {/* Quick stats counter */}
-                <div className="col-6 col-md-3">
+                <div className="col-12 col-sm-6 col-md-3 mb-3">
                     <Card>
                         <CardBody className="text-center py-3">
                             <div className="display-6 fw-bold text-primary mb-1">{artists.length}</div>
@@ -119,7 +120,7 @@ export const HomePage = () => {
                         </CardBody>
                     </Card>
                 </div>
-                <div className="col-6 col-md-3">
+                <div className="col-12 col-sm-6 col-md-3 mb-3">
                     <Card>
                         <CardBody className="text-center py-3">
                             <div className="display-6 fw-bold text-primary mb-1">{records.length}</div>
@@ -129,6 +130,7 @@ export const HomePage = () => {
                         </CardBody>
                     </Card>
                 </div>
+                {user && <RadioButton />}
             </div>
 
             {/* Latest releases showcase */}
