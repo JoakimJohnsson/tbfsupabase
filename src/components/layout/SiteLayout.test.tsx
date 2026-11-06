@@ -93,7 +93,7 @@ describe("SiteLayout page landmarks", () => {
         expect(host.querySelectorAll("main")).toHaveLength(1);
         expect(host.querySelectorAll("#main-content")).toHaveLength(1);
         const main = host.querySelector("main#main-content")!;
-        expect(main.className).toBe("container-fluid py-3 flex-grow-1");
+        expect(main.className).toBe("container-fluid px-3 px-md-5 py-5 flex-grow-1");
         expect(main.contains(host.querySelector("header"))).toBe(false);
         expect(main.querySelector(".container-fluid")).toBeNull();
         for (const column of main.querySelectorAll('[class*="col-"], .col')) {
@@ -122,9 +122,54 @@ describe("SiteLayout page landmarks", () => {
         ).not.toBeNull();
     });
 
+    it("shows a theme toggle beside login for anonymous visitors", () => {
+        localStorage.setItem("tbf-theme", "light");
+        renderPage(<HomePage />);
+
+        const themeToggle = host.querySelector<HTMLButtonElement>('button[aria-label="Switch to dark mode"]');
+        expect(themeToggle).not.toBeNull();
+        expect(host.querySelector('a[href="/login"]')?.textContent).toBe("Login");
+
+        act(() => themeToggle!.click());
+
+        expect(document.documentElement.getAttribute("data-bs-theme")).toBe("dark");
+        expect(host.querySelector('button[aria-label="Switch to light mode"]')).not.toBeNull();
+    });
+
+    it("provides an authenticated user menu with navigation and theme controls", () => {
+        localStorage.setItem("tbf-theme", "light");
+        vi.mocked(useAuth).mockReturnValue({
+            user: { id: "user-1", email: "member@example.com" } as NonNullable<ReturnType<typeof useAuth>["user"]>,
+            profile: null,
+            session: null,
+            isLoading: false,
+        });
+        renderPage(<HomePage />);
+
+        const trigger = host.querySelector<HTMLButtonElement>(".dropdown > button.dropdown-toggle");
+        expect(trigger?.textContent).toContain("member@example.com");
+        act(() => trigger!.click());
+
+        const menu = host.querySelector(".dropdown-menu.show");
+        expect(menu?.textContent).toContain("member@example.com");
+        expect(menu?.querySelector('a[href="/profile"]')?.textContent).toContain("My profile");
+        expect(menu?.querySelector('a[href="/playlists"]')?.textContent).toContain("My playlists");
+        expect(menu?.querySelector('a[href="/favorites"]')?.textContent).toContain("Favorites");
+        expect(menu?.textContent).toContain("Light");
+
+        const themeAction = [...menu!.querySelectorAll("button")].find((button) =>
+            button.textContent?.includes("Switch to dark mode"),
+        );
+        expect(themeAction).toBeDefined();
+        act(() => themeAction!.click());
+
+        expect(document.documentElement.getAttribute("data-bs-theme")).toBe("dark");
+        expect(host.querySelector(".dropdown-menu.show")).toBeNull();
+    });
+
     it("aligns the home hero and artist grid with the shared page container", () => {
         const main = renderPage(<HomePage />);
-        expect(main.querySelector(":scope > .row.g-0 > .col-xxl-8")).not.toBeNull();
+        expect(main.querySelector(":scope > .row.mb-5 > .col-12")).not.toBeNull();
 
         renderPage(<ArtistPage />);
         expect(main.querySelector(':scope > .row.g-4 > section[aria-labelledby="artist-heading"]')).not.toBeNull();
