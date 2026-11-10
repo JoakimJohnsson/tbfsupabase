@@ -15,7 +15,7 @@ import { RecordsPage } from "../features/records/pages/RecordsPage";
 import { SongsPage } from "../features/songs/pages/SongsPage";
 import { AdminPersonsPage } from "../features/admin/pages/AdminPersonsPage";
 import { RecordPage } from "../features/records/pages/RecordPage";
-import { ProfilePage } from "../features/profile/pages/ProfilePage";
+import { ProfilePage } from "../features/auth/pages/ProfilePage";
 
 export const router = createBrowserRouter([
     {

@@ -270,6 +270,21 @@ export const en = {
             },
         },
         auth: {
+            profile: {
+                title: "My profile",
+                lead: "View your account details and manage your profile.",
+                email: "Email address",
+                displayName: "Display name",
+                displayNamePlaceholder: "Enter your display name",
+                firstName: "First name",
+                firstNamePlaceholder: "Enter your first name",
+                lastName: "Last name",
+                lastNamePlaceholder: "Enter your last name",
+                save: "Save profile",
+                submitting: "Saving profile...",
+                updateSuccess: "Profile updated.",
+                updateError: "Could not update your profile. Please try again.",
+            },
             login: {
                 title: "Login",
                 lead: "Sign in to access your archive and tools.",

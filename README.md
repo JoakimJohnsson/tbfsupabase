@@ -31,6 +31,18 @@ Use labelled `<section>` elements for primary-content groups such as admin
 editors and artist details. Reserve `<aside>` for genuinely supplementary content,
 not simply content displayed in a side column.
 
+## Profile
+
+Authenticated users can edit their display name, first name, last name, and
+profile picture at `/profile`; email is read-only. Saving updates `public.profiles`
+and the auth context immediately, including the display name in the header.
+Empty names are stored as `null`, so the header falls back to the email address.
+
+Apply `supabase/migrations/20261110200000_allow_profile_name_updates.sql` before
+using name editing. It extends column-level update permissions to the three
+name fields while retaining the existing own-profile RLS policy and image
+permissions. Administrative fields such as `is_admin` remain non-editable.
+
 ## Audio player
 
 `PlayerProvider` wraps the router so playback survives page navigation.
