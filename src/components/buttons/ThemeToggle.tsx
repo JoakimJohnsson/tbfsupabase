@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMoon, faSun } from "@fortawesome/pro-solid-svg-icons";
+import { faMoon, faSunBright } from "@fortawesome/pro-solid-svg-icons";
 import { useTranslation } from "react-i18next";
 import { useTheme } from "../../theme/theme";
 
@@ -15,7 +15,7 @@ export const ThemeToggle = () => {
             onClick={toggleTheme}
             type="button"
         >
-            <FontAwesomeIcon aria-hidden="true" icon={isDark ? faSun : faMoon} />
+            <FontAwesomeIcon aria-hidden="true" icon={isDark ? faSunBright : faMoon} />
         </button>
     );
 };

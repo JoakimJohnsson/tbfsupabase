@@ -25,7 +25,7 @@ export const SearchToolbar = ({
             <div className="text-secondary small">{countText}</div>
             {showSearch && (
                 <div className="input-group input-group-sm w-auto">
-                    <span className="input-group-text bg-body border-end-0">
+                    <span className="input-group-text bg-body-secondary border-end-0">
                         <FontAwesomeIcon className="text-muted" icon={faSearch} />
                     </span>
                     <input
