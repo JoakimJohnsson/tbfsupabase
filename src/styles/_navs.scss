@@ -6,4 +6,11 @@
 
 .navbar .dropdown-menu {
   z-index: 1040;
+
+  &.dropdown-menu-end {
+    @include media-breakpoint-up(md) {
+      right: 0;
+      left: auto;
+    }
+  }
 }
