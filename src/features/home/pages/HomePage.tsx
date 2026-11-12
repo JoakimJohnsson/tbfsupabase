@@ -138,9 +138,9 @@ export const HomePage = () => {
                 <div className="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
                     <div>
                         <h2 className="h4 fw-bold mb-0" id="home-records-heading">
-                            {t("features.home.sections.recentReleasesTitle")}
+                            {t("features.home.sections.featuredReleasesTitle")}
                         </h2>
-                        <span className="text-secondary small">{t("features.home.sections.recentReleasesLead")}</span>
+                        <span className="text-secondary small">{t("features.home.sections.featuredReleasesLead")}</span>
                     </div>
                     <Link
                         className="btn btn-outline-secondary btn-sm d-inline-flex align-items-center gap-2"
