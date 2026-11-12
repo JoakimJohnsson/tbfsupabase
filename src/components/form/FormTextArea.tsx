@@ -9,6 +9,7 @@ interface IFormTextArea {
     disabled?: boolean;
     labelClassName?: string;
     name?: string;
+    placeholder?: string;
     required?: boolean;
     rows?: number;
     textAreaClassName?: string;
@@ -23,6 +24,7 @@ export const FormTextArea = ({
     disabled = false,
     labelClassName = "form-label",
     name,
+    placeholder,
     required = false,
     rows = 3,
     textAreaClassName = "form-control",
@@ -42,6 +44,7 @@ export const FormTextArea = ({
                 id={id}
                 name={name ?? id}
                 onChange={handleChange}
+                placeholder={placeholder}
                 required={required}
                 rows={rows}
                 value={value}

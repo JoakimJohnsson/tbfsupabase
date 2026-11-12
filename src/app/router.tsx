@@ -15,6 +15,10 @@ import { RecordsPage } from "../features/records/pages/RecordsPage";
 import { SongsPage } from "../features/songs/pages/SongsPage";
 import { AdminPersonsPage } from "../features/admin/pages/AdminPersonsPage";
 import { RecordPage } from "../features/records/pages/RecordPage";
+import { ProfilePage } from "../features/auth/pages/ProfilePage";
+import { FavoritesPage } from "../features/favorites/pages/FavoritesPage";
+import { PlaylistsPage } from "../features/playlists/pages/PlaylistsPage";
+import { PlaylistDetailPage } from "../features/playlists/pages/PlaylistDetailPage";
 
 export const router = createBrowserRouter([
     {
@@ -44,6 +48,10 @@ export const router = createBrowserRouter([
                 element: <AuthenticatedLayout />,
                 children: [
                     {
+                        path: "profile",
+                        element: <ProfilePage />,
+                    },
+                    {
                         path: "records",
                         element: <RecordsPage />,
                     },
@@ -54,6 +62,18 @@ export const router = createBrowserRouter([
                     {
                         path: "songs",
                         element: <SongsPage />,
+                    },
+                    {
+                        path: "favorites",
+                        element: <FavoritesPage />,
+                    },
+                    {
+                        path: "playlists",
+                        element: <PlaylistsPage />,
+                    },
+                    {
+                        path: "playlists/:playlistId",
+                        element: <PlaylistDetailPage />,
                     },
                 ],
             },

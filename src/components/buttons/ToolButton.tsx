@@ -75,7 +75,11 @@ const renderContent = ({
     iconPosition?: "start" | "end";
     text?: string;
 }) => {
-    const iconMargin = iconPosition === "start" ? "me-0 me-md-2 me-lg-0 me-xl-2" : "ms-0 ms-md-2 ms-lg-0 ms-xl-2";
+    const iconMargin = !text
+        ? "me-0"
+        : iconPosition === "start"
+          ? "me-0 me-md-2 me-lg-0 me-xl-2"
+          : "ms-0 ms-md-2 ms-lg-0 ms-xl-2";
 
     const iconNode = (
         <span aria-hidden="true" className={buildClassName(iconMargin, iconClassName)}>

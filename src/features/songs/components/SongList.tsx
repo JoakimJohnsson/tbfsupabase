@@ -7,9 +7,18 @@ interface ISongList {
     emptyMessage?: string;
     showCover?: boolean;
     showRecordInfo?: boolean;
+    onRemoveSong?: (songId: string) => void;
+    removeSongLabel?: string;
 }
 
-export const SongList = ({ songs, emptyMessage, showCover = false, showRecordInfo = false }: ISongList) => {
+export const SongList = ({
+    songs,
+    emptyMessage,
+    showCover = false,
+    showRecordInfo = false,
+    onRemoveSong,
+    removeSongLabel,
+}: ISongList) => {
     if (songs.length === 0) {
         return emptyMessage ? <EmptyStateCard message={emptyMessage} /> : null;
     }
@@ -23,6 +32,8 @@ export const SongList = ({ songs, emptyMessage, showCover = false, showRecordInf
                     showRecordInfo={showRecordInfo}
                     song={song}
                     songs={songs}
+                    onRemoveSong={onRemoveSong}
+                    removeSongLabel={removeSongLabel}
                 />
             ))}
         </ul>

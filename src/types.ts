@@ -11,6 +11,8 @@ export type ArtistMember = Database["public"]["Tables"]["artist_members"]["Row"]
 export type Profile = Database["public"]["Tables"]["profiles"]["Row"];
 export type Song = Database["public"]["Tables"]["songs"]["Row"];
 export type SongArtist = Database["public"]["Tables"]["song_artists"]["Row"];
+export type Playlist = Database["public"]["Tables"]["playlists"]["Row"];
+export type SongFavorite = Database["public"]["Tables"]["song_favorites"]["Row"];
 
 export type SimpleMessage = string | null;
 export type SimpleMessageList = SimpleMessage[];
@@ -60,6 +62,10 @@ export type SongWithArtists = Song & {
 
 export type SongWithRecordAndArtists = SongWithArtists & {
     records: Pick<Record, "id" | "name" | "year" | "cover_path"> | null;
+};
+
+export type PlaylistWithSongs = Playlist & {
+    songs: SongWithRecordAndArtists[];
 };
 
 // Inputs
@@ -137,6 +143,7 @@ export type AuthContextValue = {
     session: Session | null;
     user: User | null;
     profile: Profile | null;
+    setProfile: (profile: Profile) => void;
     isLoading: boolean;
 };
 

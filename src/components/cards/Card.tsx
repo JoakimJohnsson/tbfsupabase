@@ -1,7 +1,7 @@
 import type { ComponentPropsWithoutRef } from "react";
 
 const cardVariants = {
-    default: "border-0 shadow-sm",
+    default: "border shadow-sm",
     outlined: "border shadow-none",
     flat: "border-0 shadow-none",
 };

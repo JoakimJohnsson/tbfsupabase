@@ -1,20 +1,35 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, Outlet } from "react-router";
 import { useTranslation } from "react-i18next";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+    faHeart,
+    faListMusic,
+    faMoon,
+    faRightFromBracket,
+    faSun,
+    faUser,
+    faUserGear,
+} from "@fortawesome/pro-solid-svg-icons";
 import { useAuth } from "../../features/auth/hooks/useAuth";
 import { signOut } from "../../features/auth/api/signOut";
 import { BottomPlayer } from "../../features/player/components/BottomPlayer";
+import { ThemeToggle } from "../buttons/ThemeToggle";
+import { useTheme } from "../../theme/theme";
 
 export const SiteLayout = () => {
     const { t } = useTranslation();
     const { user, profile } = useAuth();
+    const { theme, toggleTheme } = useTheme();
 
     // State for mobile navbar collapse
     const [isNavOpen, setIsNavOpen] = useState(false);
 
-    // State for admin dropdown menu
+    // State for dropdown menus
     const [isAdminMenuOpen, setIsAdminMenuOpen] = useState(false);
-    const dropdownRef = useRef<HTMLLIElement>(null);
+    const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+    const adminDropdownRef = useRef<HTMLLIElement>(null);
+    const userDropdownRef = useRef<HTMLDivElement>(null);
     const headerRef = useRef<HTMLElement>(null);
 
     // Close menus and dropdowns when clicking outside relevant areas
@@ -22,29 +37,35 @@ export const SiteLayout = () => {
         const handleClickOutside = (event: MouseEvent) => {
             const targetNode = event.target as Node;
 
-            if (dropdownRef.current && !dropdownRef.current.contains(targetNode)) {
+            if (adminDropdownRef.current && !adminDropdownRef.current.contains(targetNode)) {
                 setIsAdminMenuOpen(false);
+            }
+
+            if (userDropdownRef.current && !userDropdownRef.current.contains(targetNode)) {
+                setIsUserMenuOpen(false);
             }
 
             if (headerRef.current && !headerRef.current.contains(targetNode)) {
                 setIsNavOpen(false);
                 setIsAdminMenuOpen(false);
+                setIsUserMenuOpen(false);
             }
         };
 
-        if (isAdminMenuOpen || isNavOpen) {
+        if (isAdminMenuOpen || isUserMenuOpen || isNavOpen) {
             document.addEventListener("mousedown", handleClickOutside);
         }
 
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
-    }, [isAdminMenuOpen, isNavOpen]);
+    }, [isAdminMenuOpen, isUserMenuOpen, isNavOpen]);
 
     // Close mobile nav when clicking a link
     const handleNavigation = () => {
         setIsNavOpen(false);
         setIsAdminMenuOpen(false);
+        setIsUserMenuOpen(false);
     };
 
     const handleSignOut = async () => {
@@ -105,7 +126,10 @@ export const SiteLayout = () => {
 
                             {/* Admin dropdown managed by React state */}
                             {profile?.is_admin && (
-                                <li className={`nav-item dropdown ${isAdminMenuOpen ? "show" : ""}`} ref={dropdownRef}>
+                                <li
+                                    className={`nav-item dropdown ${isAdminMenuOpen ? "show" : ""}`}
+                                    ref={adminDropdownRef}
+                                >
                                     <button
                                         aria-expanded={isAdminMenuOpen}
                                         className={`nav-link dropdown-toggle btn btn-link text-decoration-none ${isAdminMenuOpen ? "show" : ""}`}
@@ -162,20 +186,102 @@ export const SiteLayout = () => {
                         {/* User actions and authentication state */}
                         <div className="d-flex align-items-center gap-3">
                             {user ? (
-                                <div className="d-flex align-items-center gap-2">
-                                    <span className="small text-muted">{profile?.display_name || user.email}</span>
+                                <div className="dropdown" ref={userDropdownRef}>
                                     <button
-                                        className="btn btn-outline-secondary btn-sm"
-                                        onClick={() => void handleSignOut()}
+                                        aria-expanded={isUserMenuOpen}
+                                        aria-haspopup="true"
+                                        className={`btn btn-outline-secondary btn-sm dropdown-toggle${isUserMenuOpen ? " show" : ""}`}
+                                        onClick={() => setIsUserMenuOpen((prev) => !prev)}
                                         type="button"
                                     >
-                                        {t("common.logout")}
+                                        <FontAwesomeIcon aria-hidden="true" className="me-2" icon={faUser} />
+                                        {profile?.display_name || user.email}
                                     </button>
+                                    <ul
+                                        className={`dropdown-menu dropdown-menu-end shadow-sm${isUserMenuOpen ? " show" : ""}`}
+                                    >
+                                        <li>
+                                            <h6 className="dropdown-header">
+                                                {user.email || t("navigation.userMenu")}
+                                            </h6>
+                                        </li>
+                                        <li>
+                                            <Link className="dropdown-item" onClick={handleNavigation} to="/profile">
+                                                <FontAwesomeIcon
+                                                    aria-hidden="true"
+                                                    className="me-2"
+                                                    icon={faUserGear}
+                                                />
+                                                {t("navigation.myProfile")}
+                                            </Link>
+                                        </li>
+                                        <li>
+                                            <Link className="dropdown-item" onClick={handleNavigation} to="/playlists">
+                                                <FontAwesomeIcon
+                                                    aria-hidden="true"
+                                                    className="me-2"
+                                                    icon={faListMusic}
+                                                />
+                                                {t("navigation.myPlaylists")}
+                                            </Link>
+                                        </li>
+                                        <li>
+                                            <Link className="dropdown-item" onClick={handleNavigation} to="/favorites">
+                                                <FontAwesomeIcon aria-hidden="true" className="me-2" icon={faHeart} />
+                                                {t("navigation.favorites")}
+                                            </Link>
+                                        </li>
+                                        <li>
+                                            <hr className="dropdown-divider" />
+                                        </li>
+                                        <li>
+                                            <button
+                                                className="dropdown-item d-flex align-items-center justify-content-between gap-3"
+                                                onClick={() => {
+                                                    toggleTheme();
+                                                    setIsUserMenuOpen(false);
+                                                }}
+                                                type="button"
+                                            >
+                                                <span>
+                                                    <FontAwesomeIcon
+                                                        aria-hidden="true"
+                                                        className="me-2"
+                                                        icon={theme === "dark" ? faSun : faMoon}
+                                                    />
+                                                    {t(theme === "dark" ? "theme.switchToLight" : "theme.switchToDark")}
+                                                </span>
+                                                <span className="badge text-bg-secondary">
+                                                    {t(theme === "dark" ? "theme.dark" : "theme.light")}
+                                                </span>
+                                            </button>
+                                        </li>
+                                        <li>
+                                            <hr className="dropdown-divider" />
+                                        </li>
+                                        <li>
+                                            <button
+                                                className="dropdown-item text-danger"
+                                                onClick={() => void handleSignOut()}
+                                                type="button"
+                                            >
+                                                <FontAwesomeIcon
+                                                    aria-hidden="true"
+                                                    className="me-2"
+                                                    icon={faRightFromBracket}
+                                                />
+                                                {t("common.logout")}
+                                            </button>
+                                        </li>
+                                    </ul>
                                 </div>
                             ) : (
-                                <Link className="btn btn-primary btn-sm" onClick={handleNavigation} to="/login">
-                                    {t("navigation.login")}
-                                </Link>
+                                <>
+                                    <ThemeToggle />
+                                    <Link className="btn btn-primary btn-sm" onClick={handleNavigation} to="/login">
+                                        {t("navigation.login")}
+                                    </Link>
+                                </>
                             )}
                         </div>
                     </div>
