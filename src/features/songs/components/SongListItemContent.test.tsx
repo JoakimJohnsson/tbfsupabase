@@ -1,6 +1,9 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import type { User } from "@supabase/supabase-js";
 import type { SongWithArtists, SongWithRecordAndArtists } from "../../../types";
+import { AuthContext } from "../../auth/AuthContext";
+import { FavoritesContext } from "../../favorites/hooks/FavoritesContext";
 import { RecordSongsToolRow } from "../../records/components/songs/RecordSongsToolRow";
 import { SongListItem } from "./SongListItem";
 import { SongListItemContent } from "./SongListItemContent";
@@ -92,6 +95,34 @@ describe("song row wrappers", () => {
         expect(markup).toContain(renderToStaticMarkup(<SongListItemContent song={songWithRecord} />));
         expect(markup).toContain('aria-label="common.play"');
         expect(playerHook).toHaveBeenCalledOnce();
+    });
+
+    it("renders a labeled active favorite button for authenticated members", () => {
+        const markup = renderToStaticMarkup(
+            <AuthContext.Provider
+                value={{
+                    session: null,
+                    user: { id: "user-1" } as User,
+                    profile: null,
+                    setProfile: vi.fn(),
+                    isLoading: false,
+                }}
+            >
+                <FavoritesContext.Provider
+                    value={{
+                        favoriteSongIds: new Set([songWithRecord.id]),
+                        isFavorite: () => true,
+                        toggleFavorite: vi.fn(),
+                    }}
+                >
+                    <SongListItem song={songWithRecord} />
+                </FavoritesContext.Provider>
+            </AuthContext.Provider>,
+        );
+
+        expect(markup).toContain('aria-label="features.favorites.removeFavorite"');
+        expect(markup).toContain('aria-pressed="true"');
+        expect(markup).toContain("text-danger");
     });
 
     it.each([false, true])("keeps admin actions independent of the player when isEditing is %s", (isEditing) => {

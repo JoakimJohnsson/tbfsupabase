@@ -24,7 +24,8 @@
         "format": "prettier \"src/**/*.{ts,tsx,js,jsx}\" index.html --write",
         "format:check": "prettier \"src/**/*.{ts,tsx,js,jsx}\" index.html --check",
         "preview": "vite preview",
-        "test": "vitest"
+        "test": "vitest",
+        "pack": "npx repomix"
     },
     "devDependencies": {
         "@eslint/js": "^9.31.0",
