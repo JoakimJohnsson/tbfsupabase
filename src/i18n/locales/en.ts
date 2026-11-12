@@ -348,8 +348,8 @@ export const en = {
                 exploreRecords: "Browse releases",
             },
             sections: {
-                recentReleasesTitle: "Latest releases",
-                recentReleasesLead: "Explore the most recent records added to the archive.",
+                recentReleasesTitle: "Featured releases",
+                recentReleasesLead: "Explore new and old records added to the archive.",
                 featuredArtistsTitle: "Featured artists",
                 featuredArtistsLead: "Discover bands and solo acts preserving Swedish underground music.",
                 viewAllArtists: "View all artists",
